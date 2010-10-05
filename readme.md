@@ -10,7 +10,7 @@
 
 Node HBase is a Node.JS client for HBase server. It use the Rest API (Stargate in previous versions) to communicate with HBase. Currently, the data exchange format is json but protocol buffer will follow.
 
-Quick exemple
+Quick example
 -------------
 
 This code create a new HBase instance, create a table and a column family, insert a few records and traverse them.
