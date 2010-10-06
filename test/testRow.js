@@ -31,10 +31,47 @@ exports['Put column'] = function(assert){
 	});
 };
 
+exports['Put multiple rows'] = function(assert){
+	utils.getHBase(function(error, hbase){
+		hbase
+		.getRow('node_table','test_row_put_x_rows_1')
+		.delete(function(){
+			hbase
+			.getRow('node_table','test_row_put_x_rows_2')
+			.delete(function(){
+				var time = Date.now();
+				var rows = 
+					[ {row:'test_row_put_x_rows_1',column:'node_column_family',timestamp:time+20,$:'v 1.3'}
+					, {row:'test_row_put_x_rows_1',column:'node_column_family',timestamp:time+60,$:'v 1.1'}
+					, {row:'test_row_put_x_rows_1',column:'node_column_family',timestamp:time+40,$:'v 1.2'}
+					, {row:'test_row_put_x_rows_2',column:'node_column_family',timestamp:time+40,$:'v 2.2'}
+					];
+				hbase
+				.getRow('node_table', null) // 'test_row_put_multiple_rows'
+				.put(rows, function(error, success){
+					assert.ifError(error);
+					assert.strictEqual(true,success);
+					hbase
+					.getRow('node_table', 'test_row_put_x_rows_*')
+					.get(function(error,cells){
+						assert.ifError(error);
+						assert.deepEqual([  
+		                    { key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time+60, '$': 'v 1.1'}
+							, { key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time+40, '$': 'v 1.2'}
+							, { key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time+20, '$': 'v 1.3'}
+							, { key: 'test_row_put_x_rows_2', column: 'node_column_family:', timestamp: time+40, '$': 'v 2.2'}
+						],cells);
+					})
+				})
+			})
+		})
+	});
+};
+
 exports['Put multiple columns'] = function(assert){
 	utils.getHBase(function(error, hbase){
 		hbase
-		.getRow('node_table', 'test_row_put_multiple_columns')
+		.getRow('node_table', 'test_row_put_multiple_columns_multi_args')
 		.delete(function(error,success){
 			assert.ifError(error);
 			this.put(['node_column_family:node_column_1','node_column_family:node_column_2'], ['my value 1','my value 2'], function(error, success){
@@ -46,6 +83,29 @@ exports['Put multiple columns'] = function(assert){
 					assert.strictEqual('my value 1',cells[0].$);
 					assert.strictEqual('node_column_family:node_column_2',cells[1].column);
 					assert.strictEqual('my value 2',cells[1].$);
+				})
+			})
+		})
+	});
+	utils.getHBase(function(error, hbase){
+		hbase
+		.getRow('node_table', 'test_row_put_multiple_columns_one_arg')
+		.delete(function(error,success){
+			assert.ifError(error);
+			var columns = 
+			[ { column: 'node_column_family:c1', $: 'v 1' }
+			, { column: 'node_column_family:c2', $: 'v 2' }
+			];
+			this.put(columns, function(error, success){
+				assert.ifError(error);
+				assert.strictEqual(true,success);
+				this.get(function(error,cells){
+					assert.ifError(error);
+					assert.strictEqual(2,cells.length);
+					assert.strictEqual('node_column_family:c1',cells[0].column);
+					assert.strictEqual('v 1',cells[0].$);
+					assert.strictEqual('node_column_family:c2',cells[1].column);
+					assert.strictEqual('v 2',cells[1].$);
 				})
 			})
 		})
@@ -139,6 +199,31 @@ exports['Get escape'] = function(assert){
 					assert.ifError(error);
 					assert.strictEqual(1,value.length);
 					assert.strictEqual('node_column_family:!\'éè~:@#.?*()',value[0].column);
+				})
+			})
+		})
+	});
+};
+
+exports['Get options start and end'] = function(assert){
+	utils.getHBase(function(error, hbase){
+		hbase
+		.getRow('node_table', 'test_row_get_start_end')
+		.delete(function(error, success){
+			var time = Date.now();
+			var rows = 
+				[ { column: 'node_column_family:c1', timestamp: time+20, $: 'v 1' }
+				, { column: 'node_column_family:c1', timestamp: time+40, $: 'v 2' }
+				, { column: 'node_column_family:c1', timestamp: time+60, $: 'v 3' }
+				, { column: 'node_column_family:c1', timestamp: time+80, $: 'v 4' }
+				];
+			this.put(rows, function(error, success){
+				assert.ifError(error);
+				this.get('node_column_family:c1', {start:time+40,end:time+60+1},function(error, cells){
+					assert.ifError(error);
+					assert.strictEqual(2,cells.length);
+					assert.strictEqual(time+60,cells[0].timestamp);
+					assert.strictEqual(time+40,cells[1].timestamp);
 				})
 			})
 		})
