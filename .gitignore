@@ -1,3 +1,4 @@
 .*
+restart.sh
 test/properties.json
 !.gitignore

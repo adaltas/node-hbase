@@ -94,6 +94,7 @@ exports['Get row with suffix globbing'] = function(assert){
 						hbase
 						.getRow('node_table','test_row_get_globbing_*')
 						.get(function(error, cells){
+							assert.ifError(error);
 							assert.strictEqual(2,cells.length);
 							assert.strictEqual('test_row_get_globbing_1',cells[0].key);
 							assert.strictEqual('test_row_get_globbing_2',cells[1].key);
@@ -118,6 +119,44 @@ exports['Get column'] = function(assert){
 					assert.strictEqual(1,cells.length);
 					assert.strictEqual('node_column_family:',cells[0].column);
 					assert.strictEqual('my value',cells[0].$);
+				})
+			})
+		})
+	});
+};
+
+exports['Get escape'] = function(assert){
+	utils.getHBase(function(error, hbase){
+		hbase
+		.getRow('node_table', 'test_get_escape!\'éè~:@#.?*()') // "/, "
+		.delete(function(error, value){
+			assert.ifError(error);
+			this.put('node_column_family:!\'éè~:@#.?*()', 'my value', function(error, success){
+				assert.ifError(error);
+				hbase
+				.getRow('node_table', 'test_get_escape!\'éè~:@#.?*()')
+				.get(function(error,value){
+					assert.ifError(error);
+					assert.strictEqual(1,value.length);
+					assert.strictEqual('node_column_family:!\'éè~:@#.?*()',value[0].column);
+				})
+			})
+		})
+	});
+};
+
+exports['Get option v'] = function(assert){
+	utils.getHBase(function(error, hbase){
+		hbase
+		.getRow('node_table', 'test_row_get_v')
+		.delete(function(error, value){
+			this.put(['node_column_family','node_column_family'], ['v 1','v 2'], function(error, value){
+				this.get('node_column_family', {v:1},function(error, cells){
+					assert.ifError(error);
+					assert.strictEqual(true,cells instanceof Array);
+					assert.strictEqual(1,cells.length);
+					assert.strictEqual('node_column_family:',cells[0].column);
+					assert.strictEqual('v 2',cells[0].$);
 				})
 			})
 		})
