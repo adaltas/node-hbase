@@ -1,5 +1,5 @@
 { "name": "hbase"
-, "version": "0.0.2"
+, "version": "0.0.3"
 , "description": "HBase client using the REST connector"
 , "author": "David Worms <david@adaltas.com>"
 , "directories" : { "lib" : "./lib" }
