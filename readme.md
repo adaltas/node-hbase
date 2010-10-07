@@ -8,7 +8,7 @@
 |_|   |_|\___/ \____|_____)  |_|   |_|______/\_____(___/|_____)
 </pre>
 
-Node HBase is a Node.JS client for HBase server. It use the Rest API (Stargate in previous versions) to communicate with HBase. Currently, the data exchange format is json but protocol buffer will follow.
+Node HBase is a Node.JS client for HBase server. It use the Rest API (Stargate) to communicate with HBase. Currently, the data exchange format is JSON (but protocol buffer could follow).
 
 Quick example
 -------------
