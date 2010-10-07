@@ -32,6 +32,11 @@ This code create a new HBase instance, create a table and a column family, inser
 		});
 	});
 
+Status
+------
+
+At this point, HBase REST API is fully covered at the exception of scanners. Javascript API might also change in the near future.
+
 Installing
 ----------
 

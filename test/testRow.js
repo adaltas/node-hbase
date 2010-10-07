@@ -4,7 +4,7 @@ var utils = require('./utils')
 
 exports['Instance'] = function(assert){
 	utils.getHBase(function(error, hbase){
-		assert.ok(hbase.getRow('mytable','my_row') instanceof Row);
+		assert.ok(hbase.getRow('mytable', 'my_row') instanceof Row);
 		assert.ok(hbase.getTable('mytable').getRow('my_row') instanceof Row);
 	});
 };
@@ -275,7 +275,7 @@ exports['Get missing'] = function(assert){
 		hbase
 		.getRow('node_table', 'test_row_get_row_missing')
 		.get('node_column_family',function(error, value){
-			assert.strictEqual(404,error.code);
+			assert.strictEqual(true,error.code===404||error.code===503);
 			assert.strictEqual(null,value);
 		})
 		// on column missing
