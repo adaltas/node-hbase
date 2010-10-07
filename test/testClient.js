@@ -1,11 +1,9 @@
 
-var utils = require('./utils')
-	, HBase = require('hbase').HBase
-	, Table = require('hbase').Table;
+var utils = require('./utils');
 
 exports['Get version'] = function(assert){
-	utils.getHBase(function( error, hbase ){
-		hbase.getVersion(function(err,version){
+	utils.getClient(function( error, client ){
+		client.getVersion(function(err,version){
 			assert.ifError(err);
 			var keys = [];
 			for(var key in version) keys.push(key);
@@ -15,8 +13,8 @@ exports['Get version'] = function(assert){
 };
 
 exports['Get version cluster'] = function(assert){
-	utils.getHBase(function( error, hbase ){
-		hbase.getVersionCluster(function(err,versionCluster){
+	utils.getClient(function( error, client ){
+		client.getVersionCluster(function(err,versionCluster){
 			assert.ifError(err);
 			assert.ok(/^\d[\d\.]+/.test(versionCluster));
 		});
@@ -24,8 +22,8 @@ exports['Get version cluster'] = function(assert){
 };
 
 exports['Get status cluster'] = function(assert){
-	utils.getHBase(function( error, hbase ){
-		hbase.getStatusCluster(function(err,statusCluster){
+	utils.getClient(function( error, client ){
+		client.getStatusCluster(function(err,statusCluster){
 			assert.ifError(err);
 			var keys = [];
 			for(var key in statusCluster){
@@ -37,8 +35,8 @@ exports['Get status cluster'] = function(assert){
 };
 
 exports['Get tables'] = function(assert){
-	utils.getHBase(function( error, hbase ){
-		hbase.getTables(function(err,tables){
+	utils.getClient(function( error, client ){
+		client.getTables(function(err,tables){
 			assert.ifError(err);
 			assert.strictEqual( 1, tables.filter( function(table){ return table.name === 'node_table' } ).length );
 		});

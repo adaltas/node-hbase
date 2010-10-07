@@ -1,18 +1,17 @@
 
 var utils = require('./utils')
-  , HBase = require('hbase').HBase
   , Table = require('hbase').Table;
 
 exports['Instance'] = function(assert){
-	utils.getHBase(function(error, hbase){
-		assert.ok(hbase.getTable('my table') instanceof Table);
+	utils.getClient(function(error, client){
+		assert.ok(client.getTable('my table') instanceof Table);
 	});
 };
 
 exports['Create'] = function(assert){
-	utils.getHBase(function(error, hbase,config){
+	utils.getClient(function(error, client,config){
 		if(!config.test_table) return;
-		hbase
+		client
 		.getTable('node_table_create')
 		.create({
 			IS_META: false,
@@ -36,8 +35,8 @@ exports['Create'] = function(assert){
 //exports['Modify table'] = function(assert){
 //	console.log('ok 0');
 //	// Create column_2 with compression set to none
-//	utils.getHBase(function(error, hbase,config){
-//		hbase
+//	utils.getClient(function(error, client,config){
+//		client
 //		.getTable('node_table_modify')
 //		.create({
 //			Attribute: {READ_ONLY:true},
@@ -77,9 +76,9 @@ exports['Create'] = function(assert){
 //};
 
 exports['Delete'] = function(assert){
-	utils.getHBase(function(error, hbase,config){
+	utils.getClient(function(error, client,config){
 		if(!config.test_table) return;
-		hbase
+		client
 		.getTable('node_table_delete')
 		.create({
 			IS_META: false,
@@ -89,9 +88,9 @@ exports['Delete'] = function(assert){
 			}]
 		},function(error, data){
 			// really start here
-			utils.getHBase(function(error, hbase){
+			utils.getClient(function(error, client){
 				if(!config.test_table) return;
-				hbase
+				client
 				.getTable('node_table_delete')
 				.delete(function(error, data){
 					assert.ok(this instanceof Table);
@@ -104,9 +103,9 @@ exports['Delete'] = function(assert){
 };
 
 exports['Delete (no callback)'] = function(assert){
-	utils.getHBase(function(error, hbase,config){
+	utils.getClient(function(error, client, config){
 		if(!config.test_table) return;
-		hbase
+		client
 		.getTable('node_table_delete_no_callback')
 		.create({
 			IS_META: false,
@@ -116,9 +115,9 @@ exports['Delete (no callback)'] = function(assert){
 			}]
 		},function(error, data){
 			// really start here
-			utils.getHBase(function(error, hbase){
+			utils.getClient(function(error, client){
 				if(!config.test_table) return;
-				hbase
+				client
 				.getTable('node_table_delete_no_callback')
 				.delete();
 			});
@@ -127,9 +126,9 @@ exports['Delete (no callback)'] = function(assert){
 };
 
 exports['Exists'] = function(assert){
-	utils.getHBase(function(error, hbase){
+	utils.getClient(function(error, client){
 		// Test existing table
-		hbase
+		client
 		.getTable('node_table')
 		.exists(function(error,exists){
 			assert.ok(this instanceof Table);
@@ -137,7 +136,7 @@ exports['Exists'] = function(assert){
 			assert.strictEqual(true,exists);
 		});
 		// Test missing table
-		hbase
+		client
 		.getTable('node_table_missing')
 		.exists(function(error,exists){
 			assert.ok(this instanceof Table);
@@ -148,8 +147,8 @@ exports['Exists'] = function(assert){
 };
 
 exports['Regions'] = function(assert){
-	utils.getHBase(function(error, hbase){
-		hbase
+	utils.getClient(function(error, client){
+		client
 		.getTable('node_table')
 		.getRegions(function(error, regions){
 			assert.ifError(error);
@@ -161,8 +160,8 @@ exports['Regions'] = function(assert){
 };
 
 exports['Schema'] = function(assert){
-	utils.getHBase(function(error, hbase){
-		hbase
+	utils.getClient(function(error, client){
+		client
 		.getTable('node_table')
 		.getSchema(function(error, schema){
 			assert.ifError(error);
