@@ -41,10 +41,10 @@ exports['Put multiple rows'] = function(assert){
 			.delete(function(){
 				var time = Date.now();
 				var rows = 
-					[ {row:'test_row_put_x_rows_1',column:'node_column_family',timestamp:time+20,$:'v 1.3'}
-					, {row:'test_row_put_x_rows_1',column:'node_column_family',timestamp:time+60,$:'v 1.1'}
-					, {row:'test_row_put_x_rows_1',column:'node_column_family',timestamp:time+40,$:'v 1.2'}
-					, {row:'test_row_put_x_rows_2',column:'node_column_family',timestamp:time+40,$:'v 2.2'}
+					[ {key:'test_row_put_x_rows_1',column:'node_column_family',timestamp:time+20,$:'v 1.3'}
+					, {key:'test_row_put_x_rows_1',column:'node_column_family',timestamp:time+60,$:'v 1.1'}
+					, {key:'test_row_put_x_rows_1',column:'node_column_family',timestamp:time+40,$:'v 1.2'}
+					, {key:'test_row_put_x_rows_2',column:'node_column_family',timestamp:time+40,$:'v 2.2'}
 					];
 				client
 				.getRow('node_table', null) // 'test_row_put_multiple_rows'
