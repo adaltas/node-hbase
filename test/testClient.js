@@ -16,7 +16,7 @@ exports['Get version cluster'] = function(assert){
 	utils.getClient(function( error, client ){
 		client.getVersionCluster(function(err,versionCluster){
 			assert.ifError(err);
-			assert.ok(/^\d[\d\.]+/.test(versionCluster));
+			assert.ok(/^(Unknown)|(\d[\d\.]+)/.test(versionCluster));
 		});
 	});
 };

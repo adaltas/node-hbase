@@ -10,6 +10,14 @@
 
 Node HBase is a Node.JS client for HBase server. It use the Rest API (Stargate) to communicate with HBase. Currently, the data exchange format is JSON (but protocol buffer could follow).
 
+Features include
+-   Intuitive API following HBase naming conventions
+-   Documentation and tests
+-   Implements all the REST API
+-   Transparent encoding/decoding of values
+-   Scanner and filter support
+-   Integration with npm
+
 Quick example
 -------------
 

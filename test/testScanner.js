@@ -1,5 +1,6 @@
 
 var utils = require('./utils')
+  , hbase = require('hbase')
   , Scanner = require('hbase').Scanner;
 
 exports['Instance'] = function(assert){
@@ -57,7 +58,7 @@ exports['Get startRow'] = function(assert){
 					// http://brunodumon.wordpress.com/2010/02/17/building-indexes-using-hbase-mapping-strings-numbers-and-dates-onto-bytes/
 					// Technically, you would set the start row for the scanner to France 
 					// and stop the scanning by using a RowFilter with a BinaryPrefixComparator
-					assert.strictEqual(true,rows.length >= 4);
+					assert.strictEqual(true,rows.length >= 3);
 					assert.strictEqual('test_scanner_get_startRow_11',rows[0].key);
 					assert.strictEqual('node_column_family:',rows[0].column);
 					assert.strictEqual('test_scanner_get_startRow_111',rows[1].key);
@@ -188,9 +189,41 @@ exports['Get columns'] = function(assert){
 	});
 }
 
+//exports['Option maxVersions'] = function(assert){
+//	utils.getClient(function(error, hbase){
+//		var time = (new Date).getTime();
+//		hbase
+//		.getRow('node_table')
+//		.put([
+//			{key:'test_scanner_maxversions_1', column:'node_column_family::c', timestamp: time+1, $:'v 1.1'},
+//			{key:'test_scanner_maxversions_1', column:'node_column_family::c', timestamp: time+2, $:'v 1.2'},
+//			{key:'test_scanner_maxversions_1', column:'node_column_family::c', timestamp: time+3, $:'v 1.3'},
+//			{key:'test_scanner_maxversions_1', column:'node_column_family::c', timestamp: time+4, $:'v 1.4'}
+//		], function(error, success){
+//			assert.ifError(error);
+//			hbase
+//			.getScanner('node_table')
+//			.create({
+//				startRow: 'test_scanner_maxversions_1',
+//				endRow: 'test_scanner_maxversions_11',
+//				column: 'node_column_family::c',
+//				maxVersions: 3
+//			}, function(error,id){
+//				assert.ifError(error);
+//				this.get(function(error,cells){
+//					assert.ifError(error);
+//					console.log(cells);
+//					assert.strictEqual(3,cells.length);
+//					this.delete();
+//				})
+//			})
+//		})
+//	});
+//}
+
 exports['Get columns'] = function(assert){
-	utils.getClient(function(error, hbase){
-		hbase
+	utils.getClient(function(error, client){
+		client
 		.getRow('node_table')
 		.put([
 			{key:'test_scanner_continue_1', column:'node_column_family', $:'v 1.3'},
@@ -199,7 +232,7 @@ exports['Get columns'] = function(assert){
 			{key:'test_scanner_continue_4', column:'node_column_family', $:'v 2.2'}
 		], function(error, success){
 			assert.ifError(error);
-			hbase
+			client
 			.getScanner('node_table')
 			.create({
 				startRow: 'test_scanner_continue_1', 
