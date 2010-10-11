@@ -8,7 +8,7 @@
 |_|   |_|\___/ \____|_____)  |_|   |_|______/\_____(___/|_____)
 </pre>
 
-Node HBase is a Node.JS client for HBase server. It use the Rest API (Stargate) to communicate with HBase. Currently, the data exchange format is JSON (but protocol buffer could follow).
+Node HBase is a Node.JS client for HBase server. It use the Rest API (Stargate) to communicate with HBase. Currently, all the API is implemented and the data exchange format is JSON (but protocol buffer could follow).
 
 Features include
 -   Intuitive API following HBase naming conventions
@@ -39,11 +39,6 @@ This code create a new HBase instance, create a table and a column family, inser
 			}
 		});
 	});
-
-Status
-------
-
-At this point, HBase REST API is fully covered at the exception of scanners. Javascript API might also change in the near future.
 
 Installing
 ----------
