@@ -8,8 +8,27 @@ exports['Instance'] = function(assert){
 	});
 };
 
-exports['Create'] = function(assert){
-	utils.getClient(function(error, client,config){
+exports['Create no schema'] = function(assert){
+	utils.getClient(function(error, client, config){
+		if(!config.test_table) return;
+		client
+		.getTable('node_table_create_no_schema')
+		.create(function(error, data){
+			assert.ok(this instanceof Table);
+			assert.ifError(error);
+			assert.strictEqual(true,data);
+			this.getSchema(function(error, schema){
+				assert.strictEqual('false', schema['IS_META']);
+				assert.strictEqual('false', schema['IS_ROOT']);
+				assert.strictEqual(false, 'ColumnSchema' in schema);
+				this.delete();
+			})
+		});
+	});
+};
+
+exports['Create with schema'] = function(assert){
+	utils.getClient(function(error, client, config){
 		if(!config.test_table) return;
 		client
 		.getTable('node_table_create')
@@ -33,50 +52,58 @@ exports['Create'] = function(assert){
 };
 
 //exports['Modify table'] = function(assert){
-//	console.log('ok 0');
+//	// Create a table `node_table_modify`
 //	// Create column_2 with compression set to none
-//	utils.getClient(function(error, client,config){
+//	utils.getClient(function(error, client, config){
 //		client
 //		.getTable('node_table_modify')
-//		.create({
-//			Attribute: {READ_ONLY:true},
-//			READ_ONLY: true,
-//			ColumnSchema: [{
-//				name: 'column_6',
-//				COMPRESSION: 'RECORD',
-//				READONLY: 'true'
-//			}]
-//		}, function(error, data){
-//			console.log('ok 5');
-//			// Update column_2 with compression set to gz
-//			this.update({
+//		.delete(function(error, data){
+//			this.create({
+//				Attribute: {READ_ONLY:true},
 //				READ_ONLY: true,
 //				ColumnSchema: [{
 //					name: 'column_6',
 //					COMPRESSION: 'RECORD',
-//					REPLICATION_SCOPE: '1',
-//					IN_MEMORY: true,
-//					READONLY: 'true'
+//					READONLY: 'false'
 //				}]
 //			}, function(error, data){
-//				console.log('ok 6');
-//				// todo: drop the created column
-//				assert.ok(this instanceof Table);
-//				assert.ifError(error);
-//				assert.strictEqual(true,data);
-//				console.log('ok 1');
-//				this.getSchema(function(error, schema){
-//					console.log('ok 2');
-//					console.log(schema)
-//					this.delete();
+//				// Update column_2 with compression set to gz
+//				this.update({
+//					READ_ONLY: true,
+//					ColumnSchema: [{
+//						name: 'column_6',
+//						COMPRESSION: 'RECORD',
+//						REPLICATION_SCOPE: '1',
+//						IN_MEMORY: true,
+//						READONLY: 'true'
+//					},{
+//						name: 'column_7',
+//						COMPRESSION: 'RECORD',
+//						REPLICATION_SCOPE: '1',
+//						IN_MEMORY: true,
+//						READONLY: 'true'
+//					}]
+//				}, function(error, data){
+//					console.log('ok 6');
+//					console.log(data);
+//					// todo: drop the created column
+//					assert.ok(this instanceof Table);
+//					assert.ifError(error);
+//					assert.strictEqual(true,data);
+//					console.log('ok 1');
+//					this.getSchema(function(error, schema){
+//						console.log('ok 2');
+//						console.log(schema)
+//						this.delete();
+//					})
 //				})
-//			})
-//		});
+//			});
+//		})
 //	});
 //};
 
 exports['Delete'] = function(assert){
-	utils.getClient(function(error, client,config){
+	utils.getClient(function(error, client, config){
 		if(!config.test_table) return;
 		client
 		.getTable('node_table_delete')
