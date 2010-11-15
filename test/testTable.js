@@ -51,56 +51,56 @@ exports['Create with schema'] = function(assert){
 	});
 };
 
-//exports['Modify table'] = function(assert){
-//	// Create a table `node_table_modify`
-//	// Create column_2 with compression set to none
-//	utils.getClient(function(error, client, config){
-//		client
-//		.getTable('node_table_modify')
-//		.delete(function(error, data){
-//			this.create({
-//				Attribute: {READ_ONLY:true},
-//				READ_ONLY: true,
-//				ColumnSchema: [{
-//					name: 'column_6',
-//					COMPRESSION: 'RECORD',
-//					READONLY: 'false'
-//				}]
-//			}, function(error, data){
-//				// Update column_2 with compression set to gz
-//				this.update({
-//					READ_ONLY: true,
-//					ColumnSchema: [{
-//						name: 'column_6',
-//						COMPRESSION: 'RECORD',
-//						REPLICATION_SCOPE: '1',
-//						IN_MEMORY: true,
-//						READONLY: 'true'
-//					},{
-//						name: 'column_7',
-//						COMPRESSION: 'RECORD',
-//						REPLICATION_SCOPE: '1',
-//						IN_MEMORY: true,
-//						READONLY: 'true'
-//					}]
-//				}, function(error, data){
-//					console.log('ok 6');
-//					console.log(data);
-//					// todo: drop the created column
-//					assert.ok(this instanceof Table);
-//					assert.ifError(error);
-//					assert.strictEqual(true,data);
-//					console.log('ok 1');
-//					this.getSchema(function(error, schema){
-//						console.log('ok 2');
-//						console.log(schema)
-//						this.delete();
-//					})
-//				})
-//			});
-//		})
-//	});
-//};
+exports['Modify table'] = function(assert){
+	// Create a table `node_table_modify`
+	// Create column_2 with compression set to none
+	// Note, require path 3140
+	// https://issues.apache.org/jira/browse/HBASE-3140?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel
+	utils.getClient(function(error, client, config){
+		client
+		.getTable('node_table_modify')
+		.delete(function(error, data){
+			this.create({
+				Attribute: {READ_ONLY:true},
+				READ_ONLY: true,
+				ColumnSchema: [{
+					name: 'column_6',
+					COMPRESSION: 'RECORD',
+					READONLY: 'false'
+				}]
+			}, function(error, data){
+				// Update column_2 with compression set to gz
+				this.update({
+					READ_ONLY: true,
+					ColumnSchema: [{
+						name: 'column_6',
+						COMPRESSION: 'RECORD',
+						REPLICATION_SCOPE: '1',
+						IN_MEMORY: true,
+						READONLY: 'true'
+					},{
+						name: 'column_7',
+						COMPRESSION: 'RECORD',
+						REPLICATION_SCOPE: '1',
+						IN_MEMORY: true,
+						READONLY: 'true'
+					}]
+				}, function(error, data){
+					// todo: drop the created column
+					assert.ifError(error);
+					assert.ok(this instanceof Table);
+					assert.strictEqual(true,data);
+					this.getSchema(function(error, schema){
+						assert.strictEqual(2,schema.ColumnSchema.length);
+						assert.strictEqual('column_6',schema.ColumnSchema[0].name);
+						assert.strictEqual('column_7',schema.ColumnSchema[1].name);
+						this.delete();
+					})
+				})
+			});
+		})
+	});
+};
 
 exports['Delete'] = function(assert){
 	utils.getClient(function(error, client, config){

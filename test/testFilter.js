@@ -41,75 +41,13 @@ exports['Option filter'] = function(assert){
 			{key:'test_filter_row_3', column:'node_column_family:cb', $:'cc'},
 			{key:'test_filter_row_3', column:'node_column_family:cc', $:'cc'}
 		], function(error, success){
-			// Test RowFilter EQUAL with BinaryComparator
-			// Based on the key
-			client
-			.getScanner('node_table')
-			.create({
-				startRow: 'test_filter_row_1',
-				filter: {'op':'EQUAL','type':'RowFilter','comparator':{'value':'test_filter_row_2','type':'BinaryComparator'}}
-			}, function(error,id){
-				assert.ifError(error);
-				this.get(function(error,cells){
-					assert.ifError(error);
-					assert.strictEqual(3,cells.length);
-					this.delete();
-				})
-			})
-			// Test FirstKeyOnlyFilter
-			// Only return the first KV from each row.
-			client
-			.getScanner('node_table')
-			.create({
-				startRow: 'test_filter_row_1',
-				filter: {'type':'FirstKeyOnlyFilter'}
-			}, function(error,id){
-				assert.ifError(error);
-				this.get(function(error,cells){
-					assert.ifError(error);
-					assert.strictEqual(true,cells.length > 2);
-					assert.strictEqual('test_filter_row_1', cells[0].key);
-					assert.strictEqual('test_filter_row_2', cells[1].key);
-					assert.strictEqual('test_filter_row_3', cells[2].key);
-					this.delete();
-				})
-			})
-			// Test FilterList and RegexStringComparator
-			client
-			.getScanner('node_table')
-			.create({
-				startRow: 'test_filter_row_1',
-				filter: {
-					"op":"MUST_PASS_ALL","type":"FilterList","filters":[
-						{"op":"EQUAL","type":"RowFilter","comparator":{"value":"test_filter_row_.*","type":"RegexStringComparator"}},
-						{"op":"EQUAL","type":"RowFilter","comparator":{"value":".+2$","type":"RegexStringComparator"}}
-					]}
-			}, function(error,id){
-				assert.ifError(error);
-				this.get(function(error,cells){
-					assert.ifError(error);
-					assert.strictEqual(3,cells.length);
-					assert.strictEqual('test_filter_row_2', cells[0].key);
-					assert.strictEqual('test_filter_row_2', cells[1].key);
-					assert.strictEqual('test_filter_row_2', cells[2].key);
-					this.delete();
-				})
-			})
-			// Test ValueFilter
-			client
-			.getScanner('node_table')
-			.create({
-				startRow: 'test_filter_row_1',
-				endRow: 'test_filter_row_4',
-				filter: {"op":"EQUAL","type":"ValueFilter","comparator":{"value":"bb","type":"BinaryComparator"}}
-			}, function(error,id){
-				assert.ifError(error);
-				this.get(function(error,cells){
-					assert.ifError(error);
-					assert.strictEqual(1,cells.length);
-					assert.strictEqual('test_filter_row_2', cells[0].key);
-					assert.strictEqual('node_column_family:bb', cells[0].column);
-					this.delete();
+			assert.ifError(error);
+			require('fs').readdir(__dirname+'/testFilter',function(error,files){
+				files.forEach(function(file){
+					var tests = require(__dirname+'/testFilter/'+file);
+					for(var test in tests){
+						tests[test](client,assert);
+					}
 				})
 			})
 		})
