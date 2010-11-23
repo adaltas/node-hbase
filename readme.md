@@ -8,9 +8,11 @@
 |_|   |_|\___/ \____|_____)  |_|   |_|______/\_____(___/|_____)
 </pre>
 
-Node HBase is a Node.JS client for HBase server. It use the Rest API (Stargate) to communicate with HBase. Currently, all the API is implemented and the data exchange format is JSON (but protocol buffer could follow).
+Node HBase is a Node.JS client for the Apache HBase database. It use the Rest API (Stargate) to communicate with HBase. Currently, all the API is implemented and the data exchange format is JSON (but protocol buffer could follow).
 
-Features include
+Apache HBase is part of the Hadoop ecosystem. It describes itself as the Hadoop database optimized for random, realtime read/write access to big data. It is an open-source, distributed, versioned, column-oriented store modeled after Google' Bigtable.
+
+Client features include:
 -   Intuitive API following HBase naming conventions
 -   Documentation and tests
 -   Implements all the REST API
