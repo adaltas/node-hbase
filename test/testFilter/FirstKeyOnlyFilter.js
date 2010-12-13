@@ -1,8 +1,10 @@
 
 // Called by "testFilter.js"
 
+var assert = require('assert');
+
 module.exports = {
-	simple: function(client,assert){
+	simple: function(client){
 		// Test FirstKeyOnlyFilter
 		// Only return the first KV from each row.
 		client

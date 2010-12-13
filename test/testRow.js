@@ -1,15 +1,16 @@
 
 var utils = require('./utils')
-  , Row = require('hbase').Row;
+  , Row = require('hbase').Row
+  , assert = require('assert');
 
-exports['Instance'] = function(assert){
+exports['Instance'] = function(){
 	utils.getClient(function(error, client){
 		assert.ok(client.getRow('mytable', 'my_row') instanceof Row);
 		assert.ok(client.getTable('mytable').getRow('my_row') instanceof Row);
 	});
 };
 
-exports['Put column family'] = function(assert){
+exports['Put column family'] = function(){
 	utils.getClient(function(error, client){
 		client
 		.getRow('node_table', 'test_row_put_column_family')
@@ -20,7 +21,7 @@ exports['Put column family'] = function(assert){
 	});
 };
 
-exports['Put column'] = function(assert){
+exports['Put column'] = function(){
 	utils.getClient(function(error, client){
 		client
 		.getRow('node_table', 'test_row_put_column')
@@ -31,7 +32,7 @@ exports['Put column'] = function(assert){
 	});
 };
 
-exports['Put multiple rows'] = function(assert){
+exports['Put multiple rows'] = function(){
 	utils.getClient(function(error, client){
 		client
 		.getRow('node_table','test_row_put_x_rows_1')
@@ -68,7 +69,7 @@ exports['Put multiple rows'] = function(assert){
 	});
 };
 
-exports['Put multiple columns'] = function(assert){
+exports['Put multiple columns'] = function(){
 	utils.getClient(function(error, client){
 		client
 		.getRow('node_table', 'test_row_put_multiple_columns_multi_args')
@@ -112,7 +113,7 @@ exports['Put multiple columns'] = function(assert){
 	});
 };
 
-exports['Get row'] = function(assert){
+exports['Get row'] = function(){
 	utils.getClient(function(error, client){
 		client
 		.getRow('node_table', 'test_row_get_row')
@@ -137,7 +138,7 @@ exports['Get row'] = function(assert){
 	});
 };
 
-exports['Get row with suffix globbing'] = function(assert){
+exports['Get row with suffix globbing'] = function(){
 	utils.getClient(function(error, client){
 		client
 		.getRow('node_table', 'test_row_get_globbing_1')
@@ -166,7 +167,7 @@ exports['Get row with suffix globbing'] = function(assert){
 	});
 };
 
-exports['Get column'] = function(assert){
+exports['Get column'] = function(){
 	utils.getClient(function(error, client){
 		client
 		.getRow('node_table', 'test_row_get_column')
@@ -185,7 +186,7 @@ exports['Get column'] = function(assert){
 	});
 };
 
-exports['Get escape'] = function(assert){
+exports['Get escape'] = function(){
 	utils.getClient(function(error, client){
 		client
 		.getRow('node_table', 'test_get_escape!\'éè~:@#.?*()') // "/, "
@@ -205,7 +206,7 @@ exports['Get escape'] = function(assert){
 	});
 };
 
-exports['Get options start and end'] = function(assert){
+exports['Get options start and end'] = function(){
 	utils.getClient(function(error, client){
 		client
 		.getRow('node_table', 'test_row_get_start_end')
@@ -230,7 +231,7 @@ exports['Get options start and end'] = function(assert){
 	});
 };
 
-exports['Get option v'] = function(assert){
+exports['Get option v'] = function(){
 	utils.getClient(function(error, client){
 		client
 		.getRow('node_table', 'test_row_get_v')
@@ -248,7 +249,7 @@ exports['Get option v'] = function(assert){
 	});
 };
 
-exports['Get multiple columns'] = function(assert){
+exports['Get multiple columns'] = function(){
 	utils.getClient(function(error, client){
 		client
 		.getRow('node_table', 'test_row_get_multiple_columns')
@@ -269,7 +270,7 @@ exports['Get multiple columns'] = function(assert){
 	});
 };
 
-exports['Get missing'] = function(assert){
+exports['Get missing'] = function(){
 	utils.getClient(function(error, client){
 		// on row missing
 		client
@@ -290,7 +291,7 @@ exports['Get missing'] = function(assert){
 	});
 };
 
-exports['Exists row'] = function(assert){
+exports['Exists row'] = function(){
 	utils.getClient(function(error, client){
 		// Row exists
 		client
@@ -311,7 +312,7 @@ exports['Exists row'] = function(assert){
 	})
 }
 
-exports['Exists column'] = function(assert){
+exports['Exists column'] = function(){
 	utils.getClient(function(error, client){
 		// Row exists
 		client
@@ -350,7 +351,7 @@ exports['Exists column'] = function(assert){
 	});
 };
 
-exports['Delete row'] = function(assert){
+exports['Delete row'] = function(){
 	utils.getClient(function(error, client){
 		client
 		.getRow('node_table', 'test_row_delete_row')
@@ -369,7 +370,7 @@ exports['Delete row'] = function(assert){
 	});
 };
 
-exports['Delete column'] = function(assert){
+exports['Delete column'] = function(){
 	utils.getClient(function(error, client){
 		client
 		.getRow('node_table', 'test_row_delete_column')
@@ -392,7 +393,7 @@ exports['Delete column'] = function(assert){
 	});
 };
 
-exports['Delete multiple columns'] = function(assert){
+exports['Delete multiple columns'] = function(){
 	utils.getClient(function(error, client){
 		client
 		.getRow('node_table', 'test_row_delete_multiple_columns')

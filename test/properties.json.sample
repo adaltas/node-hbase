@@ -1,4 +1,6 @@
 { "host": "127.0.0.1"				
 , "port": 8080					
-, "test_table": true		
+, "test_table": true
+, "timeout": 1000
+, "test_table_modify": false		
 }

@@ -1,6 +1,8 @@
 
 // Called by "testFilter.js
 
+var assert = require('assert');
+
 function getKeysFromCells(cells){
 	var keys = [];
 	cells.forEach(function(cell){
@@ -12,7 +14,7 @@ function getKeysFromCells(cells){
 }
 
 module.exports = {
-	value_as_string: function(client,assert){
+	value_as_string: function(client){
 		// Test PageFilter
 		client
 		.getScanner('node_table')
@@ -31,7 +33,7 @@ module.exports = {
 			})
 		})
 	},
-	value_as_int: function(client,assert){
+	value_as_int: function(client){
 		// Test PageFilter
 		client
 		.getScanner('node_table')

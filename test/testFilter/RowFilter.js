@@ -1,8 +1,10 @@
 
 // Called by "testFilter.js"
 
+var assert = require('assert');
+
 module.exports = {
-	equal_with_binary_comparator: function(client,assert){
+	equal_with_binary_comparator: function(client){
 		// Test RowFilter EQUAL with BinaryComparator
 		// Based on the key
 		client

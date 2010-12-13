@@ -1,7 +1,8 @@
 
-var utils = require('./utils');
+var utils = require('./utils')
+  , assert = require('assert');
 
-exports['Get version'] = function(assert){
+exports['Get version'] = function(){
 	utils.getClient(function( error, client ){
 		client.getVersion(function(err,version){
 			assert.ifError(err);
@@ -12,7 +13,7 @@ exports['Get version'] = function(assert){
 	});
 };
 
-exports['Get version cluster'] = function(assert){
+exports['Get version cluster'] = function(){
 	utils.getClient(function( error, client ){
 		client.getVersionCluster(function(err,versionCluster){
 			assert.ifError(err);
@@ -21,7 +22,7 @@ exports['Get version cluster'] = function(assert){
 	});
 };
 
-exports['Get status cluster'] = function(assert){
+exports['Get status cluster'] = function(){
 	utils.getClient(function( error, client ){
 		client.getStatusCluster(function(err,statusCluster){
 			assert.ifError(err);
@@ -34,7 +35,7 @@ exports['Get status cluster'] = function(assert){
 	});
 };
 
-exports['Get tables'] = function(assert){
+exports['Get tables'] = function(){
 	utils.getClient(function( error, client ){
 		client.getTables(function(err,tables){
 			assert.ifError(err);

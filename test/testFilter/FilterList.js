@@ -1,8 +1,10 @@
 
 // Called by "testFilter.js"
 
+var assert = require('assert');
+
 module.exports = {
-	must_pass_all: function(client,assert){
+	must_pass_all: function(client){
 		// Test FilterList and RegexStringComparator
 		client
 		.getScanner('node_table')

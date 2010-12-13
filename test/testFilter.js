@@ -1,7 +1,8 @@
 
 var utils = require('./utils')
   , hbase = require('hbase')
-  , Scanner = require('hbase').Scanner;
+  , Scanner = require('hbase').Scanner
+  , assert = require('assert');
 
 //{"op":"LESS","type":"RowFilter","comparator":{"value":"dGVzdFJvd09uZS0y","type":"BinaryComparator"}}
 //{"op":"LESS_OR_EQUAL","type":"RowFilter","comparator":{"value":"dGVzdFJvd09uZS0y","type":"BinaryComparator"}}
@@ -25,7 +26,7 @@ var utils = require('./utils')
 //{"op":"MUST_PASS_ONE","type":"FilterList","filters":[{"op":"EQUAL","type":"RowFilter","comparator":{"value":".+Two.+","type":"RegexStringComparator"}},{"op":"EQUAL","type":"QualifierFilter","comparator":{"value":".+-2","type":"RegexStringComparator"}},{"op":"EQUAL","type":"ValueFilter","comparator":{"value":"one","type":"SubstringComparator"}}]}
 
 
-exports['Option filter'] = function(assert){
+exports['Option filter'] = function(){
 	utils.getClient(function(error, client){
 		var time = (new Date).getTime();
 		client
@@ -46,7 +47,7 @@ exports['Option filter'] = function(assert){
 				files.forEach(function(file){
 					var tests = require(__dirname+'/testFilter/'+file);
 					for(var test in tests){
-						tests[test](client,assert);
+						tests[test](client);
 					}
 				})
 			})

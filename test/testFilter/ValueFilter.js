@@ -1,8 +1,10 @@
 
 // Called by "testFilter.js"
 
+var assert = require('assert');
+
 module.exports = {
-	equal: function(client,assert){
+	equal: function(client){
 		// Test ValueFilter
 		client
 		.getScanner('node_table')

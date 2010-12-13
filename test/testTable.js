@@ -1,14 +1,15 @@
 
 var utils = require('./utils')
-  , Table = require('hbase').Table;
+  , Table = require('hbase').Table
+  , assert = require('assert');
 
-exports['Instance'] = function(assert){
+exports['Instance'] = function(){
 	utils.getClient(function(error, client){
 		assert.ok(client.getTable('my table') instanceof Table);
 	});
 };
 
-exports['Create no schema'] = function(assert){
+exports['Create no schema'] = function(){
 	utils.getClient(function(error, client, config){
 		if(!config.test_table) return;
 		client
@@ -27,7 +28,7 @@ exports['Create no schema'] = function(assert){
 	});
 };
 
-exports['Create with schema'] = function(assert){
+exports['Create with schema'] = function(){
 	utils.getClient(function(error, client, config){
 		if(!config.test_table) return;
 		client
@@ -51,12 +52,15 @@ exports['Create with schema'] = function(assert){
 	});
 };
 
-exports['Modify table'] = function(assert){
+exports['Modify table'] = function(){
 	// Create a table `node_table_modify`
 	// Create column_2 with compression set to none
-	// Note, require path 3140
-	// https://issues.apache.org/jira/browse/HBASE-3140?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel
 	utils.getClient(function(error, client, config){
+		if(!config.test_table_modify){
+			// Note, require patch 3140
+			// https://issues.apache.org/jira/browse/HBASE-3140?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel
+			return;
+		}
 		client
 		.getTable('node_table_modify')
 		.delete(function(error, data){
@@ -102,7 +106,7 @@ exports['Modify table'] = function(assert){
 	});
 };
 
-exports['Delete'] = function(assert){
+exports['Delete'] = function(){
 	utils.getClient(function(error, client, config){
 		if(!config.test_table) return;
 		client
@@ -129,7 +133,7 @@ exports['Delete'] = function(assert){
 	});
 };
 
-exports['Delete (no callback)'] = function(assert){
+exports['Delete (no callback)'] = function(){
 	utils.getClient(function(error, client, config){
 		if(!config.test_table) return;
 		client
@@ -152,7 +156,7 @@ exports['Delete (no callback)'] = function(assert){
 	});
 };
 
-exports['Exists'] = function(assert){
+exports['Exists'] = function(){
 	utils.getClient(function(error, client){
 		// Test existing table
 		client
@@ -173,7 +177,7 @@ exports['Exists'] = function(assert){
 	});
 };
 
-exports['Regions'] = function(assert){
+exports['Regions'] = function(){
 	utils.getClient(function(error, client){
 		client
 		.getTable('node_table')
@@ -186,7 +190,7 @@ exports['Regions'] = function(assert){
 	});
 };
 
-exports['Schema'] = function(assert){
+exports['Schema'] = function(){
 	utils.getClient(function(error, client){
 		client
 		.getTable('node_table')
