@@ -19,8 +19,8 @@ module.exports = {
 		client
 		.getScanner('node_table')
 		.create({
-			startRow: 'test_filter_row_1',
-			endRow: 'test_filter_row_4',
+			startRow: 'test_filter|row_1',
+			endRow: 'test_filter|row_4',
 			filter: {"type":"PageFilter","value":"2"}
 		}, function(error,id){
 			assert.ifError(error);
@@ -28,7 +28,7 @@ module.exports = {
 				assert.ifError(error);
 				assert.strictEqual(4,cells.length);
 				var keys = getKeysFromCells(cells);
-				assert.deepEqual(['test_filter_row_1','test_filter_row_2'],keys);
+				assert.deepEqual(['test_filter|row_1','test_filter|row_2'],keys);
 				this.delete();
 			})
 		})
@@ -38,8 +38,8 @@ module.exports = {
 		client
 		.getScanner('node_table')
 		.create({
-			startRow: 'test_filter_row_1',
-			endRow: 'test_filter_row_4',
+			startRow: 'test_filter|row_1',
+			endRow: 'test_filter|row_4',
 			filter: {"type":"PageFilter","value":2}
 		}, function(error,id){
 			assert.ifError(error);
@@ -47,7 +47,7 @@ module.exports = {
 				assert.ifError(error);
 				assert.strictEqual(4,cells.length);
 				var keys = getKeysFromCells(cells);
-				assert.deepEqual(['test_filter_row_1','test_filter_row_2'],keys);
+				assert.deepEqual(['test_filter|row_1','test_filter|row_2'],keys);
 				this.delete();
 			})
 		})

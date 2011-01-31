@@ -10,8 +10,8 @@ module.exports = {
 		client
 		.getScanner('node_table')
 		.create({
-			startRow: 'test_filter_row_1',
-			filter: {'op':'EQUAL','type':'RowFilter','comparator':{'value':'test_filter_row_2','type':'BinaryComparator'}}
+			startRow: 'test_filter|row_1',
+			filter: {'op':'EQUAL','type':'RowFilter','comparator':{'value':'test_filter|row_2','type':'BinaryComparator'}}
 		}, function(error,id){
 			assert.ifError(error);
 			this.get(function(error,cells){

@@ -32,15 +32,15 @@ exports['Option filter'] = function(){
 		client
 		.getRow('node_table')
 		.put([
-			{key:'test_filter_row_1', column:'node_column_family:aa', $:'aa'},
-			{key:'test_filter_row_1', column:'node_column_family:aa', $:'ab'},
-			{key:'test_filter_row_1', column:'node_column_family:aa', $:'ac'},
-			{key:'test_filter_row_2', column:'node_column_family:ab', $:'ba'},
-			{key:'test_filter_row_2', column:'node_column_family:bb', $:'bb'},
-			{key:'test_filter_row_2', column:'node_column_family:bc', $:'bc'},
-			{key:'test_filter_row_3', column:'node_column_family:ca', $:'cc'},
-			{key:'test_filter_row_3', column:'node_column_family:cb', $:'cc'},
-			{key:'test_filter_row_3', column:'node_column_family:cc', $:'cc'}
+			{key:'test_filter|row_1', column:'node_column_family:aa', $:'aa'},
+			{key:'test_filter|row_1', column:'node_column_family:aa', $:'ab'},
+			{key:'test_filter|row_1', column:'node_column_family:aa', $:'ac'},
+			{key:'test_filter|row_2', column:'node_column_family:ab', $:'ba'},
+			{key:'test_filter|row_2', column:'node_column_family:bb', $:'bb'},
+			{key:'test_filter|row_2', column:'node_column_family:bc', $:'bc'},
+			{key:'test_filter|row_3', column:'node_column_family:ca', $:'cc'},
+			{key:'test_filter|row_3', column:'node_column_family:cb', $:'cc'},
+			{key:'test_filter|row_3', column:'node_column_family:cc', $:'cc'}
 		], function(error, success){
 			assert.ifError(error);
 			require('fs').readdir(__dirname+'/testFilter',function(error,files){
