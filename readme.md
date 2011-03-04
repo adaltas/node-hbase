@@ -49,7 +49,7 @@ Via git (or downloaded tarball):
 
     $ git clone http://github.com/wdavidw/node-hbase.git
 
-Then, simply copy or link the lib/csv.js file into your $HOME/.node_libraries folder or inside a declared path folder.
+Then, simply copy or link the project inside a discoverable Node directory (node_modules).
 
 Via [npm](http://github.com/isaacs/npm):
 

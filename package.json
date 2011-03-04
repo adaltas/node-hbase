@@ -2,7 +2,6 @@
 , "version": "0.0.7"
 , "description": "HBase client using the REST connector"
 , "author": "David Worms <david@adaltas.com>"
-, "directories" : { "lib" : "./lib" }
 , "main": "./lib/hbase"
 , "engines": { "node": ">= 0.1.90" }
 }
