@@ -15,7 +15,7 @@ Apache HBase is part of the Hadoop ecosystem. It describes itself as the Hadoop 
 Client features include:
 -   Intuitive API following HBase naming conventions
 -   Documentation and tests
--   Implements all the REST API
+-   Full Implementation of the REST API
 -   Transparent encoding/decoding of values
 -   Scanner and filter support
 -   Integration with npm
@@ -29,16 +29,16 @@ This code create a new HBase instance, create a table and a column family, inser
 	  , hbase = require('hbase');
 	
 	hbase({ host: '127.0.0.1', port: 8080 })
-	.getTable('node_hbase' )
-	.create('node_hbase_column', function(error, success){
+	.getTable('my_table' )
+	.create('my_column_family', function(err, success){
 		this
-		.row('my_row')
-		.put('my_column_family:my_column', function(error, success){
-			this.get('my_column_family', function(error, cells){
-				this.exists(function(error, exists){
+		.getRow('my_row')
+		.put('my_column_family:my_column', 'my value', function(err, success){
+			this.get('my_column_family', function(err, cells){
+				this.exists(function(err, exists){
 					assert.ok(exists);
-				}
-			}
+				});
+			});
 		});
 	});
 
@@ -61,13 +61,13 @@ Running the tests
 Tests are executed with expresso. To install it, simple use `npm install expresso`.
 
 To run the tests
-	expresso -I lib test/test*
+	expresso test/test*
 
 To develop with the tests watching at your changes
-	expresso -w -I lib test/test*
+	expresso -w test/test*
 
 To instrument the tests
-	expresso -I lib --cov test/test*
+	expresso --cov test/test*
 
 
 
