@@ -1,4 +1,5 @@
 .*
+lib-cov
 restart.sh
 test/properties.json
 !.gitignore
