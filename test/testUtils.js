@@ -2,30 +2,23 @@
 var utils = require('hbase').utils,
 	assert = require('assert');
 
-exports['URL encode regexp'] = function(){
-	var split = function(path){
-		path = utils.url.regexp.exec(path).filter(function(path,i){
-			return path&&i%2===1;
-		})
-		return path;
-	}
-	assert.deepEqual(['table'],split('/table'));
-	assert.deepEqual(['table'],split('/table/'));
-	assert.deepEqual(['table','key'],split('/table/key'));
-	assert.deepEqual(['table','key'],split('/table/key/'));
-	assert.deepEqual(['table','key','column_family'],split('/table/key/column_family'));
-	assert.deepEqual(['table','key','column_family:colum'],split('/table/key/column_family:colum'));
-	assert.deepEqual(['table','key','column_family:colum'],split('/table/key/column_family:colum/'));
-	assert.deepEqual(['table','key','column_family:colum:test'],split('/table/key/column_family:colum:test/'));
-	assert.deepEqual(['table','key','column_family:colum:test','key=value'],split('/table/key/column_family:colum:test?key=value'));
-	assert.deepEqual(['table','key','column_family:colum','1285941387939'],split('/table/key/column_family:colum/1285941387939'));
-	assert.deepEqual(['table','key','cf1:c1,cf2:c2','1285941387939'],split('/table/key/cf1:c1,cf2:c2/1285941387939'));
-	assert.deepEqual(['table','key','cf1:c1,cf2:c2','1285941387939,1285942722246'],split('/table/key/cf1:c1,cf2:c2/1285941387939,1285942722246'));
-	assert.deepEqual(['table','key','column_family:colum','1285941387939','key=value'],split('/table/key/column_family:colum/1285941387939?key=value'));
-};
-
 exports['URL encode'] = function(){
-	assert.strictEqual('/table/key/%C3%A91:%C3%A81,%C3%A92:%C3%A82/1285941387939?key=value',utils.url.encode('/table/key/é1:è1,é2:è2/1285941387939?key=value'));
-	assert.strictEqual('/table/key/cf:c/1285941387939,1285941387939?key=value',utils.url.encode('/table/key/cf:c/1285941387939,1285941387939?key=value'));
-	assert.strictEqual('/table/key/cf:c?key=value',utils.url.encode('/table/key/cf:c?key=value'));
+	assert.eql('/table', utils.url.encode('table'));
+	assert.eql('/table', utils.url.encode('table'));
+	assert.eql('/table/key', utils.url.encode('table','key'));
+	assert.eql('/table/key', utils.url.encode('table','key',null,null,null,null));
+	assert.eql('/table/key/column_family', utils.url.encode('table','key','column_family'));
+	assert.eql('/table/key/column_family:colum', utils.url.encode('table','key',{'column_family':'colum'}));
+	assert.eql('/table/key/column_family:colum?key=value', utils.url.encode('table','key',{'column_family':'colum'},{key:'value'}));
+	assert.eql('/table/key/column_family:colum?key=value', utils.url.encode('table','key',[['column_family','colum']],{key:'value'}));
+	assert.eql('/table/key/column_family:colum?key=value', utils.url.encode('table','key',{'column_family':'colum'},{key:'value'}));
+	assert.eql('/table/key/column_family:colum?key=value', utils.url.encode('table','key',[['column_family','colum']],{key:'value'}));
+	assert.eql('/table/key/column_family:colum/1285941387939', utils.url.encode('table','key',{'column_family':'colum'},1285941387939));
+	assert.eql('/table/key/cf1:c1,cf2:c2/1285941387939', utils.url.encode('table','key',{'cf1':'c1','cf2':'c2'},1285941387939));
+	assert.eql('/table/key/cf1:c1,cf2:c2/1285941387939', utils.url.encode('table','key',[['cf1','c1'],['cf2','c2']],1285941387939));
+	assert.eql('/table/key/cf1:c1,cf2:c2/1285941387939?key=value', utils.url.encode('table','key',{'cf1':'c1','cf2':'c2'},1285941387939,{key:'value'}));
+	assert.eql('/table/key/cf1:c1,cf2:c2/1285941387939?key=value', utils.url.encode('table','key',[['cf1','c1'],['cf2','c2']],1285941387939,{key:'value'}));
+	assert.eql('/table/key/cf1:c1,cf2:c2/1285941387939,1285942722246', utils.url.encode('table','key',{'cf1':'c1','cf2':'c2'},1285941387939,1285942722246));
+	assert.eql('/table/key/cf1:c1,cf2:c2/1285941387939,1285942722246', utils.url.encode('table','key',[['cf1','c1'],['cf2','c2']],1285941387939,1285942722246));
+	assert.eql('/t%C3%A0%3A%2F/k%C3%AA%3A%2F/cf1%C3%A9%3A%2F:c1%C3%A8%3A%2F,cf2%C3%A9%3A%2F:c2%C3%A8%3A%2F/1285941387939?k%C3%B6%3A%2F=v%C3%AE%3A%2F', utils.url.encode('tà:/','kê:/',{'cf1é:/':'c1è:/','cf2é:/':'c2è:/'},1285941387939,{'kö:/':'vî:/'}));
 };
