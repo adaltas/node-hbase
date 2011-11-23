@@ -1,6 +1,7 @@
-{ "host": "127.0.0.1"				
-, "port": 8080					
-, "test_table": true
-, "timeout": 1000
-, "test_table_modify": false		
+{
+    "host": "localhost",
+    "port": 8080,
+    "test_table": true,
+    "timeout": 60000,
+    "test_table_modify": true
 }
