@@ -1,7 +1,8 @@
-{ "name": "hbase"
-, "version": "0.0.9"
-, "description": "HBase client using the REST connector"
-, "author": "David Worms <david@adaltas.com>"
-, "main": "./lib/hbase"
-, "engines": { "node": ">= 0.1.90" }
+{
+    "name": "hbase",
+    "version": "0.0.9",
+    "description": "HBase client using the REST connector",
+    "author": "David Worms <david@adaltas.com>",
+    "main": "./lib/hbase",
+    "engines": { "node": ">= 0.1.90" }
 }
