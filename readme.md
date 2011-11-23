@@ -18,15 +18,24 @@ Client features include:
 -   Full Implementation of the REST API
 -   Transparent encoding/decoding of values
 -   Scanner and filter support
--   Integration with npm
+
+Installing
+----------
+
+Via [npm](http://github.com/isaacs/npm):
+
+```bash
+    npm install hbase
+```
 
 Quick example
 -------------
 
 This code create a new HBase instance, create a table and a column family, insert a few records and traverse them.
 
-	var assert = require('assert')
-	  , hbase = require('hbase');
+```javascript
+	var assert = require('assert');
+	var hbase = require('hbase');
 	
 	hbase({ host: '127.0.0.1', port: 8080 })
 	.getTable('my_table' )
@@ -41,35 +50,26 @@ This code create a new HBase instance, create a table and a column family, inser
 			});
 		});
 	});
-
-Installing
-----------
-
-Via git (or downloaded tarball):
-
-    $ git clone http://github.com/wdavidw/node-hbase.git
-
-Then, simply copy or link the project inside a discoverable Node directory (node_modules).
-
-Via [npm](http://github.com/isaacs/npm):
-
-    $ npm install hbase
+```
 
 Running the tests
 -----------------
 
-Tests are executed with expresso. To install it, simple use `npm install expresso`.
+Tests are executed with expresso. To install it, simple use 
+`npm install -g expresso`. Before running the tests the first time, copy the
+file "./test/properties.json.sample" to "./test/properties.json" and make the
+appropriate changes.
 
 To run the tests
-	expresso test/test*
 
-To develop with the tests watching at your changes
-	expresso -w test/test*
+```bash
+	expresso -s -t 100000
+```
 
 To instrument the tests
-	expresso --cov test/test*
-
-
+```bash
+	expresso --cov -s -t 100000
+```
 
 Related projects
 ----------------
