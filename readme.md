@@ -75,4 +75,12 @@ Related projects
 ----------------
 
 *   Official Apache HBase project: <http://hbase.apache.org/>
-*   Brother project Pop HBase (PHP): <http://www.php-pop.org/pop_hbase.html>
+*   Brother project Pop HBase (PHP): <https://github.com/pop/pop_hbase>
+
+
+Contributors
+------------
+
+*   David Worms: <https://github.com/wdavidw>
+*   Michael Kurze: <https://github.com/michaelku>
+*   Michal Taborsky: <https://github.com/whizz>

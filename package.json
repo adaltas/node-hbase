@@ -3,6 +3,16 @@
     "version": "0.0.9",
     "description": "HBase client using the REST connector",
     "author": "David Worms <david@adaltas.com>",
+    "contributors": [{
+        "name": "David Worms",
+        "email": "david@adaltas.com"
+    },{
+        "name": "Michael Kurze",
+        "email": "https://github.com/michaelku"
+    },{
+        "name": "Michal Taborsky",
+        "email": "https://github.com/whizz"
+    }],
     "main": "./lib/hbase",
     "engines": { "node": ">= 0.1.90" }
 }
