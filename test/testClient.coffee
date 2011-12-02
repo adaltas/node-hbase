@@ -1,4 +1,5 @@
 
+hbase = require '..'
 utils = require './utils'
 assert = require 'assert'
 
@@ -29,3 +30,9 @@ module.exports =
                 assert.ifError err
                 assert.strictEqual 1, tables.filter( (table) -> table.name is 'node_table' ).length
                 next()
+    'Test': (next) ->
+        # Hopefully, 456789 isnt used, might worth checking it with `nc`
+        hbase({host: 'localhost', port: 456789})
+        .getVersionCluster (err, versionCluster) ->
+            assert.ok err instanceof Error
+            next()

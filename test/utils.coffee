@@ -1,8 +1,8 @@
 
-hbase = require('hbase')
-fs = require('fs')
-path = require('path')
-assert = require('assert')
+hbase = require '..'
+fs = require 'fs'
+path = require 'path'
+assert = require 'assert'
 
 module.exports.getClient = (callback) ->
     configFile = "#{__dirname}/properties.json"
