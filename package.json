@@ -14,7 +14,7 @@
         "email": "https://github.com/whizz"
     }],
     "main": "./lib/hbase",
-    "engines": { "node": ">= 0.1.90" }
+    "engines": { "node": ">= 0.1.90" },
     "bugs": {
         "url": "https://github.com/wdavidw/node-hbase/issues"
     },
@@ -22,5 +22,5 @@
         "type": "git",
         "url": "https://github.com/wdavidw/node-hbase.git"
     },
-    "homepage": "https://github.com/wdavidw/node-hbase",
+    "homepage": "https://github.com/wdavidw/node-hbase"
 }
