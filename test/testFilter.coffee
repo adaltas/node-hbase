@@ -161,3 +161,21 @@ module.exports =
                     assert.strictEqual('test_filter|row_2', cells[0].key)
                     assert.strictEqual('node_column_family:bb', cells[0].column)
                     this.delete next
+    'SingleColumnValueFilter # op equal substringcomparator': (next) ->
+        utils.getClient (error, client) ->
+            client
+            .getScanner('node_table')
+            .create
+                startRow: 'test_filter|row_1'
+                endRow: 'test_filter|row_4'
+                maxVersions: 1
+                filter: {"family":"node_column_family","qualifier":"aa","op":"EQUAL","type":"SingleColumnValueFilter","comparator":{"value":"ab","type":"SubstringComparator"}}
+            , (error,id) ->
+                assert.ifError error
+                this.get (error,cells) ->
+                    assert.ifError error
+                    assert.strictEqual(3,cells.length)
+                    assert.strictEqual('test_filter|row_1', cells[0].key)
+                    assert.strictEqual('test_filter|row_1', cells[1].key)
+                    assert.strictEqual('test_filter|row_1', cells[2].key)
+                    this.delete next
