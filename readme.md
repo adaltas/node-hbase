@@ -52,6 +52,12 @@ This code create a new HBase instance, create a table and a column family, inser
 	});
 ```
 
+Scanner Filters
+-----------------
+
+I found it quite a pain to figure out what options can be sent
+with a scanner request. I have generated a few examples [here](https://gist.github.com/3979381).
+
 Running the tests
 -----------------
 
