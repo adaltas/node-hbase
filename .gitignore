@@ -2,4 +2,5 @@
 lib-cov
 restart.sh
 test/properties.json
+node_modules
 !.gitignore
