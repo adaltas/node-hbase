@@ -1,7 +1,7 @@
 {
-    "host": "localhost",
-    "port": 8080,
-    "test_table": true,
-    "timeout": 60000,
-    "test_table_modify": true
+  "host": "localhost",
+  "port": 8080,
+  "test_table": true,
+  "timeout": 60000,
+  "test_table_modify": true
 }

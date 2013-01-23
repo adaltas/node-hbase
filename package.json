@@ -1,26 +1,30 @@
 {
-    "name": "hbase",
-    "version": "0.1.1",
-    "description": "HBase client using the REST connector",
-    "author": "David Worms <david@adaltas.com>",
-    "contributors": [{
-        "name": "David Worms",
-        "email": "david@adaltas.com"
-    },{
-        "name": "Michael Kurze",
-        "email": "https://github.com/michaelku"
-    },{
-        "name": "Michal Taborsky",
-        "email": "https://github.com/whizz"
-    }],
-    "main": "./lib/hbase",
-    "engines": { "node": ">= 0.1.90" },
-    "bugs": {
-        "url": "https://github.com/wdavidw/node-hbase/issues"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/wdavidw/node-hbase.git"
-    },
-    "homepage": "https://github.com/wdavidw/node-hbase"
+  "name": "hbase",
+  "version": "0.1.1",
+  "description": "HBase client using the REST connector",
+  "author": "David Worms <david@adaltas.com>",
+  "contributors": [{
+    "name": "David Worms",
+    "email": "david@adaltas.com"
+  },{
+    "name": "Michael Kurze",
+    "email": "https://github.com/michaelku"
+  },{
+    "name": "Michal Taborsky",
+    "email": "https://github.com/whizz"
+  }],
+  "main": "./lib/hbase",
+  "engines": { "node": ">= 0.1.90" },
+  "devDependencies": {
+    "mocha": "latest",
+    "should": "latest"
+  },
+  "bugs": {
+    "url": "https://github.com/wdavidw/node-hbase/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wdavidw/node-hbase.git"
+  },
+  "homepage": "https://github.com/wdavidw/node-hbase"
 }
