@@ -13,11 +13,14 @@
     "name": "Michal Taborsky",
     "email": "https://github.com/whizz"
   }],
-  "main": "./lib/hbase",
+  "main": "./lib/index",
   "engines": { "node": ">= 0.1.90" },
   "devDependencies": {
     "mocha": "latest",
-    "should": "latest"
+    "should": "latest",
+    "docgen": "latest",
+    "each": "latest",
+    "coffee-script": "latest"
   },
   "bugs": {
     "url": "https://github.com/wdavidw/node-hbase/issues"

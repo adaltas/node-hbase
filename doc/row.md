@@ -1,6 +1,14 @@
-
-Row operations: CRUD operation on rows and columns
-==================================================
+---
+title: "Row operations: CRUD operation on rows and columns"
+date: 2013-01-24T09:46:30.065Z
+language: en
+layout: page
+comments: false
+sharing: false
+footer: false
+navigation: hbase
+github: https://github.com/wdavidw/node-hbase
+---
 
 Row objects provide access and multipulation on colunns and rows. Single and multiple operations are available and are documented below.
 
@@ -143,8 +151,12 @@ hbase()
   ['my_column_family:my_column_1', 'my_column_family:my_column_2'], 
   ['my value 1', 'my value 2'], 
   function(error, success){
-    assert.strictEqual(true, success);
-  }
+
+```javascript
+assert.strictEqual(true, success);
+
+```
+
 );
 ```
 
@@ -258,7 +270,11 @@ hbase()
 .delete(
   ['my_column_family:my_column_1', 'my_column_family:my_column_2'], 
   function(error, success){
-    assert.strictEqual(true, success);
-  }
+
+```javascript
+assert.strictEqual(true, success);
+
+```
+
 );
 ```

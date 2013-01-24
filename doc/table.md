@@ -1,6 +1,14 @@
-
-Table operations: create, modify and delete HBase tables
-========================================================
+---
+title: "Table operations: create, modify and delete HBase tables"
+date: 2013-01-24T09:46:30.065Z
+language: en
+layout: page
+comments: false
+sharing: false
+footer: false
+navigation: hbase
+github: https://github.com/wdavidw/node-hbase
+---
 
 Grab an instance of "hbase.Table"
 ---------------------------------
@@ -44,17 +52,16 @@ hbase()
   IS_META: false, 
   IS_ROOT: false,
   COLUMNS: [{
-    NAME: 'my_new_column'
-  }] 
+
+```javascript
+NAME: 'my_new_column'
+ 
+```
+
 }, function( error, success ){
   console.log('Table created: ' + (success ? 'yes' : 'no'));
 } );
 ```
-
-Update an existing table
-------------------------
-
-NOT YET WORKING, waiting for [HBASE-3140](https://issues.apache.org/jira/browse/HBASE-3140).
 
 Drop an existing table
 ----------------------
@@ -72,6 +79,11 @@ hbase()
   assert.ok(success);
 });
 ```
+
+Update an existing table
+------------------------
+
+NOT YET WORKING, waiting for [HBASE-3140](https://issues.apache.org/jira/browse/HBASE-3140).
 
 Retrieves table schema
 ----------------------
@@ -130,13 +142,3 @@ Will print something similar to:
    ]
 }
 ```
-
-
-
-
-
-
-
-
-
-
