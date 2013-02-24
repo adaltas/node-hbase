@@ -1,8 +1,8 @@
 
 ###
 
-Getting started
-===============
+Node Hbase: getting started
+===========================
 
 About HBase
 -----------
