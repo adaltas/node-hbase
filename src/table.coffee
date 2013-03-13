@@ -62,7 +62,7 @@ hbase()
 #myTable.create([schema], [callback])
 Table::create = (schema, callback) ->
   self = this
-  args = Array::slice.call(arguments_)
+  args = Array::slice.call(arguments)
   schema = (if args.length and typeof args[0] is "object" or typeof args[0] is "string" then args.shift() else {})
   callback = (if args.length then args.shift() else null)
   schema.name = @name
