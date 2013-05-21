@@ -12,6 +12,9 @@
   },{
     "name": "Michal Taborsky",
     "email": "https://github.com/whizz"
+  },{
+    "name": "Marc Trudel",
+    "email": "https://github.com/stelcheck"
   }],
   "main": "./lib/index",
   "engines": { "node": ">= 0.1.90" },

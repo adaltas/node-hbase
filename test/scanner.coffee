@@ -2,7 +2,7 @@
 should = require 'should'
 test = require './test'
 hbase = require '..'
-Scanner = require '../lib/hbase-scanner'
+Scanner = require '../lib/scanner'
 
 describe 'scanner', ->
     it 'Instance', (next) ->
@@ -45,7 +45,7 @@ describe 'scanner', ->
                 should.not.exist err
                 client
                 .getScanner('node_table')
-                .create 
+                .create
                     startRow: 'test_scanner_get_startRow_11'
                     maxVersions: 1
                 , (err, id) ->
@@ -53,7 +53,7 @@ describe 'scanner', ->
                     this.get (err, rows) ->
                         should.not.exist err
                         # http:#brunodumon.wordpress.com/2010/02/17/building-indexes-using-hbase-mapping-strings-numbers-and-dates-onto-bytes/
-                        # Technically, you would set the start row for the scanner to France 
+                        # Technically, you would set the start row for the scanner to France
                         # and stop the scanning by using a RowFilter with a BinaryPrefixComparator
                         rows.length.should.be.above 2
                         rows[0].key.should.eql 'test_scanner_get_startRow_11'
@@ -75,7 +75,7 @@ describe 'scanner', ->
                 should.not.exist err
                 client
                 .getScanner('node_table')
-                .create 
+                .create
                     startRow: 'test_scanner_get_startEndRow_11'
                     endRow: 'test_scanner_get_startEndRow_2'
                     maxVersions: 1
@@ -84,7 +84,7 @@ describe 'scanner', ->
                     this.get (err, rows) ->
                         should.not.exist err
                         # http:#brunodumon.wordpress.com/2010/02/17/building-indexes-using-hbase-mapping-strings-numbers-and-dates-onto-bytes/
-                        # Technically, you would set the start row for the scanner to France 
+                        # Technically, you would set the start row for the scanner to France
                         # and stop the scanning by using a RowFilter with a BinaryPrefixComparator
                         rows.length.should.eql 2
                         rows[0].key.should.eql 'test_scanner_get_startEndRow_11'
@@ -152,13 +152,13 @@ describe 'scanner', ->
                 should.not.exist err
                 hbase
                 .getScanner('node_table')
-                # .create 
+                # .create
                 #     startRow: 'test_scanner_get_columns'
                 #     column: ['node_column_family:c4','node_column_family:c2']
                 #     batch: 6
                 #     maxVersions: 1
                 .create
-                    startRow: 'test_scanner_get_columns', 
+                    startRow: 'test_scanner_get_columns',
                     # endRow: 'test_scanner_continue_4'
                     batch: 2
                     maxVersions: 1
@@ -213,7 +213,7 @@ describe 'scanner', ->
         client
         .getScanner('node_table')
         .create
-          startRow: 'test_scanner_continue_1', 
+          startRow: 'test_scanner_continue_1',
           endRow: 'test_scanner_continue_4'
           batch: 2
           maxVersions: 1

@@ -1,8 +1,8 @@
 
-Connection = require "./hbase-connection"
-Table = require "./hbase-table"
-Row = require "./hbase-row"
-Scanner = require "./hbase-scanner"
+Connection = require "./connection"
+Table = require "./table"
+Row = require "./row"
+Scanner = require "./scanner"
 
 ###
 
@@ -14,10 +14,10 @@ Creating a new client
 
 A new instance of "HBase" may be instantiated with an object containing the following properties:
 
--   *host*   
+-   *host*
     string, optional, default to "localhost"
     Domain or IP of the HBase Stargate server
--   *port*   
+-   *port*
     string or int, optional, default to "8080"
     Port of the HBase REST server
 
@@ -42,6 +42,7 @@ Client = (options) ->
   options.timeout = 60 * 1000  unless options.timeout
   @options = options
   @connection = new Connection(this)
+  return
 
 ###
 Query Software Version

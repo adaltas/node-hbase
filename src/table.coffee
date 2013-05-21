@@ -1,5 +1,5 @@
-Row = require("./hbase-row")
-Scanner = require("./hbase-scanner")
+Row = require("./row")
+Scanner = require("./scanner")
 
 ###
 Table operations: create, modify and delete HBase tables
@@ -48,12 +48,12 @@ For more control on the table and column family schema configuration, the argume
 ```javascript
 hbase()
 .getTable( 'my_new_table' )
-.create( { 
-  IS_META: false, 
+.create( {
+  IS_META: false,
   IS_ROOT: false,
   COLUMNS: [{
     NAME: 'my_new_column'
-  }] 
+  }]
 }, function( error, success ){
   console.log('Table created: ' + (success ? 'yes' : 'no'));
 } );
@@ -149,7 +149,7 @@ Will print something similar to:
 { name: 'node_hbase'
 , IS_META: 'false'
 , IS_ROOT: 'false'
-, ColumnSchema: 
+, ColumnSchema:
    [ { name: 'column_2'
    , BLOCKSIZE: '65536'
    , BLOOMFILTER: 'NONE'
@@ -186,7 +186,7 @@ Will print something similar to:
 
 ```json
 { name: 'node_hbase'
-, Region: 
+, Region:
    [ { startKey: ''
    , name: 'node_hbase,,1285801694075'
    , location: 'eha.home:56243'

@@ -1,6 +1,6 @@
 
 should = require 'should'
-Table = require '../lib/hbase-table'
+Table = require '../lib/table'
 test = require './test'
 
 describe 'table', ->
