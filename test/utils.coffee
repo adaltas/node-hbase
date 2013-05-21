@@ -1,6 +1,6 @@
 
 should = require 'should'
-utils = require '../lib/hbase-utils'
+utils = require '../lib/utils'
 
 describe 'utils', ->
   it 'URL encode', ->

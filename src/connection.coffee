@@ -5,21 +5,21 @@ http = require("http")
 Connection: HTTP REST requests for HBase
 ========================================
 
-The connection object handles HTTP requests. You shouldn't 
-have to call it directly because HBase requests are transparently 
+The connection object handles HTTP requests. You shouldn't
+have to call it directly because HBase requests are transparently
 made by the client objects.
 
-Note, at this point, the HTTP client only communicate to 
-HBase with the JSON format. Some valid requests requests return 
-an empty body which of course not a valid JSON. In such cases, 
-no error is thrown by the response handler but the returned value 
+Note, at this point, the HTTP client only communicate to
+HBase with the JSON format. Some valid requests requests return
+an empty body which of course not a valid JSON. In such cases,
+no error is thrown by the response handler but the returned value
 is null.
 
 Creating a new connection
 -------------------------
 
-The most common way of initializing a new connection object 
-is through the client object. When a new client is constructed, 
+The most common way of initializing a new connection object
+is through the client object. When a new client is constructed,
 it create and hold a connection object.
 
 ```javascript
@@ -35,6 +35,7 @@ var connection = new hbase.Connection( client );
 ###
 Connection = (client) ->
   @client = client
+  return
 
 Connection::makeRequest = (method, command, data, callback) ->
   self = this

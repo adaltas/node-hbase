@@ -1,5 +1,5 @@
-utils = require("./hbase-utils")
-Table = require("./hbase-table")
+utils = require("./utils")
+Table = require("./table")
 
 ###
 Row operations: CRUD operation on rows and columns
@@ -119,7 +119,7 @@ Print something like
 # myRow.get([column], [callback])
 Row::get = (column, callback) ->
   self = this
-  args = Array::slice.call(arguments_)
+  args = Array::slice.call(arguments)
   key = "/" + @table + "/" + @key
   isGlob = @key.substr(-1, 1) is "*"
   options = {}
@@ -181,8 +181,8 @@ Inserting values into multiple columns is achieved the same way as for a single 
 hbase()
 .getRow('my_table', 'my_row')
 .put(
-  ['my_column_family:my_column_1', 'my_column_family:my_column_2'], 
-  ['my value 1', 'my value 2'], 
+  ['my_column_family:my_column_1', 'my_column_family:my_column_2'],
+  ['my value 1', 'my value 2'],
   function(error, success){
     assert.strictEqual(true, success);
   }
@@ -192,7 +192,7 @@ hbase()
 Alternatively, you could provide an array of cells as below:
 
 ```javascript
-var cells = 
+var cells =
   [ { column: 'cf:c1', timestamp: Date.now(), $: 'my value' }
   , { column: 'cf:c2', timestamp: Date.now(), $: 'my value' }
   , { column: 'cf:c1', timestamp: Date.now()+1, $: 'my value' }
@@ -214,7 +214,7 @@ myRow.put(data, [callback]);
 HBase allows us to send multiple cells from multiple rows in batch. To achieve it, construct a new row with a null key and provide the `put` function with an array of cells. Each cell objects must include the row `key`, `column` and `$` properties while `timestamp` is optional.
 
 ```javascript
-var rows = 
+var rows =
   [ { key: 'row_1', column: 'cf:c1', timestamp: Date.now(), $: 'my value' }
   , { key: 'row_1', column: 'cf:c2', timestamp: Date.now(), $: 'my value' }
   , { key: 'row_2', column: 'cf:c1', timestamp: Date.now()+1, $: 'my value' }
@@ -230,7 +230,7 @@ hbase()
 # myRow.put(data, [callback])
 Row::put = (columns, values, callback) ->
   self = this
-  args = Array::slice.call(arguments_)
+  args = Array::slice.call(arguments)
   url = undefined
   body = undefined
   bodyRow = undefined
@@ -319,7 +319,7 @@ hbase()
 # myRow.exists(column, [callback])
 Row::exists = (column, callback) ->
   self = this
-  args = Array::slice.call(arguments_)
+  args = Array::slice.call(arguments)
   column = (if typeof args[0] is "string" then args.shift() else null)
   url = utils.url.encode(@table, @key, column)
   @client.connection.get url, (error, exists) ->
@@ -372,7 +372,7 @@ Deleting multiple columns is achieved by providing an array of columns as the fi
 hbase()
 .getRow('my_table','my_row')
 .delete(
-  ['my_column_family:my_column_1', 'my_column_family:my_column_2'], 
+  ['my_column_family:my_column_1', 'my_column_family:my_column_2'],
   function(error, success){
     assert.strictEqual(true, success);
   }
@@ -382,7 +382,7 @@ hbase()
 # myRow.delete([column], [callback])
 Row::delete = ->
   self = this
-  args = Array::slice.call(arguments_)
+  args = Array::slice.call(arguments)
   columns = undefined
   columns = args.shift()  if typeof args[0] is "string" or (typeof args[0] is "object" and args[0] instanceof Array)
   url = utils.url.encode(@table, @key, columns)
