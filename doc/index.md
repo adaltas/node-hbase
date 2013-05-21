@@ -1,6 +1,14 @@
-
-Getting started
-===============
+---
+title: "Node Hbase: getting started"
+date: 2013-01-24T09:46:30.065Z
+language: en
+layout: page
+comments: false
+sharing: false
+footer: false
+navigation: hbase
+github: https://github.com/wdavidw/node-hbase
+---
 
 About HBase
 -----------
@@ -17,15 +25,23 @@ Starting HBase
 
 It seems like Stargate took the place of the old REST namespace. However, i need confirmation on this one. So if i'm right, assuming `${HBASE_HOME}/bin` is in your classpath, starting HBase with REST connector is as follow:
 
-	start-hbase.sh
-	hbase-daemon.sh start rest
+```bash
+start-hbase.sh
+hbase-daemon.sh start rest
+```
 
 And stoping:
 
-	hbase-daemon.sh stop rest
-	stop-hbase.sh
+```bash
+hbase-daemon.sh stop rest
+stop-hbase.sh
+```
+
 Or
-	ps ax | grep hbase | awk '{print $1}' | xargs kill -9
+
+```bash
+ps ax | grep hbase | awk '{print $1}' | xargs kill -9
+```
 
 Installing node-hbase
 ---------------------
@@ -35,21 +51,27 @@ Then, simply copy or link the lib/csv.js file into your $HOME/.node_libraries fo
 
 Node-hbase is also integrated to npm and can be installed with
 
-	npm install hbase
+```bash
+npm install hbase
+```
 
 Creating a new instance
 -----------------------
 
-	var hbase = require('hbase');
-	var client = hbase({
-		host: '127.0.0.1',
-		port: 8080
-	});
+```javascript
+var hbase = require('hbase');
+var client = hbase({
+  host: '127.0.0.1',
+  port: 8080
+});
+```
 
 Or
 
-	var hbase = require('hbase');
-	var client = new hbase.Client({
-		host: '127.0.0.1',
-		port: 8080
-	});
+```javascript
+var hbase = require('hbase');
+var client = new hbase.Client({
+  host: '127.0.0.1',
+  port: 8080
+});
+```
