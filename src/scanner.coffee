@@ -91,7 +91,7 @@ following properties are available:
 #myScanner.create([params], callback)
 Scanner::create = (params, callback) ->
   self = this
-  args = Array::slice.call(arguments_)
+  args = Array::slice.call(arguments)
   key = "/" + @table + "/scanner"
   params = (if typeof args[0] is "object" then args.shift() else {})
   callback = args.shift()

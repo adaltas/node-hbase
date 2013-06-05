@@ -9,7 +9,7 @@ utils =
 
   url:
     encode: (table, key, columns, from, to, params) ->
-      args = Array::slice.call(arguments_)
+      args = Array::slice.call(arguments)
       newpath = "/"
       params = args.pop()  if args.length > 3 and typeof args[args.length - 1] is "object"
       

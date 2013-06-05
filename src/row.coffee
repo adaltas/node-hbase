@@ -119,7 +119,7 @@ Print something like
 # myRow.get([column], [callback])
 Row::get = (column, callback) ->
   self = this
-  args = Array::slice.call(arguments_)
+  args = Array::slice.call(arguments)
   key = "/" + @table + "/" + @key
   isGlob = @key.substr(-1, 1) is "*"
   options = {}
@@ -230,7 +230,7 @@ hbase()
 # myRow.put(data, [callback])
 Row::put = (columns, values, callback) ->
   self = this
-  args = Array::slice.call(arguments_)
+  args = Array::slice.call(arguments)
   url = undefined
   body = undefined
   bodyRow = undefined
@@ -319,7 +319,7 @@ hbase()
 # myRow.exists(column, [callback])
 Row::exists = (column, callback) ->
   self = this
-  args = Array::slice.call(arguments_)
+  args = Array::slice.call(arguments)
   column = (if typeof args[0] is "string" then args.shift() else null)
   url = utils.url.encode(@table, @key, column)
   @client.connection.get url, (error, exists) ->
@@ -382,7 +382,7 @@ hbase()
 # myRow.delete([column], [callback])
 Row::delete = ->
   self = this
-  args = Array::slice.call(arguments_)
+  args = Array::slice.call(arguments)
   columns = undefined
   columns = args.shift()  if typeof args[0] is "string" or (typeof args[0] is "object" and args[0] instanceof Array)
   url = utils.url.encode(@table, @key, columns)
