@@ -1,6 +1,6 @@
 
 should = require 'should'
-Table = require '../lib/hbase-table'
+Table = require '../lib/table'
 test = require './test'
 
 describe 'table', ->
@@ -18,9 +18,10 @@ describe 'table', ->
         should.not.exist err
         assert.strictEqual(true,data)
         this.getSchema (err, schema) ->
-          assert.strictEqual('false', schema['IS_META'])
-          assert.strictEqual('false', schema['IS_ROOT'])
-          assert.strictEqual(false, 'ColumnSchema' in schema)
+          schema['IS_META'].should.eql 'false'
+          schema['IS_ROOT'].should.eql 'false'
+          # assert.strictEqual(false, 'ColumnSchema' in schema)
+          schema.should.not.include 'ColumnSchema'
           this.delete next
   it 'Create with schema', (next) ->
     test.getClient (err, client, config) ->
@@ -36,10 +37,10 @@ describe 'table', ->
       , (err, data) ->
         this.should.be.an.instanceof Table
         should.not.exist err
-        assert.strictEqual(true,data)
+        data.should.be.ok
         this.getSchema (err, schema) ->
-          assert.strictEqual(1,schema['ColumnSchema'].length)
-          assert.strictEqual('column_1',schema['ColumnSchema'][0]['name'])
+          schema['ColumnSchema'].length.should.eql 1
+          schema['ColumnSchema'][0]['name'].should.eql 'column_1'
           this.delete next
   it 'Modify table', (next) ->
     # Create a table `node_table_modify`

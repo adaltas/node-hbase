@@ -1,5 +1,5 @@
-Row = require("./hbase-row")
-Scanner = require("./hbase-scanner")
+Row = require("./row")
+Scanner = require("./scanner")
 
 ###
 Table operations: create, modify and delete HBase tables
@@ -22,6 +22,7 @@ var myTable = new hbase.Table(client, 'my_table');
 Table = (client, name) ->
   @client = client
   @name = name
+  @
 
 ###
 Create a new table in HBase

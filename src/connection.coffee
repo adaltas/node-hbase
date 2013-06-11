@@ -35,6 +35,7 @@ var connection = new hbase.Connection( client );
 ###
 Connection = (client) ->
   @client = client
+  @
 
 Connection::makeRequest = (method, command, data, callback) ->
   self = this
@@ -46,12 +47,10 @@ Connection::makeRequest = (method, command, data, callback) ->
     headers:
       "content-type": "application/json"
       Accept: "application/json"
-
-  req = http.request(options, (res) ->
+  req = http.request options, (res) ->
     body = ""
     res.on "data", (chunk) ->
       body += chunk
-
     res.on "end", ->
       error = null
       try
@@ -60,15 +59,11 @@ Connection::makeRequest = (method, command, data, callback) ->
         body = null
         error = e
       callback error, body, res
-
     res.on "close", ->
-      e = new Error("Connectino closed")
+      e = new Error("Connection closed")
       callback e, null
-
-  )
   req.on "error", (err) ->
     callback err
-
   if data and data isnt ""
     data = (if typeof data is "string" then data else JSON.stringify(data))
     req.write data, "utf8"

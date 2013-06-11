@@ -1,5 +1,5 @@
-utils = require("./hbase-utils")
-Table = require("./hbase-table")
+utils = require("./utils")
+Table = require("./table")
 
 ###
 Scanner operations
@@ -113,6 +113,7 @@ Scanner::create = (params, callback) ->
 
     encode params.filter
     params.filter = JSON.stringify(params.filter)
+  params['max-versions'] = 1
   console.log params
   @client.connection.put key, params, (error, data, response) ->
     return callback.apply(self, [error, null])  if error
