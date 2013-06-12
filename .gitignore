@@ -1,6 +1,8 @@
 .*
 lib-cov
 restart.sh
+test/properties.coffee
+test/properties.js
 test/properties.json
 node_modules
 !.gitignore
