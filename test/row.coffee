@@ -49,7 +49,7 @@ describe 'row', ->
             .getRow('node_table', 'test_row_put_x_rows_*')
             .get (err, cells) ->
               should.not.exist err
-              cells.should.eql [  
+              cells.should.eql [
                 { key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time + 60, '$': 'v 1.1'}
                 { key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time + 40, '$': 'v 1.2'}
                 { key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time + 20, '$': 'v 1.3'}

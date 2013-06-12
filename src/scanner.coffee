@@ -5,7 +5,7 @@ Table = require("./table")
 Scanner operations
 ==================
 
-Scanner are the most efficient way to retrieve multiple 
+Scanner are the most efficient way to retrieve multiple
 rows and columns from HBase.
 
 Grab an instance of "Scanner"
@@ -34,15 +34,15 @@ var myScanner = new hbase.Scanner(client, 'my_table', 'my_id');
 Using filter
 ------------
 
-Filter are defined during the scanner creation. If you 
-are familiar with HBase filters, it will be real easy to 
-use them. Note, you should not worry about encoding the 
-values, the library will do it for you. When you create 
-a new scanner, just associate the `filter` property with 
+Filter are defined during the scanner creation. If you
+are familiar with HBase filters, it will be real easy to
+use them. Note, you should not worry about encoding the
+values, the library will do it for you. When you create
+a new scanner, just associate the `filter` property with  
 your filter object. All filters are supported.
 
-Many exemples are available in the tests but here\'s one 
-wich returns all rows starting by "my_key_" and whose 
+Many exemples are available in the tests but here\'s one
+wich returns all rows starting by "my_key_" and whose
 value is "here you are".
 
 ```javascript
@@ -77,7 +77,7 @@ Create a new scanner
 myScanner.create([params], [callback]);
 ```
 
-Params is an object for which all properties are optional. The 
+Params is an object for which all properties are optional. The
 following properties are available:
 
 -   startRow: First row returned by the scanner
@@ -127,11 +127,11 @@ Scanning records
 myScanner.get(callback);
 ```
 
-Retrieve the next cells from HBase. The callback is required 
-and receive two arguments, an error object if any and a array 
+Retrieve the next cells from HBase. The callback is required
+and receive two arguments, an error object if any and a array
 of cells or null if the scanner is exhausted.
 
-The number of cells depends on the `batch` option. It is your 
+The number of cells depends on the `batch` option. It is your
 responsibity to call `get` as long as more cells are expected.
 
 ```javascript
@@ -149,8 +149,8 @@ var callback = function(error, cells){
 myScanner.get(callback);
 ```
 
-Note, this is not very pretty. Alternatively, you could make 
-use of the scanner function `continue` inside your callback 
+Note, this is not very pretty. Alternatively, you could make
+use of the scanner function `continue` inside your callback
 to trigger a new iteration. Here's how:
   
 ```javascript
@@ -220,6 +220,5 @@ Scanner::delete = (callback) ->
       else
         return
     callback.apply self, [error, (if error then null else true)]
-
 
 module.exports = Scanner

@@ -141,7 +141,7 @@ Row::get = (column, callback) ->
       key = utils.base64.decode(row.key)
       row.Cell.forEach (cell) ->
         data = {}
-        data.key = key  if isGlob
+        data.key = key if isGlob
         data.column = utils.base64.decode(cell.column)
         data.timestamp = cell.timestamp
         data.$ = utils.base64.decode(cell.$)
@@ -182,8 +182,8 @@ Inserting values into multiple columns is achieved the same way as for a single 
 hbase()
 .getRow('my_table', 'my_row')
 .put(
-  ['my_column_family:my_column_1', 'my_column_family:my_column_2'], 
-  ['my value 1', 'my value 2'], 
+  ['my_column_family:my_column_1', 'my_column_family:my_column_2'],
+  ['my value 1', 'my value 2'],
   function(error, success){
     assert.strictEqual(true, success);
   }
@@ -193,7 +193,7 @@ hbase()
 Alternatively, you could provide an array of cells as below:
 
 ```javascript
-var cells = 
+var cells =
   [ { column: 'cf:c1', timestamp: Date.now(), $: 'my value' }
   , { column: 'cf:c2', timestamp: Date.now(), $: 'my value' }
   , { column: 'cf:c1', timestamp: Date.now()+1, $: 'my value' }
@@ -373,7 +373,7 @@ Deleting multiple columns is achieved by providing an array of columns as the fi
 hbase()
 .getRow('my_table','my_row')
 .delete(
-  ['my_column_family:my_column_1', 'my_column_family:my_column_2'], 
+  ['my_column_family:my_column_1', 'my_column_family:my_column_2'],
   function(error, success){
     assert.strictEqual(true, success);
   }

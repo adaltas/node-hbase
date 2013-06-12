@@ -14,10 +14,10 @@ Creating a new client
 
 A new instance of "HBase" may be instantiated with an object containing the following properties:
 
--   *host*   
+-   *host*
     string, optional, default to "localhost"
     Domain or IP of the HBase Stargate server
--   *port*   
+-   *port*
     string or int, optional, default to "8080"
     Port of the HBase REST server
 

@@ -49,12 +49,12 @@ For more control on the table and column family schema configuration, the argume
 ```javascript
 hbase()
 .getTable( 'my_new_table' )
-.create( { 
-  IS_META: false, 
+.create( {
+  IS_META: false,
   IS_ROOT: false,
   COLUMNS: [{
     NAME: 'my_new_column'
-  }] 
+  }]
 }, function( error, success ){
   console.log('Table created: ' + (success ? 'yes' : 'no'));
 } );
@@ -150,7 +150,7 @@ Will print something similar to:
 { name: 'node_hbase'
 , IS_META: 'false'
 , IS_ROOT: 'false'
-, ColumnSchema: 
+, ColumnSchema:
    [ { name: 'column_2'
    , BLOCKSIZE: '65536'
    , BLOOMFILTER: 'NONE'

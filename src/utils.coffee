@@ -6,21 +6,17 @@ utils =
 
     decode: (string) ->
       (new Buffer(string, "base64")).toString "utf8"
-
   url:
     encode: (table, key, columns, from, to, params) ->
       args = Array::slice.call(arguments)
       newpath = "/"
       params = args.pop()  if args.length > 3 and typeof args[args.length - 1] is "object"
-      
       # Table
       newpath += encodeURIComponent(args.shift())  if args.length
-      
       # Key
       if args.length
         newpath += "/"
         newpath += encodeURIComponent(args.shift())
-      
       # Columns
       if args.length
         columnPath = undefined
@@ -44,11 +40,9 @@ utils =
         if columnPath
           newpath += "/"
           newpath += columnPath
-      
       # From & To
       from = to = null
       from = args.shift()  if args.length
-      
       # To
       to = args.shift()  if args.length
       if from or to
@@ -57,7 +51,6 @@ utils =
         if to
           newpath += ","
           newpath += encodeURIComponent(to)
-      
       # Params
       if params
         newpath += "?"
