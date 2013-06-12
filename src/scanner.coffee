@@ -113,8 +113,6 @@ Scanner::create = (params, callback) ->
 
     encode params.filter
     params.filter = JSON.stringify(params.filter)
-  params['max-versions'] = 1
-  console.log params
   @client.connection.put key, params, (error, data, response) ->
     return callback.apply(self, [error, null])  if error
     id = /scanner\/(\w+)$/.exec(response.headers.location)[1]
