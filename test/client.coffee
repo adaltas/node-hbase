@@ -2,6 +2,7 @@
 should = require 'should'
 hbase = require '..'
 test = require './test'
+sort = (a, b) -> if a.toLowerCase() < b.toLowerCase() then -1 else 1
 
 describe 'client', ->
   it 'get version', (next) ->
@@ -9,8 +10,9 @@ describe 'client', ->
     test.getClient (err, client) ->
       client.getVersion (err, version) ->
         should.not.exist err
-        keys = Object.keys version
-        keys.should.eql ['Server','REST','OS','Jersey','JVM']
+        Object.keys(version)
+        .sort(sort)
+        .should.eql ['Jersey','JVM','OS','REST','Server']
         next()
   it 'get version cluster', (next) ->
     @timeout 0
@@ -24,8 +26,9 @@ describe 'client', ->
     test.getClient (err, client) ->
       client.getStatusCluster (err,statusCluster) ->
         should.not.exist err
-        keys = Object.keys statusCluster
-        keys.should.eql ['requests','regions','averageLoad','DeadNodes','LiveNodes']
+        Object.keys(statusCluster)
+        .sort(sort)
+        .should.eql ['averageLoad','DeadNodes','LiveNodes','regions','requests']
         next()
   it 'get tables', (next) ->
     @timeout 0

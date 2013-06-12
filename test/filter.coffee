@@ -3,7 +3,7 @@ fs = require 'fs'
 should = require 'should'
 test = require './test'
 hbase = require '..'
-Scanner = require '../lib/hbase-scanner'
+Scanner = require '../lib/scanner'
 
 #{"op":"LESS","type":"RowFilter","comparator":{"value":"dGVzdFJvd09uZS0y","type":"BinaryComparator"}}
 #{"op":"LESS_OR_EQUAL","type":"RowFilter","comparator":{"value":"dGVzdFJvd09uZS0y","type":"BinaryComparator"}}
@@ -104,7 +104,7 @@ describe 'filter', ->
           should.not.exist err
           cells.length.should.eql 4
           keys = getKeysFromCells(cells)
-          assert.deepEqual(['test_filter|row_1','test_filter|row_2'],keys)
+          keys.should.eql ['test_filter|row_1','test_filter|row_2']
           this.delete next
   it 'PageFilter # int value', (next) ->
     getKeysFromCells = (cells) ->
@@ -127,7 +127,7 @@ describe 'filter', ->
           should.not.exist err
           cells.length.should.eql 4
           keys = getKeysFromCells(cells)
-          assert.deepEqual(['test_filter|row_1','test_filter|row_2'], keys)
+          keys.should.eql ['test_filter|row_1','test_filter|row_2']
           this.delete next
   it 'RowFilter # equal_with_binary_comparator', (next) ->
     test.getClient (err, client) ->

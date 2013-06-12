@@ -1,8 +1,7 @@
 
 should = require 'should'
 test = require './test'
-hbase = require '..'
-Scanner = require '../lib/hbase-scanner'
+Scanner = require '../lib/scanner'
 
 describe 'scanner', ->
   it 'Instance', (next) ->
@@ -14,15 +13,14 @@ describe 'scanner', ->
       next()
   it 'Create', (next) ->
     test.getClient (err, client) ->
-      rows = [
+      client
+      .getRow('node_table', null)
+      .put [
         {key:'test_scanner_create_1', column:'node_column_family', $:'v 1.3'}
         {key:'test_scanner_create_2', column:'node_column_family', $:'v 1.1'}
         {key:'test_scanner_create_3', column:'node_column_family', $:'v 1.2'}
         {key:'test_scanner_create_4', column:'node_column_family', $:'v 2.2'}
-      ]
-      client
-      .getRow('node_table', null)
-      .put rows, (err, success) ->
+      ], (err, success) ->
         should.not.exist err
         client
         .getScanner('node_table')
@@ -33,15 +31,14 @@ describe 'scanner', ->
           this.delete next
   it 'Get startRow', (next) ->
     test.getClient (err, client) ->
-      rows = [
+      client
+      .getRow('node_table')
+      .put [
         {key:'test_scanner_get_startRow_1', column:'node_column_family', $:'v 1.3'}
         {key:'test_scanner_get_startRow_11', column:'node_column_family', $:'v 1.1'}
         {key:'test_scanner_get_startRow_111', column:'node_column_family', $:'v 1.2'}
         {key:'test_scanner_get_startRow_2', column:'node_column_family', $:'v 2.2'}
-      ]
-      client
-      .getRow('node_table')
-      .put rows, (err, success) ->
+      ], (err, success) ->
         should.not.exist err
         client
         .getScanner('node_table')
@@ -63,15 +60,14 @@ describe 'scanner', ->
             this.delete next
   it 'Get startRow and endRow', (next) ->
     test.getClient (err, client) ->
-      rows = [
+      client
+      .getRow('node_table')
+      .put [
         {key:'test_scanner_get_startEndRow_1', column:'node_column_family', $:'v 1.3'}
         {key:'test_scanner_get_startEndRow_11', column:'node_column_family', $:'v 1.1'}
         {key:'test_scanner_get_startEndRow_111', column:'node_column_family', $:'v 1.2'}
         {key:'test_scanner_get_startEndRow_2', column:'node_column_family', $:'v 2.2'}
-      ]
-      client
-      .getRow('node_table')
-      .put rows, (err, success) ->
+      ], (err, success) ->
         should.not.exist err
         client
         .getScanner('node_table')
@@ -94,15 +90,14 @@ describe 'scanner', ->
             this.delete next
   it 'Get batch', (next) ->
     test.getClient (err, client) ->
-      rows = [
+      client
+      .getRow('node_table')
+      .put [
         {key:'test_scanner_get_batch_1', column:'node_column_family', $:'v 1.3'}
         {key:'test_scanner_get_batch_2', column:'node_column_family', $:'v 1.1'}
         {key:'test_scanner_get_batch_3', column:'node_column_family', $:'v 1.2'}
         {key:'test_scanner_get_batch_4', column:'node_column_family', $:'v 2.2'}
-      ]
-      client
-      .getRow('node_table')
-      .put rows, (err, success) ->
+      ], (err, success) ->
         should.not.exist err
         options = {startRow: 'test_scanner_get_batch_1', batch:1, maxVersions: 1}
         client
@@ -130,9 +125,11 @@ describe 'scanner', ->
             else
               should.not.be.ok false
           this.get(getCallback)
-  it 'Get columns', (next) ->
-    test.getClient (err, hbase) ->
-      rows = [
+  it.skip 'Get columns', (next) ->
+    test.getClient (err, client) ->
+      client
+      .getRow('node_table')
+      .put [
         {key:'test_scanner_get_columns_1', column:'node_column_family:c1', $:'v 1.1'}
         {key:'test_scanner_get_columns_1', column:'node_column_family:c2', $:'v 1.2'}
         {key:'test_scanner_get_columns_1', column:'node_column_family:c3', $:'v 1.3'}
@@ -145,87 +142,77 @@ describe 'scanner', ->
         {key:'test_scanner_get_columns_3', column:'node_column_family:c2', $:'v 3.2'}
         {key:'test_scanner_get_columns_3', column:'node_column_family:c3', $:'v 3.3'}
         {key:'test_scanner_get_columns_3', column:'node_column_family:c4', $:'v 3.4'}
-      ]
-      hbase
-      .getRow('node_table')
-      .put rows, (err, success) ->
+      ], (err, success) ->
         should.not.exist err
-        hbase
+        client
         .getScanner('node_table')
-        # .create 
-        #   startRow: 'test_scanner_get_columns'
-        #   column: ['node_column_family:c4','node_column_family:c2']
-        #   batch: 6
-        #   maxVersions: 1
         .create
-          startRow: 'test_scanner_get_columns', 
+          startRow: 'test_scanner_get_columns'
+          column: ['node_column_family:c4','node_column_family:c2']
+          maxVersions: 3
+        , (err, id) ->
+          should.not.exist err
+          this.get (err, rows) ->
+            should.not.exist err
+            rows.length.should.eql 2
+            rows[0].key.should.eql 'test_scanner_get_columns_2'
+            rows[0].column.should.eql 'node_column_family:c2'
+            rows[1].key.should.eql 'test_scanner_get_columns_2'
+            rows[1].column.should.eql 'node_column_family:c4'
+            this.delete next
+  #Does not work : even if maxVersion is missing, only one version is returned by the scanner
+  it.skip 'Option maxVersions', (next) ->
+    test.getClient (err, client) ->
+      time = (new Date).getTime()
+      client
+      .getRow('node_table')
+      .put [
+        key:'test_scanner_maxversions_1', column:'node_column_family::c', timestamp: time+1, $:'v 1.1'
+        key:'test_scanner_maxversions_1', column:'node_column_family::c', timestamp: time+2, $:'v 1.2'
+        key:'test_scanner_maxversions_1', column:'node_column_family::c', timestamp: time+3, $:'v 1.3'
+        key:'test_scanner_maxversions_1', column:'node_column_family::c', timestamp: time+4, $:'v 1.4'
+      ], (err, success) ->
+        should.not.exist err
+        client
+        .getScanner('node_table')
+        .create
+          startRow: 'test_scanner_maxversions_1'
+          endRow: 'test_scanner_maxversions_11'
+          column: 'node_column_family::c'
+          maxVersions: 3
+        , (err, id) ->
+          should.not.exist err
+          this.get (err, cells) ->
+            should.not.exist err
+            cells.length.should.eql 3
+            this.delete next
+  it.only 'should honor batch by returning defined number of record on each call', (next) ->
+    test.getClient (err, client) ->
+      client
+      .getRow('node_table')
+      .put [
+        key:'test_scanner_continue_1', column:'node_column_family', $:'v 1.3'
+        key:'test_scanner_continue_2', column:'node_column_family', $:'v 1.1'
+        key:'test_scanner_continue_3', column:'node_column_family', $:'v 1.2'
+        key:'test_scanner_continue_4', column:'node_column_family', $:'v 2.2'
+      ], (err, success) ->
+        should.not.exist err
+        client
+        .getScanner('node_table')
+        .create
+          startRow: 'test_scanner_continue_1'
           # endRow: 'test_scanner_continue_4'
           batch: 2
           maxVersions: 1
         , (err, id) ->
           should.not.exist err
+          i = 1
           this.get (err, rows) ->
             should.not.exist err
-            console.log rows
-            rows.length.should.eql 6
-            rows[0].key.should.eql 'test_scanner_get_columns_1'
-            rows[0].column.should.eql 'node_column_family:c2'
-            rows[1].key.should.eql 'test_scanner_get_columns_1'
-            rows[1].column.should.eql 'node_column_family:c4'
-            this.delete next
-  #Does not work : even if maxVersion is missing, only one version is returned by the scanner
-  it 'Option maxVersions', (next) ->
-  test.getClient (err, hbase) ->
-    time = (new Date).getTime()
-    hbase
-    .getRow('node_table')
-    .put [
-    {key:'test_scanner_maxversions_1', column:'node_column_family::c', timestamp: time+1, $:'v 1.1'}
-    {key:'test_scanner_maxversions_1', column:'node_column_family::c', timestamp: time+2, $:'v 1.2'}
-    {key:'test_scanner_maxversions_1', column:'node_column_family::c', timestamp: time+3, $:'v 1.3'}
-    {key:'test_scanner_maxversions_1', column:'node_column_family::c', timestamp: time+4, $:'v 1.4'}
-    ], (err, success) ->
-    should.not.exist err
-    hbase
-    .getScanner('node_table')
-    .create
-      startRow: 'test_scanner_maxversions_1'
-      endRow: 'test_scanner_maxversions_11'
-      column: 'node_column_family::c'
-      maxVersions: 3
-    , (err, id) ->
-      should.not.exist err
-      this.get (err, cells) ->
-      should.not.exist err
-      cells.length.should.eql 3
-      this.delete next
-  it 'should honor batch by returning defined number of record on each call', (next) ->
-  test.getClient (err, client) ->
-    client
-    .getRow('node_table')
-    .put [
-    {key:'test_scanner_continue_1', column:'node_column_family', $:'v 1.3'}
-    {key:'test_scanner_continue_2', column:'node_column_family', $:'v 1.1'}
-    {key:'test_scanner_continue_3', column:'node_column_family', $:'v 1.2'}
-    {key:'test_scanner_continue_4', column:'node_column_family', $:'v 2.2'}
-    ], (err, success) ->
-    should.not.exist err
-    client
-    .getScanner('node_table')
-    .create
-      startRow: 'test_scanner_continue_1', 
-      endRow: 'test_scanner_continue_4'
-      batch: 2
-      maxVersions: 1
-    , (err, id) ->
-      should.not.exist err
-      i = 1
-      this.get (err, rows) ->
-      should.not.exist err
-      console.log rows
-      # end of scanner
-      return this.delete next if rows is null and i is 5
-      rows[0].key.should.eql 'test_scanner_continue_' + i
-      i += 2
-      this.continue()
+            console.log err, rows
+            # end of scanner
+            return this.delete next if rows is null and i is 5
+            rows[0].key.should.eql 'test_scanner_continue_' + i
+            i += 2
+            this.continue()
 

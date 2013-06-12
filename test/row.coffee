@@ -1,7 +1,7 @@
 
 should = require 'should'
 test = require './test'
-Row = require '../lib/hbase-row'
+Row = require '../lib/row'
 
 describe 'row', ->
   it 'Row # Instance', (next) ->

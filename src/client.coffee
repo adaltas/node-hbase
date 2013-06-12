@@ -1,8 +1,8 @@
 
-Connection = require "./hbase-connection"
-Table = require "./hbase-table"
-Row = require "./hbase-row"
-Scanner = require "./hbase-scanner"
+Connection = require "./connection"
+Table = require "./table"
+Row = require "./row"
+Scanner = require "./scanner"
 
 ###
 
@@ -41,7 +41,8 @@ Client = (options) ->
   options.port = "8080"  unless options.port
   options.timeout = 60 * 1000  unless options.timeout
   @options = options
-  @connection = new Connection(this)
+  @connection = new Connection @
+  @
 
 ###
 Query Software Version

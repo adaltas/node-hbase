@@ -1,5 +1,5 @@
-utils = require("./hbase-utils")
-Table = require("./hbase-table")
+utils = require("./utils")
+Table = require("./table")
 
 ###
 Row operations: CRUD operation on rows and columns
@@ -31,6 +31,7 @@ Row = (client, table, key) ->
   @client = client
   @table = (if typeof table is "string" then table else table.name)
   @key = key
+  @
 
 ###
 Retrieve values from HBase
