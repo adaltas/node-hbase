@@ -152,7 +152,6 @@ hbase()
   ['my value 1', 'my value 2'], 
   function(error, success){
 
-```javascript
 assert.strictEqual(true, success);
 
 ```
