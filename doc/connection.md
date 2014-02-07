@@ -1,6 +1,6 @@
 ---
 title: "Connection: HTTP REST requests for HBase"
-date: 2013-01-24T09:46:30.065Z
+date: 2014-02-07T15:26:49.061Z
 language: en
 layout: page
 comments: false
@@ -10,21 +10,21 @@ navigation: hbase
 github: https://github.com/wdavidw/node-hbase
 ---
 
-The connection object handles HTTP requests. You shouldn't 
-have to call it directly because HBase requests are transparently 
+The connection object handles HTTP requests. You shouldn't
+have to call it directly because HBase requests are transparently
 made by the client objects.
 
-Note, at this point, the HTTP client only communicate to 
-HBase with the JSON format. Some valid requests requests return 
-an empty body which of course not a valid JSON. In such cases, 
-no error is thrown by the response handler but the returned value 
+Note, at this point, the HTTP client only communicate to
+HBase with the JSON format. Some valid requests requests return
+an empty body which of course not a valid JSON. In such cases,
+no error is thrown by the response handler but the returned value
 is null.
 
 Creating a new connection
 -------------------------
 
-The most common way of initializing a new connection object 
-is through the client object. When a new client is constructed, 
+The most common way of initializing a new connection object
+is through the client object. When a new client is constructed,
 it create and hold a connection object.
 
 ```javascript
@@ -51,13 +51,9 @@ Execute an HTTP Get request. The callback contains 3 arguments: the error object
 (new Connection({}))
 .get('http://localhost:8080/', function(error, data, response){
   if(error){
-
-```javascript
-process.exit(1);
-
-nsole.log('Status code: ' + response.statusCode);
-nsole.log('Number of tables: ' + tables.length);
-```
-
+    process.exit(1);
+  }
+  console.log('Status code: ' + response.statusCode);
+  console.log('Number of tables: ' + tables.length);
 });
 ```

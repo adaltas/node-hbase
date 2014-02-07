@@ -1,6 +1,6 @@
 ---
 title: "Client: server information and object factory"
-date: 2013-01-24T09:46:30.065Z
+date: 2014-02-07T15:26:49.061Z
 language: en
 layout: page
 comments: false
@@ -13,22 +13,14 @@ github: https://github.com/wdavidw/node-hbase
 Creating a new client
 ---------------------
 
-A new instance of "HBase" may be instantiated with an object containing the following properties:
+A new instance of "HBase" may be instantiated with an object containing the following properties:   
 
--   *host*   
-
-```javascript
-string, optional, default to "localhost"
-Domain or IP of the HBase Stargate server
-```
-
--   *port*   
-
-```javascript
-string or int, optional, default to "8080"
-Port of the HBase REST server
-
-```
+-   *host*
+    string, optional, default to "localhost"
+    Domain or IP of the HBase Stargate server
+-   *port*
+    string or int, optional, default to "8080"
+    Port of the HBase REST server
 
 Calling the `hbase` method return an initialized client object.
 

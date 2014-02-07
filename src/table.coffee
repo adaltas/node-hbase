@@ -29,7 +29,7 @@ Create a new table in HBase
 ---------------------------
 
 ```javascript
-myTable.create([callback])
+myTable.create(callback)
 ```
 
 Callback is optionnal and receive two arguments, an 
@@ -70,7 +70,6 @@ hbase()
 } );
 ```
 ###
-#myTable.create([schema], [callback])
 Table::create = (schema, callback) ->
   self = this
   args = Array::slice.call(arguments)
@@ -91,7 +90,7 @@ Drop an existing table
 ----------------------
 
 ```javascript
-myTable.delete([callback]);
+myTable.delete(callback);
 ```
 
 Callback is optionnal and receive two arguments, an error object if any and a boolean indicating whether the table was removed/disabled or not.
@@ -104,7 +103,6 @@ hbase()
 });
 ```
 ###
-# myTable.delete([callback])
 Table::delete = (callback) ->
   self = this
   @client.connection.delete "/#{@name}/schema", (error, data) ->
@@ -115,7 +113,14 @@ Table::delete = (callback) ->
         return
     callback.apply self, [error, if error then null else true]
 
-#myTable.exists(callback)
+###
+Check if a table is created
+---------------------------
+
+```javascript
+myTable.exists(calblack);
+```
+###
 Table::exists = (callback) ->
   self = this
   @client.connection.get "/#{@name}/exists", (error, exists) ->
@@ -130,7 +135,6 @@ Update an existing table
 
 NOT YET WORKING, waiting for [HBASE-3140](https://issues.apache.org/jira/browse/HBASE-3140).
 ###
-#myTable.update(schema, [callback])
 Table::update = (schema, callback) ->
   self = this
   schema.name = @name
@@ -175,7 +179,6 @@ Will print something similar to:
 }
 ```
 ###
-#myTable.getSchema(callback)
 Table::getSchema = (callback) ->
   self = this
   @client.connection.get "/#{@name}/schema", (error, data) ->
@@ -208,20 +211,32 @@ Will print something similar to:
 }
 ```
 ###
-#myTable.getRegions(callback)
 Table::getRegions = (callback) ->
   self = this
   @client.connection.get "/#{@name}/regions", (error, data) ->
     callback.apply self, [error, if error then null else data]
 
+###
+Return a new row instance
+-----------------
 
+```javascript
+Table.getRow(key)
+```
 
-#myTable.getRow(key)
+###
 Table::getRow = (key) ->
   new Row @client, @name, key
 
 
-#myTable.getScanner(key)
+###
+Return a new scanner instance
+---------------------
+
+```javascript
+Table.getScanner(key)
+```
+###
 Table::getScanner = (id) ->
   new Scanner @client, @name, id
 

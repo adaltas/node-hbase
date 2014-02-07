@@ -38,7 +38,7 @@ Retrieve values from HBase
 --------------------------
 
 ```javascript
-myRow.get([column], [options], [callback]);
+myRow.get([column], [options], callback);
 ```
 
 Column is optional and corresponds to a column family optionnally followed by a column name separated with a column (":").
@@ -117,7 +117,6 @@ Print something like
 ]
 ```
 ###
-# myRow.get([column], [callback])
 Row::get = (column, callback) ->
   self = this
   args = Array::slice.call(arguments)
@@ -153,7 +152,7 @@ Insert and update a column value
 --------------------------------
 
 ```javascript
-myRow.put(column, data, [timestamp], [callback]);
+myRow.put(column, data, [timestamp], callback);
 ```
 
 Column is required and corresponds to a column family optionnally followed by a column name separated with a column (":").
@@ -172,8 +171,8 @@ Insert and update multiple column values
 ----------------------------------------
 
 ```javascript
-myRow.put(columns, values, [timestamps], [callback]);
-myRow.put(data, [callback]);
+myRow.put(columns, values, [timestamps], callback);
+myRow.put(data, callback);
 ```
 
 Inserting values into multiple columns is achieved the same way as for a single column but the column and data arguments must be an array of the same length.
@@ -209,7 +208,7 @@ Insert and update multiple rows
 -------------------------------
 
 ```javascript
-myRow.put(data, [callback]);
+myRow.put(data, callback);
 ```
 
 HBase allows us to send multiple cells from multiple rows in batch. To achieve it, construct a new row with a null key and provide the `put` function with an array of cells. Each cell objects must include the row `key`, `column` and `$` properties while `timestamp` is optional.
@@ -227,8 +226,6 @@ hbase()
 });
 ```
 ###
-# myRow.put(column(s), value(s), [timestamp(s)], [callback])
-# myRow.put(data, [callback])
 Row::put = (columns, values, callback) ->
   self = this
   args = Array::slice.call(arguments)
@@ -290,7 +287,7 @@ Test if a row or a column exists
 --------------------------------
 
 ```javascript
-myRow.exists([column], [callback]);
+myRow.exists([column], callback);
 ```
 
 Column is optional and corresponds to a column family optionnally followed by a column name separated with a column (":").
@@ -317,7 +314,6 @@ hbase()
 });
 ```
 ###
-# myRow.exists(column, [callback])
 Row::exists = (column, callback) ->
   self = this
   args = Array::slice.call(arguments)
@@ -337,7 +333,7 @@ Delete a row or a column
 ------------------------
 
 ```javascript
-myRow.delete([column], [callback]);
+myRow.delete([column], callback);
 ```
 
 Column is optional and corresponds to a column family optionnally followed by a column name separated with a column (":").
@@ -380,7 +376,6 @@ hbase()
 );
 ```
 ###
-# myRow.delete([column], [callback])
 Row::delete = ->
   self = this
   args = Array::slice.call(arguments)

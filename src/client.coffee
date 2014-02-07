@@ -12,7 +12,7 @@ Client: server information and object factory
 Creating a new client
 ---------------------
 
-A new instance of "HBase" may be instantiated with an object containing the following properties:
+A new instance of "HBase" may be instantiated with an object containing the following properties:   
 
 -   *host*
     string, optional, default to "localhost"

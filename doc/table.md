@@ -1,6 +1,6 @@
 ---
 title: "Table operations: create, modify and delete HBase tables"
-date: 2013-01-24T09:46:30.065Z
+date: 2014-02-07T15:26:49.061Z
 language: en
 layout: page
 comments: false
@@ -28,12 +28,15 @@ Create a new table in HBase
 ---------------------------
 
 ```javascript
-myTable.create([callback])
+myTable.create(callback)
 ```
 
-Callback is optionnal and receive two arguments, an error object if any and a boolean indicating whether the table was created or not.
+Callback is optionnal and receive two arguments, an 
+error object if any and a boolean indicating whether 
+the table was created or not.
 
-The simplest way is to grab a table object and call its `create` function with the schema as argument.
+The simplest way is to grab a table object and call 
+its `create` function with the schema as argument.
 
 ```javascript
 hbase()
@@ -43,21 +46,24 @@ hbase()
 } );
 ```
 
-For more control on the table and column family schema configuration, the argument may be a full schema object. It doesn't need to contain the "name" property as it will be injected but may  contain the keys "is_meta" and "is_root" as well as the column family schemas. The column property must contain the key "name" and any other valid keys ("blocksize", "bloomfilter", "blockcache", "compression", "length", "versions", "ttl" and "in_memory").
+For more control on the table and column family schema
+ configuration, the argument may be a full schema object. 
+ It doesn't need to contain the "name" property as it will 
+ be injected but may  contain the keys "is_meta" and "is_root" 
+ as well as the column family schemas. The column property 
+ must contain the key "name" and any other valid keys 
+ ("blocksize", "bloomfilter", "blockcache", "compression", 
+ "length", "versions", "ttl" and "in_memory").
 
 ```javascript
 hbase()
 .getTable( 'my_new_table' )
-.create( { 
-  IS_META: false, 
+.create( {
+  IS_META: false,
   IS_ROOT: false,
   COLUMNS: [{
-
-```javascript
-NAME: 'my_new_column'
- 
-```
-
+    NAME: 'my_new_column'
+  }]
 }, function( error, success ){
   console.log('Table created: ' + (success ? 'yes' : 'no'));
 } );
@@ -67,7 +73,7 @@ Drop an existing table
 ----------------------
 
 ```javascript
-myTable.delete([callback]);
+myTable.delete(callback);
 ```
 
 Callback is optionnal and receive two arguments, an error object if any and a boolean indicating whether the table was removed/disabled or not.
@@ -78,6 +84,13 @@ hbase()
 .delete(function(error, success){
   assert.ok(success);
 });
+```
+
+Check if a table is created
+---------------------------
+
+```javascript
+myTable.exists(calblack);
 ```
 
 Update an existing table
@@ -102,7 +115,7 @@ Will print something similar to:
 { name: 'node_hbase'
 , IS_META: 'false'
 , IS_ROOT: 'false'
-, ColumnSchema: 
+, ColumnSchema:
    [ { name: 'column_2'
    , BLOCKSIZE: '65536'
    , BLOOMFILTER: 'NONE'
@@ -141,4 +154,18 @@ Will print something similar to:
    }
    ]
 }
+```
+
+Return a new row instance
+-----------------
+
+```javascript
+Table.getRow(key)
+```
+
+Return a new scanner instance
+---------------------
+
+```javascript
+Table.getScanner(key)
 ```

@@ -1,6 +1,6 @@
 ---
 title: "Row operations: CRUD operation on rows and columns"
-date: 2013-01-24T09:46:30.065Z
+date: 2014-02-07T15:26:49.061Z
 language: en
 layout: page
 comments: false
@@ -36,7 +36,7 @@ Retrieve values from HBase
 --------------------------
 
 ```javascript
-myRow.get([column], [options], [callback]);
+myRow.get([column], [options], callback);
 ```
 
 Column is optional and corresponds to a column family optionnally followed by a column name separated with a column (":").
@@ -119,7 +119,7 @@ Insert and update a column value
 --------------------------------
 
 ```javascript
-myRow.put(column, data, [timestamp], [callback]);
+myRow.put(column, data, [timestamp], callback);
 ```
 
 Column is required and corresponds to a column family optionnally followed by a column name separated with a column (":").
@@ -138,8 +138,8 @@ Insert and update multiple column values
 ----------------------------------------
 
 ```javascript
-myRow.put(columns, values, [timestamps], [callback]);
-myRow.put(data, [callback]);
+myRow.put(columns, values, [timestamps], callback);
+myRow.put(data, callback);
 ```
 
 Inserting values into multiple columns is achieved the same way as for a single column but the column and data arguments must be an array of the same length.
@@ -148,22 +148,18 @@ Inserting values into multiple columns is achieved the same way as for a single 
 hbase()
 .getRow('my_table', 'my_row')
 .put(
-  ['my_column_family:my_column_1', 'my_column_family:my_column_2'], 
-  ['my value 1', 'my value 2'], 
+  ['my_column_family:my_column_1', 'my_column_family:my_column_2'],
+  ['my value 1', 'my value 2'],
   function(error, success){
-
-```javascript
-assert.strictEqual(true, success);
-
-```
-
+    assert.strictEqual(true, success);
+  }
 );
 ```
 
 Alternatively, you could provide an array of cells as below:
 
 ```javascript
-var cells = 
+var cells =
   [ { column: 'cf:c1', timestamp: Date.now(), $: 'my value' }
   , { column: 'cf:c2', timestamp: Date.now(), $: 'my value' }
   , { column: 'cf:c1', timestamp: Date.now()+1, $: 'my value' }
@@ -179,7 +175,7 @@ Insert and update multiple rows
 -------------------------------
 
 ```javascript
-myRow.put(data, [callback]);
+myRow.put(data, callback);
 ```
 
 HBase allows us to send multiple cells from multiple rows in batch. To achieve it, construct a new row with a null key and provide the `put` function with an array of cells. Each cell objects must include the row `key`, `column` and `$` properties while `timestamp` is optional.
@@ -201,7 +197,7 @@ Test if a row or a column exists
 --------------------------------
 
 ```javascript
-myRow.exists([column], [callback]);
+myRow.exists([column], callback);
 ```
 
 Column is optional and corresponds to a column family optionnally followed by a column name separated with a column (":").
@@ -232,7 +228,7 @@ Delete a row or a column
 ------------------------
 
 ```javascript
-myRow.delete([column], [callback]);
+myRow.delete([column], callback);
 ```
 
 Column is optional and corresponds to a column family optionnally followed by a column name separated with a column (":").
@@ -268,13 +264,9 @@ Deleting multiple columns is achieved by providing an array of columns as the fi
 hbase()
 .getRow('my_table','my_row')
 .delete(
-  ['my_column_family:my_column_1', 'my_column_family:my_column_2'], 
+  ['my_column_family:my_column_1', 'my_column_family:my_column_2'],
   function(error, success){
-
-```javascript
-assert.strictEqual(true, success);
-
-```
-
+    assert.strictEqual(true, success);
+  }
 );
 ```

@@ -1,11 +1,11 @@
-utils = require("./utils")
-Table = require("./table")
+utils = require './utils'
+Table = require './table'
 
 ###
 Scanner operations
 ==================
 
-Scanner are the most efficient way to retrieve multiple
+Scanner are the most efficient way to retrieve multiple 
 rows and columns from HBase.
 
 Grab an instance of "Scanner"
@@ -39,11 +39,11 @@ are familiar with HBase filters, it will be real easy to
 use them. Note, you should not worry about encoding the
 values, the library will do it for you. When you create
 a new scanner, just associate the `filter` property with  
-your filter object. All filters are supported.
+your filter object. All filters are supported.   
 
-Many exemples are available in the tests but here\'s one
+Many examples are available in the tests but here's one
 wich returns all rows starting by "my_key_" and whose
-value is "here you are".
+value is "here you are".   
 
 ```javascript
 myScanner.create({
@@ -65,51 +65,52 @@ myScanner.create({
 ###
 Scanner = (client, table, id) ->
   @client = client
-  @table = (if typeof table is "string" then table else table.name)
+  @table = if typeof table is 'string' then table else table.name
   @id = id or null
   @callback = null
 
 ###
-Create a new scanner
---------------------
+`Scanner.create([params], callback)`
+------------------------------------
+
+Create a new scanner.
 
 ```javascript
-myScanner.create([params], [callback]);
+myScanner.create([params], callback);
 ```
 
 Params is an object for which all properties are optional. The
 following properties are available:
 
--   startRow: First row returned by the scanner
--   endRow: Row stopping the scanner, not returned by the scanner
--   columns: Filter the scanner by columns (a string or an array of columns)
--   batch: Number of cells returned on each iteration
--   startTime
--   endTime
--   filter: see below for more informations
+-   startRow: First row returned by the scanner   
+-   endRow: Row stopping the scanner, not returned by the scanner   
+-   columns: Filter the scanner by columns (a string or an array of columns)   
+-   batch: Number of cells returned on each iteration   
+-   startTime   
+-   endTime   
+-   filter: see below for more informations   
 ###
-#myScanner.create([params], callback)
 Scanner::create = (params, callback) ->
   self = this
-  args = Array::slice.call(arguments)
-  key = "/" + @table + "/scanner"
-  params = (if typeof args[0] is "object" then args.shift() else {})
+  args = Array::slice.call arguments
+  key = "/#{@table}/scanner"
+  params = if typeof args[0] is 'object' then args.shift() else {}
   callback = args.shift()
   params.startRow = utils.base64.encode(params.startRow)  if params.startRow
   params.endRow = utils.base64.encode(params.endRow)  if params.endRow
   if params.column
-    if typeof params.column is "string"
-      params.column = utils.base64.encode(params.column)
+    if typeof params.column is 'string'
+      params.column = utils.base64.encode params.column
     else
       params.column.forEach (column, i) ->
-        params.column[i] = utils.base64.encode(column)
+        params.column[i] = utils.base64.encode column
 
   if params.filter
     encode = (obj) ->
       for k of obj
-        if k is "value" and (not obj["type"] or obj["type"] isnt "RegexStringComparator" and obj["type"] isnt "PageFilter")
+        if k is 'value' and (not obj['type'] or obj['type'] isnt 'RegexStringComparator' and obj['type'] isnt 'PageFilter')
           obj[k] = utils.base64.encode(obj[k])
-        else encode obj[k]  if typeof obj[k] is "object"
+        else encode obj[k]  if typeof obj[k] is 'object'
 
     encode params.filter
     params.filter = JSON.stringify(params.filter)
@@ -120,8 +121,10 @@ Scanner::create = (params, callback) ->
     callback.apply self, [null, id]
 
 ###
-Scanning records
-----------------
+`Scanner.get(callback)`
+-----------------------
+
+Scanning records.
 
 ```javascript
 myScanner.get(callback);
@@ -169,56 +172,59 @@ myScanner.get(function(error, cells){
 });
 ```
 ###
-# myScanner.get(callback)
 Scanner::get = (callback) ->
   self = this
-  key = "/" + @table + "/scanner/" + @id
+  key = "/{@table}/scanner/#{@id}"
   if callback
     @callback = callback
   else
     callback = @callback
   @client.connection.get key, (error, data, response) ->
     # result is successful but the scanner is exhausted, returns HTTP 204 status (no content)
-    return callback.apply(self, [null, null])  if response and response.statusCode is 204
-    return callback.apply(self, [error, null])  if error
+    return callback.apply self, [null, null] if response and response.statusCode is 204
+    return callback.apply self, [error, null] if error
     cells = []
     data.Row.forEach (row) ->
-      key = utils.base64.decode(row.key)
+      key = utils.base64.decode row.key
       row.Cell.forEach (cell) ->
         data = {}
         data.key = key
-        data.column = utils.base64.decode(cell.column)
+        data.column = utils.base64.decode cell.column
         data.timestamp = cell.timestamp
-        data.$ = utils.base64.decode(cell.$)
+        data.$ = utils.base64.decode cell.$
         cells.push data
     callback.apply self, [null, cells]
 
-#myScanner.continue()
+###
+`Scanner.continue()`
+--------------------
+###
 Scanner::continue = ->
   @get()
 
 ###
-Delete a scanner
-----------------
+`Scanner.delete(callback)`
+--------------------------
+
+Delete a scanner.
 
 ```javascript
-myScanner.delete([callback]);
+myScanner.delete(callback);
 ```
 
 Callback is optionnal and receive two arguments, an 
 error object if any and a boolean indicating whether 
 the scanner was removed or not.
 ###
-# myScanner.delete(callback)
 Scanner::delete = (callback) ->
   self = this
-  key = "/" + @table + "/scanner/" + @id
+  key = "/#{@table}/scanner/{#@id}"
   @client.connection.delete key, (error, success) ->
     unless callback
       if error
         throw error
       else
         return
-    callback.apply self, [error, (if error then null else true)]
+    callback.apply self, [error, if error then null else true]
 
 module.exports = Scanner
