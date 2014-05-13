@@ -46,12 +46,12 @@ utils =
       from = args.shift()  if args.length
       # To
       to = args.shift()  if args.length
-      if from or to
+      if to
         newpath += '/'
-        newpath += encodeURIComponent from if from
-        if to
+        if from
+          newpath += encodeURIComponent from 
           newpath += ','
-          newpath += encodeURIComponent to
+        newpath += encodeURIComponent to
       # Params
       if params
         newpath += '?'
