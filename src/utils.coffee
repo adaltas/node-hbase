@@ -38,8 +38,9 @@ utils =
           columnPath = cs.join ','
         else
           columnPath = if columns then encodeURIComponent columns else ''
+        newpath += "/"
         if columnPath
-          newpath += "/#{columnPath}"
+          newpath += "#{columnPath}"
       # From & To
       from = to = null
       from = args.shift()  if args.length
