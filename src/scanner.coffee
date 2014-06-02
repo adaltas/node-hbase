@@ -174,7 +174,7 @@ myScanner.get(function(error, cells){
 ###
 Scanner::get = (callback) ->
   self = this
-  key = "/{@table}/scanner/#{@id}"
+  key = "/#{@table}/scanner/#{@id}"
   if callback
     @callback = callback
   else
@@ -218,7 +218,7 @@ the scanner was removed or not.
 ###
 Scanner::delete = (callback) ->
   self = this
-  key = "/#{@table}/scanner/{#@id}"
+  key = "/#{@table}/scanner/#{@id}"
   @client.connection.delete key, (error, success) ->
     unless callback
       if error
