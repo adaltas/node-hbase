@@ -1,6 +1,6 @@
 
 should = require 'should'
-Table = require '../lib/table'
+Table = require '../src/table'
 test = require './test'
 
 describe 'table', ->

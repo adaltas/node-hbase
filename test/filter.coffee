@@ -2,8 +2,7 @@
 fs = require 'fs'
 should = require 'should'
 test = require './test'
-hbase = require '..'
-Scanner = require '../lib/scanner'
+hbase = require '../src'
 
 #{"op":"LESS","type":"RowFilter","comparator":{"value":"dGVzdFJvd09uZS0y","type":"BinaryComparator"}}
 #{"op":"LESS_OR_EQUAL","type":"RowFilter","comparator":{"value":"dGVzdFJvd09uZS0y","type":"BinaryComparator"}}

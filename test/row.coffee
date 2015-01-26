@@ -1,7 +1,7 @@
 
 should = require 'should'
 test = require './test'
-Row = require '../lib/row'
+Row = require '../src/row'
 
 describe 'row', ->
   it 'create new instance', (next) ->

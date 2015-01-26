@@ -1,7 +1,7 @@
 
 should = require 'should'
 test = require './test'
-Scanner = require '../lib/scanner'
+Scanner = require '../src/scanner'
 
 describe 'scanner', ->
   it 'Instance', (next) ->
