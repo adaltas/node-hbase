@@ -138,7 +138,4 @@ Client::getTable = (name) ->
 Client::getRow = (table, row) ->
   new Row(this, table, row)
 
-Client::getScanner = (table, id) ->
-  new Scanner(this, table, id)
-
 module.exports = Client

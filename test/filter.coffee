@@ -47,7 +47,8 @@ describe 'filter', ->
   it 'FilterList # must_pass_all # +RegexStringComparator', (next) ->
     test.getClient (err, client) ->
       client
-      .getScanner('node_table')
+      .getTable('node_table')
+      .getScanner()
       .create
         startRow: 'test_filter|row_1'
         maxVersions: 1
@@ -69,7 +70,8 @@ describe 'filter', ->
     test.getClient (err, client) ->
       # Only return the first KV from each row.
       client
-      .getScanner('node_table')
+      .getTable('node_table')
+      .getScanner()
       .create
         startRow: 'test_filter|row_1'
         filter: {'type':'FirstKeyOnlyFilter'}
@@ -91,7 +93,8 @@ describe 'filter', ->
       keys
     test.getClient (err, client) ->
       client
-      .getScanner('node_table')
+      .getTable('node_table')
+      .getScanner()
       .create
         startRow: 'test_filter|row_1'
         endRow: 'test_filter|row_4'
@@ -114,7 +117,8 @@ describe 'filter', ->
       keys
     test.getClient (err, client) ->
       client
-      .getScanner('node_table')
+      .getTable('node_table')
+      .getScanner()
       .create
         startRow: 'test_filter|row_1'
         endRow: 'test_filter|row_4'
@@ -132,7 +136,8 @@ describe 'filter', ->
     test.getClient (err, client) ->
       # Based on the key
       client
-      .getScanner('node_table')
+      .getTable('node_table')
+      .getScanner()
       .create
         startRow: 'test_filter|row_1'
         maxVersions: 1
@@ -146,7 +151,8 @@ describe 'filter', ->
   it 'ValueFilter # op equal', (next) ->
     test.getClient (err, client) ->
       client
-      .getScanner('node_table')
+      .getTable('node_table')
+      .getScanner()
       .create
         startRow: 'test_filter|row_1'
         endRow: 'test_filter|row_4'
