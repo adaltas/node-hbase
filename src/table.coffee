@@ -236,7 +236,8 @@ Return a new scanner instance
 Table.getScanner(key)
 ```
 ###
-Table::getScanner = (id) ->
-  new Scanner @client, @name, id
+Table::scan = (options) ->
+  scanner = new Scanner @client, @name, options.id
+  scanner.create arguments...
 
 module.exports = Table

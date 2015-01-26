@@ -4,11 +4,11 @@ test = require './test'
 Scanner = require '../src/scanner'
 
 describe 'scanner', ->
-  it 'Instance', (next) ->
-    test.getClient (err, client) ->
-      client.getTable('node_table').getScanner().should.be.an.instanceof Scanner
-      client.getTable('node_table').getScanner('my_id').should.be.an.instanceof Scanner
-      next()
+  # it 'Instance', (next) ->
+  #   test.getClient (err, client) ->
+  #     client.getTable('node_table').getScanner().should.be.an.instanceof Scanner
+  #     client.getTable('node_table').getScanner('my_id').should.be.an.instanceof Scanner
+  #     next()
   it 'Create', (next) ->
     test.getClient (err, client) ->
       client
@@ -22,8 +22,7 @@ describe 'scanner', ->
         should.not.exist err
         client
         .getTable('node_table')
-        .getScanner()
-        .create (err, id) ->
+        .scan (err, id) ->
           should.not.exist err
           id.should.match /\w+/
           id.should.eql this.id
@@ -41,8 +40,7 @@ describe 'scanner', ->
         should.not.exist err
         client
         .getTable('node_table')
-        .getScanner()
-        .create
+        .scan
           startRow: 'test_scanner_get_startRow_11'
           maxVersions: 1
         , (err, id) ->
@@ -71,8 +69,7 @@ describe 'scanner', ->
         should.not.exist err
         client
         .getTable('node_table')
-        .getScanner()
-        .create
+        .scan
           startRow: 'test_scanner_get_startEndRow_11'
           endRow: 'test_scanner_get_startEndRow_2'
           maxVersions: 1
@@ -102,8 +99,7 @@ describe 'scanner', ->
         should.not.exist err
         client
         .getTable('node_table')
-        .getScanner()
-        .create
+        .scan
           startRow: 'test_scanner_get_batch_1'
           endRow: 'test_scanner_get_batch_4_'
           batch:1
@@ -142,8 +138,7 @@ describe 'scanner', ->
         should.not.exist err
         client
         .getTable('node_table')
-        .getScanner()
-        .create
+        .scan
           startRow: 'test_scanner_get_columns_1'
           endRow: 'test_scanner_get_columns_3'
           maxVersions: 1
@@ -180,8 +175,7 @@ describe 'scanner', ->
         should.not.exist err
         client
         .getTable('node_table')
-        .getScanner()
-        .create
+        .scan
           startRow: 'test_scanner_maxversions_1'
           endRow: 'test_scanner_maxversions_11'
           column: 'node_column_family:c'
@@ -205,8 +199,7 @@ describe 'scanner', ->
         should.not.exist err
         client
         .getTable('node_table')
-        .getScanner()
-        .create
+        .scan
           startRow: 'test_scanner_continue_1'
           endRow: 'test_scanner_continue_4'
           batch: 2

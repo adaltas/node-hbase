@@ -48,8 +48,7 @@ describe 'filter', ->
     test.getClient (err, client) ->
       client
       .getTable('node_table')
-      .getScanner()
-      .create
+      .scan
         startRow: 'test_filter|row_1'
         maxVersions: 1
         filter: {
@@ -71,8 +70,7 @@ describe 'filter', ->
       # Only return the first KV from each row.
       client
       .getTable('node_table')
-      .getScanner()
-      .create
+      .scan
         startRow: 'test_filter|row_1'
         filter: {'type':'FirstKeyOnlyFilter'}
       , (err, id) ->
@@ -94,8 +92,7 @@ describe 'filter', ->
     test.getClient (err, client) ->
       client
       .getTable('node_table')
-      .getScanner()
-      .create
+      .scan
         startRow: 'test_filter|row_1'
         endRow: 'test_filter|row_4'
         maxVersions: 1
@@ -118,8 +115,7 @@ describe 'filter', ->
     test.getClient (err, client) ->
       client
       .getTable('node_table')
-      .getScanner()
-      .create
+      .scan
         startRow: 'test_filter|row_1'
         endRow: 'test_filter|row_4'
         maxVersions: 1
@@ -137,8 +133,7 @@ describe 'filter', ->
       # Based on the key
       client
       .getTable('node_table')
-      .getScanner()
-      .create
+      .scan
         startRow: 'test_filter|row_1'
         maxVersions: 1
         filter: {'op':'EQUAL','type':'RowFilter','comparator':{'value':'test_filter|row_2','type':'BinaryComparator'}}
@@ -152,8 +147,7 @@ describe 'filter', ->
     test.getClient (err, client) ->
       client
       .getTable('node_table')
-      .getScanner()
-      .create
+      .scan
         startRow: 'test_filter|row_1'
         endRow: 'test_filter|row_4'
         maxVersions: 1
