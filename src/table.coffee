@@ -227,11 +227,29 @@ Return a new scanner instance
 ---------------------
 
 ```javascript
-Table.getScanner(key)
+Table.scan(options, callback)
 ```
 ###
-Table::scan = (options) ->
-  scanner = new Scanner @client, @name, options.id
-  scanner.create arguments...
+Table::scan = (options, callback) ->
+  if arguments.length is 0
+    options = {}
+  else if arguments.length is 1
+    if typeof arguments[0] is 'function'
+      callback = options
+      options = {}
+  else if arguments.length isnt 2
+    throw Error 'Invalid arguments'
+  options.table = @name
+  scanner = new Scanner @client, options
+  if callback
+    chunks = []
+    scanner.on 'readable', ->
+      while chunk = scanner.read()
+        chunks.push chunk
+    scanner.on 'error', (err) ->
+      callback err
+    scanner.on 'end', ->
+      callback null, chunks
+  scanner
 
 module.exports = Table

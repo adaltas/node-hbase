@@ -1,5 +1,8 @@
+
+util = require 'util'
 utils = require './utils'
 Table = require './table'
+{Readable} = require 'stream'
 
 ###
 Scanner operations
@@ -12,24 +15,41 @@ Grab an instance of "Scanner"
 -----------------------------
 
 ```javascript
-var myScanner = hbase({}).getScanner('my_table');
-var myScanner = hbase({}).getScanner('my_table','my_id');
-```
-
-Or
-
-```javascript
-var myScanner = hbase({}).getTable('my_table').getScanner();
-var myScanner = hbase({}).getTable('my_table').getScanner('my_id');
+var myScanner = hbase({}).getTable('my_table').scan(...);
 ```
 
 Or
 
 ```javascript
 var client = new hbase.Client({});
-var myScanner = new hbase.Scanner(client, 'my_table');
-var myScanner = new hbase.Scanner(client, 'my_table', 'my_id');
+var myScanner = new hbase.Scanner(client, {table: 'my_table'});
 ```
+
+Options
+-------
+
+All options except the "table" option are optional. The following properties are
+available:
+
+*   `startRow`
+    First row returned by the scanner.   
+*   `endRow`
+    Row stopping the scanner, not returned by the scanner.   
+*   `columns`
+    Filter the scanner by columns (a string or an array of columns).   
+*   `batch`
+    Number of cells returned on each iteration, internal use, default to "1000".   
+*   `maxVersions`
+    Number of returned version for each row.   
+*   `startTime`
+    Row minimal timestamp version.   
+*   `endTime`
+    Row maxiam timestamp version.   
+*   `filter`
+    See below for more informations.   
+*   `encoding`
+    Default to client.options.encoding, set to null to overwrite default
+    encoding and return a buffer.   
 
 Using filter
 ------------
@@ -46,7 +66,7 @@ wich returns all rows starting by "my_key_" and whose
 value is "here you are".   
 
 ```javascript
-myScanner.create({
+client.getTable('my_tb').scan({
   filter: {
   "op":"MUST_PASS_ALL","type":"FilterList","filters":[{
       "op":"EQUAL",
@@ -63,122 +83,69 @@ myScanner.create({
 });
 ```
 ###
-Scanner = (client, table, id) ->
+Scanner = (client, @options={}) ->
+  @options.objectMode = true
+  Readable.call(@, @options);
   @client = client
-  @table = if typeof table is 'string' then table else table.name
-  @id = id or null
+  # @table = if typeof table is 'string' then table else table.name
+  # @id = id or null
+  @options = table: @options if typeof @options is 'string'
+  throw Error 'Missing required option "table"' unless @options.table
+  @options.id = null
   @callback = null
 
+util.inherits Scanner, Readable
+
 ###
-`Scanner.create([params], callback)`
-------------------------------------
+`Scanner.init(callback)`
+-----------------------
 
-Create a new scanner.
+Create a new scanner and return its ID.
 
-```javascript
-myScanner.create([params], callback);
-```
-
-Params is an object for which all properties are optional. The
-following properties are available:
-
-*   `startRow`: First row returned by the scanner.   
-*   `endRow`: Row stopping the scanner, not returned by the scanner.   
-*   `columns`: Filter the scanner by columns (a string or an array of columns).   
-*   `batch`: Number of cells returned on each iteration.   
-*   `startTime`   
-*   `endTime`   
-*   filter: see below for more informations.   
-*   `encoding`: default to client.options.encoding, set overwrite default encoding and return a buffer.   
 ###
-Scanner::create = (params, callback) ->
-  args = Array::slice.call arguments
-  key = "/#{@table}/scanner"
-  params = if typeof args[0] is 'object' then args.shift() else {}
-  encoding = if params.encoding is 'undefined' then params.encoding else @client.options.encoding
-  callback = args.shift()
-  params.startRow = utils.base64.encode(params.startRow, encoding) if params.startRow
-  params.endRow = utils.base64.encode(params.endRow, encoding) if params.endRow
-  if params.column
-    params.column = [params.column] if typeof params.column is 'string'
-    params.column.forEach (column, i) ->
+Scanner::init = (callback) ->
+  # options = utils.merge {}, @options
+  params = {}
+  params.batch ?= 1000
+  key = "/#{@options.table}/scanner"
+  encoding = if @options.encoding is 'undefined' then @options.encoding else @client.options.encoding
+  params.startRow = utils.base64.encode(@options.startRow, encoding) if @options.startRow
+  params.endRow = utils.base64.encode(@options.endRow, encoding) if @options.endRow
+  params.maxVersions = @options.maxVersions if @options.maxVersions
+  if @options.column
+    params.column = []
+    @options.column = [@options.column] if typeof @options.column is 'string'
+    @options.column.forEach (column, i) ->
       params.column[i] = utils.base64.encode column, encoding
-  if params.filter
+  if @options.filter
     encode = (obj) ->
       for k of obj
         if k is 'value' and (not obj['type'] or obj['type'] isnt 'RegexStringComparator' and obj['type'] isnt 'PageFilter')
           obj[k] = utils.base64.encode obj[k], encoding
         else encode obj[k]  if typeof obj[k] is 'object'
-    encode params.filter
-    params.filter = JSON.stringify(params.filter)
-  @client.connection.put key, params, (error, data, response) =>
-    return callback.apply(@, [error, null])  if error
+    encode @options.filter
+    params.filter = JSON.stringify(@options.filter)
+  @client.connection.put key, params, (err, data, response) =>
+    return callback err if err
     id = /scanner\/(\w+)$/.exec(response.headers.location)[1]
-    @id = id
-    callback.apply @, [null, id]
+    @options.id = id
+    callback null, id
 
 ###
 `Scanner.get(callback)`
 -----------------------
 
-Scanning records.
-
-```javascript
-myScanner.get(callback);
-```
-
 Retrieve the next cells from HBase. The callback is required
 and receive two arguments, an error object if any and a array
 of cells or null if the scanner is exhausted.
-
-The number of cells depends on the `batch` option. It is your
-responsibity to call `get` as long as more cells are expected.
-
-```javascript
-var callback = function(error, cells){
-  assert.ifError(error);
-  if(cells){
-    // do something
-    console.log(cells);
-    // call the next iteration
-    myScanner.get(callback)
-  }else{
-    // no more cells to iterate
-  }
-};
-myScanner.get(callback);
-```
-
-Note, this is not very pretty. Alternatively, you could make
-use of the scanner function `continue` inside your callback
-to trigger a new iteration. Here's how:
-  
-```javascript
-myScanner.get(function(error, cells){
-  assert.ifError(error);
-  if(cells){
-    // do something
-    console.log(cells);
-    // call the next iteration
-    this.continue()
-  }else{
-    // no more cells to iterate
-    // delete the scanner
-    this.delete();
-  }
-});
 ```
 ###
 Scanner::get = (callback) ->
-  key = "/#{@table}/scanner/#{@id}"
-  if callback
-    @callback = callback
-  else
-    callback = @callback
-  @client.connection.get key, (error, data, response) =>
+  key = "/#{@table}/scanner/#{@options.id}"
+  @client.connection.get key, (err, data, response) =>
     # result is successful but the scanner is exhausted, returns HTTP 204 status (no content)
-    return callback.apply @, [null, null] if response and response.statusCode is 204
-    return callback.apply @, [error, null] if error
+    return callback() if response and response.statusCode is 204
+    return callback err if err
     cells = []
     data.Row.forEach (row) =>
       key = utils.base64.decode row.key, @client.options.encoding
@@ -189,14 +156,7 @@ Scanner::get = (callback) ->
         data.timestamp = cell.timestamp
         data.$ = utils.base64.decode cell.$, @client.options.encoding
         cells.push data
-    callback.apply @, [null, cells]
-
-###
-`Scanner.continue()`
---------------------
-###
-Scanner::continue = ->
-  @get()
+    callback null, cells
 
 ###
 `Scanner.delete(callback)`
@@ -213,13 +173,29 @@ error object if any and a boolean indicating whether
 the scanner was removed or not.
 ###
 Scanner::delete = (callback) ->
-  key = "/#{@table}/scanner/#{@id}"
-  @client.connection.delete key, (error, success) =>
-    unless callback
-      if error
-        throw error
-      else
-        return
-    callback.apply @, [error, if error then null else true]
+  @client.connection.delete "/#{@table}/scanner/#{@options.id}", callback
+
+###
+Scanner._read(size)
+-------------------
+
+Implementation of the `stream.Readable` API.
+###
+Scanner::_read = (size) ->
+  return if @done
+  unless @options.id
+    return @init (err, id) =>
+      return @emit 'error', err if err
+      @_read()
+  @get (err, cells) =>
+    return if @done
+    return @emit 'error', err if err
+    unless cells
+      @done = true
+      return @delete (err) =>
+        return @emit 'error', err if err
+        @push null
+    for cell in cells
+      @push cell
 
 module.exports = Scanner

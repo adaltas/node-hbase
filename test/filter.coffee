@@ -42,8 +42,7 @@ describe 'filter', ->
         {key:'test_filter|row_3', column:'node_column_family:cb', $:'cc'}
         {key:'test_filter|row_3', column:'node_column_family:cc', $:'cc'}
       ], (err, success) ->
-        should.not.exist err
-        next()
+        next err
   it 'FilterList # must_pass_all # +RegexStringComparator', (next) ->
     test.getClient (err, client) ->
       client
@@ -56,15 +55,13 @@ describe 'filter', ->
             {"op":"EQUAL","type":"RowFilter","comparator":{"value":"test_filter\\|row_.*","type":"RegexStringComparator"}}
             {"op":"EQUAL","type":"RowFilter","comparator":{"value":".+2$","type":"RegexStringComparator"}}
           ]}
-      , (err, id) ->
-        should.not.exist err
-        this.get (err,cells) ->
-          should.not.exist err
+      , (err, cells) ->
+          return next err if err
           cells.length.should.eql 3
           cells[0].key.should.eql 'test_filter|row_2'
           cells[1].key.should.eql 'test_filter|row_2'
           cells[2].key.should.eql 'test_filter|row_2'
-          this.delete next
+          next()
   it 'FirstKeyOnlyFilter', (next) ->
     test.getClient (err, client) ->
       # Only return the first KV from each row.
@@ -73,15 +70,13 @@ describe 'filter', ->
       .scan
         startRow: 'test_filter|row_1'
         filter: {'type':'FirstKeyOnlyFilter'}
-      , (err, id) ->
-        should.not.exist err
-        this.get (err, cells) ->
-          should.not.exist err
+      , (err, cells) ->
+          return next err if err
           cells.length.should.be.above 2
           cells[0].key.should.eql 'test_filter|row_1'
           cells[1].key.should.eql 'test_filter|row_2'
           cells[2].key.should.eql 'test_filter|row_3'
-          this.delete next
+          next()
   it 'PageFilter # string value', (next) ->
     getKeysFromCells = (cells) ->
       keys = []
@@ -97,14 +92,12 @@ describe 'filter', ->
         endRow: 'test_filter|row_4'
         maxVersions: 1
         filter: {"type":"PageFilter","value":"2"}
-      , (err, id) ->
-        should.not.exist err
-        this.get (err, cells) ->
-          should.not.exist err
+      , (err, cells) ->
+          return next err if err
           cells.length.should.eql 4
           keys = getKeysFromCells(cells)
           keys.should.eql ['test_filter|row_1','test_filter|row_2']
-          this.delete next
+          next()
   it 'PageFilter # int value', (next) ->
     getKeysFromCells = (cells) ->
       keys = []
@@ -120,14 +113,12 @@ describe 'filter', ->
         endRow: 'test_filter|row_4'
         maxVersions: 1
         filter: {"type":"PageFilter","value":2}
-      , (err, id) ->
-        should.not.exist err
-        this.get (err, cells) ->
-          should.not.exist err
+      , (err, cells) ->
+          return next err if err
           cells.length.should.eql 4
           keys = getKeysFromCells(cells)
           keys.should.eql ['test_filter|row_1','test_filter|row_2']
-          this.delete next
+          next()
   it 'RowFilter # equal_with_binary_comparator', (next) ->
     test.getClient (err, client) ->
       # Based on the key
@@ -137,12 +128,10 @@ describe 'filter', ->
         startRow: 'test_filter|row_1'
         maxVersions: 1
         filter: {'op':'EQUAL','type':'RowFilter','comparator':{'value':'test_filter|row_2','type':'BinaryComparator'}}
-      , (err, id) ->
-        should.not.exist err
-        this.get (err,cells) ->
-          should.not.exist err
+      , (err, cells) ->
+          return next err if err
           cells.length.should.eql 3
-          this.delete next
+          next()
   it 'ValueFilter # op equal', (next) ->
     test.getClient (err, client) ->
       client
@@ -152,11 +141,9 @@ describe 'filter', ->
         endRow: 'test_filter|row_4'
         maxVersions: 1
         filter: {"op":"EQUAL","type":"ValueFilter","comparator":{"value":"bb","type":"BinaryComparator"}}
-      , (err, id) ->
-        should.not.exist err
-        this.get (err,cells) ->
-          should.not.exist err
+      , (err, cells) ->
+          return next err if err
           cells.length.should.eql 1
           cells[0].key.should.eql 'test_filter|row_2'
           cells[0].column.should.eql 'node_column_family:bb'
-          this.delete next
+          next()

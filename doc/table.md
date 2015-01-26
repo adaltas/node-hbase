@@ -1,6 +1,6 @@
 ---
 title: "Table operations: create, modify and delete HBase tables"
-date: 2014-02-07T15:26:49.061Z
+date: 2015-01-26T22:21:40.052Z
 language: en
 layout: page
 comments: false
@@ -62,8 +62,12 @@ hbase()
   IS_META: false,
   IS_ROOT: false,
   COLUMNS: [{
-    NAME: 'my_new_column'
-  }]
+
+```javascript
+NAME: 'my_new_column'
+
+```
+
 }, function( error, success ){
   console.log('Table created: ' + (success ? 'yes' : 'no'));
 } );
@@ -163,9 +167,10 @@ Return a new row instance
 Table.getRow(key)
 ```
 
+
 Return a new scanner instance
 ---------------------
 
 ```javascript
-Table.getScanner(key)
+Table.scan(options, callback)
 ```

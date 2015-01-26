@@ -1,6 +1,6 @@
 ---
 title: "Row operations: CRUD operation on rows and columns"
-date: 2014-02-07T15:26:49.061Z
+date: 2015-01-26T22:21:40.052Z
 language: en
 layout: page
 comments: false
@@ -46,6 +46,8 @@ An optional object of options may contains the following properties:
 -   start: timestamp indicating the minimal version date
 -   end: timestamp indicating the maximal version date
 -   v: maximum number of returned versions
+
+Note: In our current release of HBase (0.98) the "v" option only work if a column is provided.
 
 Callback is required and receive two arguments, an error object if any and the column value.
 
@@ -151,8 +153,12 @@ hbase()
   ['my_column_family:my_column_1', 'my_column_family:my_column_2'],
   ['my value 1', 'my value 2'],
   function(error, success){
-    assert.strictEqual(true, success);
-  }
+
+```javascript
+assert.strictEqual(true, success);
+
+```
+
 );
 ```
 
@@ -266,7 +272,11 @@ hbase()
 .delete(
   ['my_column_family:my_column_1', 'my_column_family:my_column_2'],
   function(error, success){
-    assert.strictEqual(true, success);
-  }
+
+```javascript
+assert.strictEqual(true, success);
+
+```
+
 );
 ```

@@ -23,7 +23,7 @@ Client features include:
 *   Documentation and tests
 *   Full Implementation of the REST API
 *   Transparent encoding/decoding of values
-*   Scanner and filter support
+*   Scanner and filter support implementing the `stream.Readable` API
 
 ## Installing
 
@@ -57,7 +57,44 @@ hbase({ host: '127.0.0.1', port: 8080 })
 });
 ```
 
-## Scanner Filters
+## Scanner and Filters
+
+The scanner implement the `stream.Readable` API. For ease of usage, an optional
+callback argument may be provided. For example:
+
+```bash
+client
+.getTable('node_table')
+.scan({
+  startRow: 'my_row',
+  maxVersions: 1
+}, function(err, rows){
+  console.log(err, rows);
+});
+```
+
+is equivalent to:
+
+```coffee
+var rows = [];
+scanner = client
+.getTable('node_table')
+.scan({
+  startRow: 'my_row',
+  maxVersions: 1
+});
+scanner.on('readable', function(){
+  while(chunk = scanner.read()){
+    rows.push(chunk);
+  }
+});
+scanner.on('error', function(err){
+  console.log(err);
+});
+scanner.on('end', function(){
+  console.log(rows);
+});
+```
 
 It can be quite a pain to figure out what options can be sent
 with a scanner request. [Marc Trudel](https://github.com/stelcheck) has 
@@ -69,22 +106,20 @@ Tests are executed with mocha. Before running the tests the first time, copy the
 file "./test/properties.json.sample" to "./test/properties.json" and make the
 appropriate changes.
 
+If using the HDP sandbox, start the virtual machine, log-in as "root", start
+Ambari `start_ambari.sh`, start HBase `start_hbase.sh` and start the HBase REST
+server `/usr/lib/hbase/bin/hbase rest -p 60080`.
+
 To run the tests:
 
 ```bash
-expresso -s -t 100000
-```
-
-To instrument the tests:
-
-```bash
-expresso --cov -s -t 100000
+make test
 ```
 
 ## Related projects
 
-*   Official Apache HBase project: <http://hbase.apache.org/>
-*   Brother project Pop HBase (PHP): <https://github.com/pop/pop_hbase>
+*   [Official Apache HBase project](http://hbase.apache.org)
+*   [REST server bundled with HBase (Stargate)](https://wiki.apache.org/hadoop/Hbase/Stargate)
 
 ## Contributors
 

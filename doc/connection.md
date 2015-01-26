@@ -1,6 +1,6 @@
 ---
 title: "Connection: HTTP REST requests for HBase"
-date: 2014-02-07T15:26:49.061Z
+date: 2015-01-26T22:21:40.052Z
 language: en
 layout: page
 comments: false
@@ -51,9 +51,13 @@ Execute an HTTP Get request. The callback contains 3 arguments: the error object
 (new Connection({}))
 .get('http://localhost:8080/', function(error, data, response){
   if(error){
-    process.exit(1);
-  }
-  console.log('Status code: ' + response.statusCode);
-  console.log('Number of tables: ' + tables.length);
+
+```javascript
+process.exit(1);
+
+nsole.log('Status code: ' + response.statusCode);
+nsole.log('Number of tables: ' + tables.length);
+```
+
 });
 ```

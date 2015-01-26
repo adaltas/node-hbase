@@ -1,6 +1,6 @@
 ---
 title: "Scanner operations"
-date: 2014-02-07T15:26:49.061Z
+date: 2015-01-26T22:21:40.052Z
 language: en
 layout: page
 comments: false
@@ -17,24 +17,33 @@ Grab an instance of "Scanner"
 -----------------------------
 
 ```javascript
-var myScanner = hbase({}).getScanner('my_table');
-var myScanner = hbase({}).getScanner('my_table','my_id');
-```
-
-Or
-
-```javascript
-var myScanner = hbase({}).getTable('my_table').getScanner();
-var myScanner = hbase({}).getTable('my_table').getScanner('my_id');
+var myScanner = hbase({}).getTable('my_table').scan(...);
 ```
 
 Or
 
 ```javascript
 var client = new hbase.Client({});
-var myScanner = new hbase.Scanner(client, 'my_table');
-var myScanner = new hbase.Scanner(client, 'my_table', 'my_id');
+var myScanner = new hbase.Scanner(client, {table: 'my_table'});
 ```
+
+Options
+-------
+
+
+
+All options except the "table" option are optional. The following properties are
+available:
+
+*   `startRow`: First row returned by the scanner.   
+*   `endRow`: Row stopping the scanner, not returned by the scanner.   
+*   `columns`: Filter the scanner by columns (a string or an array of columns).   
+*   `batch`: Number of cells returned on each iteration.   
+*   `maxVersions`
+*   `startTime`   
+*   `endTime`   
+*   `filter`: see below for more informations.   
+*   `encoding`: default to client.options.encoding, set overwrite default encoding and return a buffer.   
 
 Using filter
 ------------
@@ -51,43 +60,33 @@ wich returns all rows starting by "my_key_" and whose
 value is "here you are".   
 
 ```javascript
-myScanner.create({
+client.getTable('my_tb').scan({
   filter: {
   "op":"MUST_PASS_ALL","type":"FilterList","filters":[{
-      "op":"EQUAL",
-      "type":"RowFilter",
-      "comparator":{"value":"my_key_.+","type":"RegexStringComparator"}
-    },{
-      "op":"EQUAL",
-      "type":"ValueFilter",
-      "comparator":{"value":"here you are","type":"BinaryComparator"}
-    }
-  ]}
+
+```javascript
+  "op":"EQUAL",
+  "type":"RowFilter",
+  "comparator":{"value":"my_key_.+","type":"RegexStringComparator"}
+},{
+  "op":"EQUAL",
+  "type":"ValueFilter",
+  "comparator":{"value":"here you are","type":"BinaryComparator"}
+}
+
+```
+
 }, function(error, cells){
   assert.ifError(error);
 });
 ```
 
-<a name="Scanner.create"></a>
-`Scanner.create([params], callback)`
-------------------------------------
+<a name="Scanner.init"></a>
+`Scanner.init(callback)`
+-----------------------
 
-Create a new scanner.
+Create a new scanner and return its ID.
 
-```javascript
-myScanner.create([params], callback);
-```
-
-Params is an object for which all properties are optional. The
-following properties are available:
-
--   startRow: First row returned by the scanner   
--   endRow: Row stopping the scanner, not returned by the scanner   
--   columns: Filter the scanner by columns (a string or an array of columns)   
--   batch: Number of cells returned on each iteration   
--   startTime   
--   endTime   
--   filter: see below for more informations
 
 <a name="Scanner.get"></a>
 `Scanner.get(callback)`
@@ -110,13 +109,17 @@ responsibity to call `get` as long as more cells are expected.
 var callback = function(error, cells){
   assert.ifError(error);
   if(cells){
-    // do something
-    console.log(cells);
-    // call the next iteration
-    myScanner.get(callback)
-  }else{
-    // no more cells to iterate
-  }
+
+```javascript
+// do something
+console.log(cells);
+// call the next iteration
+myScanner.get(callback)
+lse{
+// no more cells to iterate
+
+```
+
 };
 myScanner.get(callback);
 ```
@@ -129,32 +132,26 @@ to trigger a new iteration. Here's how:
 myScanner.get(function(error, cells){
   assert.ifError(error);
   if(cells){
-    // do something
-    console.log(cells);
-    // call the next iteration
-    this.continue()
-  }else{
-    // no more cells to iterate
-    // delete the scanner
-    this.delete();
-  }
+
+```javascript
+// do something
+console.log(cells);
+// call the next iteration
+this.continue()
+lse{
+// no more cells to iterate
+// delete the scanner
+this.delete();
+
+```
+
 });
 ```
 
-<a name="Scanner.continue"></a>
+# <a name="Scanner.continue"></a>
 `Scanner.continue()`
---------------------
+# --------------------
+# ###
+# Scanner::continue = ->
+#   @get()
 
-<a name="Scanner.delete"></a>
-`Scanner.delete(callback)`
---------------------------
-
-Delete a scanner.
-
-```javascript
-myScanner.delete(callback);
-```
-
-Callback is optionnal and receive two arguments, an 
-error object if any and a boolean indicating whether 
-the scanner was removed or not.
