@@ -4,11 +4,6 @@ test = require './test'
 Scanner = require '../src/scanner'
 
 describe 'scanner', ->
-  # it 'Instance', (next) ->
-  #   test.getClient (err, client) ->
-  #     client.getTable('node_table').getScanner().should.be.an.instanceof Scanner
-  #     client.getTable('node_table').getScanner('my_id').should.be.an.instanceof Scanner
-  #     next()
   it 'Create', (next) ->
     test.getClient (err, client) ->
       client
