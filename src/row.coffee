@@ -139,13 +139,13 @@ Row::get = (column, callback) ->
     return args[0].apply(self, [error, null])  if error
     cells = []
     data.Row.forEach (row) ->
-      key = utils.base64.decode(row.key)
+      key = utils.base64.decode row.key, self.client.options.encoding
       row.Cell.forEach (cell) ->
         data = {}
         data.key = key if isGlob
-        data.column = utils.base64.decode(cell.column)
+        data.column = utils.base64.decode cell.column, self.client.options.encoding
         data.timestamp = cell.timestamp
-        data.$ = utils.base64.decode(cell.$)
+        data.$ = utils.base64.decode cell.$, self.client.options.encoding
         cells.push data
     args[0].apply self, [null, cells]
 
@@ -247,13 +247,13 @@ Row::put = (columns, values, callback) ->
     else throw new Error("Columns count must match values count")  if columns.length isnt values.length
     body = Row: []
     bodyRow =
-      key: utils.base64.encode(self.key)
+      key: utils.base64.encode self.key, @client.options.encoding
       Cell: []
     columns.forEach (column, i) ->
       bodyCell = {}
       bodyCell.timestamp = timestamps[i]  if timestamps
-      bodyCell.column = utils.base64.encode(column)
-      bodyCell.$ = utils.base64.encode(values[i])
+      bodyCell.column = utils.base64.encode column, self.client.options.encoding
+      bodyCell.$ = utils.base64.encode values[i], self.client.options.encoding
       bodyRow.Cell.push bodyCell
     body.Row.push bodyRow
     url = utils.url.encode table: @table, key: @key or "___false-row-key___", columns: columns
@@ -270,14 +270,14 @@ Row::put = (columns, values, callback) ->
     for k of cellsKeys
       cells = cellsKeys[k]
       bodyRow =
-        key: utils.base64.encode(k)
+        key: utils.base64.encode k, @client.options.encoding
         Cell: []
       for k1 of cells
         cell = cells[k1]
         bodyCell = {}
         bodyCell.timestamp = "" + cell.timestamp  if cell.timestamp
-        bodyCell.column = utils.base64.encode(cell.column)
-        bodyCell.$ = utils.base64.encode(cell.$)
+        bodyCell.column = utils.base64.encode cell.column, @client.options.encoding
+        bodyCell.$ = utils.base64.encode cell.$, @client.options.encoding
         bodyRow.Cell.push bodyCell
       body.Row.push bodyRow
     url = utils.url.encode table: @table, key: @key or "___false-row-key___", columns: ['test:']

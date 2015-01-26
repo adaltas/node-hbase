@@ -82,31 +82,33 @@ myScanner.create([params], callback);
 Params is an object for which all properties are optional. The
 following properties are available:
 
--   startRow: First row returned by the scanner   
--   endRow: Row stopping the scanner, not returned by the scanner   
--   columns: Filter the scanner by columns (a string or an array of columns)   
--   batch: Number of cells returned on each iteration   
--   startTime   
--   endTime   
--   filter: see below for more informations   
+*   `startRow`: First row returned by the scanner.   
+*   `endRow`: Row stopping the scanner, not returned by the scanner.   
+*   `columns`: Filter the scanner by columns (a string or an array of columns).   
+*   `batch`: Number of cells returned on each iteration.   
+*   `startTime`   
+*   `endTime`   
+*   filter: see below for more informations.   
+*   `encoding`: default to client.options.encoding, set overwrite default encoding and return a buffer.   
 ###
 Scanner::create = (params, callback) ->
   self = this
   args = Array::slice.call arguments
   key = "/#{@table}/scanner"
   params = if typeof args[0] is 'object' then args.shift() else {}
+  encoding = if params.encoding is 'undefined' then params.encoding else @client.options.encoding
   callback = args.shift()
-  params.startRow = utils.base64.encode(params.startRow)  if params.startRow
-  params.endRow = utils.base64.encode(params.endRow)  if params.endRow
+  params.startRow = utils.base64.encode(params.startRow, encoding) if params.startRow
+  params.endRow = utils.base64.encode(params.endRow, encoding) if params.endRow
   if params.column
     params.column = [params.column] if typeof params.column is 'string'
     params.column.forEach (column, i) ->
-      params.column[i] = utils.base64.encode column
+      params.column[i] = utils.base64.encode column, encoding
   if params.filter
     encode = (obj) ->
       for k of obj
         if k is 'value' and (not obj['type'] or obj['type'] isnt 'RegexStringComparator' and obj['type'] isnt 'PageFilter')
-          obj[k] = utils.base64.encode(obj[k])
+          obj[k] = utils.base64.encode obj[k], encoding
         else encode obj[k]  if typeof obj[k] is 'object'
     encode params.filter
     params.filter = JSON.stringify(params.filter)
@@ -181,13 +183,13 @@ Scanner::get = (callback) ->
     return callback.apply self, [error, null] if error
     cells = []
     data.Row.forEach (row) ->
-      key = utils.base64.decode row.key
+      key = utils.base64.decode row.key, self.client.options.encoding
       row.Cell.forEach (cell) ->
         data = {}
         data.key = key
-        data.column = utils.base64.decode cell.column
+        data.column = utils.base64.decode cell.column, self.client.options.encoding
         data.timestamp = cell.timestamp
-        data.$ = utils.base64.decode cell.$
+        data.$ = utils.base64.decode cell.$, self.client.options.encoding
         cells.push data
     callback.apply self, [null, cells]
 

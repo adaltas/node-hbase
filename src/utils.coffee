@@ -2,11 +2,15 @@ crypto = require 'crypto'
 
 utils =
   base64:
-    encode: (string) ->
-      (new Buffer string, 'utf8').toString 'base64'
-
-    decode: (string) ->
-      (new Buffer string, 'base64').toString 'utf8'
+    encode: (data, to_encoding) ->
+      return data if to_encoding is 'base64'
+      data = new Buffer data, to_encoding or 'utf8' unless Buffer.isBuffer data
+      data.toString 'base64'
+    decode: (data, from_encoding) ->
+      return data if from_encoding is 'base64'
+      data = (new Buffer data, 'base64')
+      return data unless from_encoding
+      data.toString from_encoding
   url:
     ###
     Arguments:

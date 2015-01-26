@@ -228,7 +228,6 @@ Table.getRow(key)
 Table::getRow = (key) ->
   new Row @client, @name, key
 
-
 ###
 Return a new scanner instance
 ---------------------
