@@ -65,8 +65,7 @@ published a few examples [here](https://gist.github.com/3979381).
 
 ## Running the tests
 
-Tests are executed with expresso. To install it, simple use 
-`npm install -g expresso`. Before running the tests the first time, copy the
+Tests are executed with mocha. Before running the tests the first time, copy the
 file "./test/properties.json.sample" to "./test/properties.json" and make the
 appropriate changes.
 
