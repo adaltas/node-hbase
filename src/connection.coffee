@@ -38,7 +38,6 @@ Connection = (client) ->
   @
 
 Connection::makeRequest = (method, command, data, callback) ->
-  self = this
   options =
     port: @client.options.port
     host: @client.options.host
@@ -47,14 +46,14 @@ Connection::makeRequest = (method, command, data, callback) ->
     headers:
       'content-type': 'application/json'
       Accept: 'application/json'
-  req = http.request options, (res) ->
+  req = http.request options, (res) =>
     body = ''
     res.on 'data', (chunk) ->
       body += chunk
-    res.on 'end', ->
+    res.on 'end', =>
       error = null
       try
-        body = self.handleJson res, body
+        body = @handleJson res, body
       catch e
         body = null
         error = e

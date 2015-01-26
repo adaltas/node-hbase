@@ -120,7 +120,6 @@ Print something like
 ```
 ###
 Row::get = (column, callback) ->
-  self = this
   args = Array::slice.call(arguments)
   key = "/" + @table + "/" + @key
   isGlob = @key.substr(-1, 1) is "*"
@@ -135,19 +134,19 @@ Row::get = (column, callback) ->
   end = options.end  if options.end
   params.v = options.v  if options.v
   url = utils.url.encode table: @table, key: @key, columns: columns, start: start, end: end, params: params
-  @client.connection.get url, (error, data) ->
-    return args[0].apply(self, [error, null])  if error
+  @client.connection.get url, (error, data) =>
+    return args[0].apply(@, [error, null])  if error
     cells = []
-    data.Row.forEach (row) ->
-      key = utils.base64.decode row.key, self.client.options.encoding
-      row.Cell.forEach (cell) ->
+    data.Row.forEach (row) =>
+      key = utils.base64.decode row.key, @client.options.encoding
+      row.Cell.forEach (cell) =>
         data = {}
         data.key = key if isGlob
-        data.column = utils.base64.decode cell.column, self.client.options.encoding
+        data.column = utils.base64.decode cell.column, @client.options.encoding
         data.timestamp = cell.timestamp
-        data.$ = utils.base64.decode cell.$, self.client.options.encoding
+        data.$ = utils.base64.decode cell.$, @client.options.encoding
         cells.push data
-    args[0].apply self, [null, cells]
+    args[0].apply @, [null, cells]
 
 ###
 Insert and update a column value
@@ -229,7 +228,6 @@ hbase()
 ```
 ###
 Row::put = (columns, values, callback) ->
-  self = this
   args = Array::slice.call(arguments)
   url = undefined
   body = undefined
@@ -247,13 +245,13 @@ Row::put = (columns, values, callback) ->
     else throw new Error("Columns count must match values count")  if columns.length isnt values.length
     body = Row: []
     bodyRow =
-      key: utils.base64.encode self.key, @client.options.encoding
+      key: utils.base64.encode @key, @client.options.encoding
       Cell: []
-    columns.forEach (column, i) ->
+    columns.forEach (column, i) =>
       bodyCell = {}
       bodyCell.timestamp = timestamps[i]  if timestamps
-      bodyCell.column = utils.base64.encode column, self.client.options.encoding
-      bodyCell.$ = utils.base64.encode values[i], self.client.options.encoding
+      bodyCell.column = utils.base64.encode column, @client.options.encoding
+      bodyCell.$ = utils.base64.encode values[i], @client.options.encoding
       bodyRow.Cell.push bodyCell
     body.Row.push bodyRow
     url = utils.url.encode table: @table, key: @key or "___false-row-key___", columns: columns
@@ -263,8 +261,8 @@ Row::put = (columns, values, callback) ->
     callback = args.shift()
     body = Row: []
     cellsKeys = {}
-    data.forEach (d) ->
-      key = d.key or self.key
+    data.forEach (d) =>
+      key = d.key or @key
       cellsKeys[key] = []  unless key of cellsKeys
       cellsKeys[key].push d
     for k of cellsKeys
@@ -281,9 +279,9 @@ Row::put = (columns, values, callback) ->
         bodyRow.Cell.push bodyCell
       body.Row.push bodyRow
     url = utils.url.encode table: @table, key: @key or "___false-row-key___", columns: ['test:']
-  @client.connection.put url, body, (error, data) ->
+  @client.connection.put url, body, (error, data) =>
     return  unless callback
-    callback.apply self, [error, (if error then null else true)]
+    callback.apply @, [error, (if error then null else true)]
 
 ###
 Test if a row or a column exists
@@ -318,18 +316,17 @@ hbase()
 ```
 ###
 Row::exists = (column, callback) ->
-  self = this
   args = Array::slice.call(arguments)
   column = (if typeof args[0] is "string" then args.shift() else null)
   url = utils.url.encode table: @table, key: @key, columns: column
-  @client.connection.get url, (error, exists) ->
+  @client.connection.get url, (error, exists) =>
     # note:
     # if row does not exists: 404
     # if row exists and column family does not exists: 503
     if error and (error.code is 404 or error.code is 503)
       error = null
       exists = false
-    args[0].apply self, [error, (if error then null else ((if exists is false then false else true)))]
+    args[0].apply @, [error, (if error then null else ((if exists is false then false else true)))]
 
 ###
 Delete a row or a column
@@ -380,13 +377,12 @@ hbase()
 ```
 ###
 Row::delete = ->
-  self = this
   args = Array::slice.call(arguments)
   columns = undefined
   columns = args.shift()  if typeof args[0] is "string" or (typeof args[0] is "object" and args[0] instanceof Array)
   url = utils.url.encode table: @table, key: @key, columns: columns
-  @client.connection.delete url, ((error, success) ->
-    args[0].apply self, [error, (if error then null else true)]
+  @client.connection.delete url, ((error, success) =>
+    args[0].apply @, [error, (if error then null else true)]
   ), true
 
 module.exports = Row

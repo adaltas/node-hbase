@@ -71,19 +71,18 @@ hbase()
 ```
 ###
 Table::create = (schema, callback) ->
-  self = this
   args = Array::slice.call(arguments)
   schema = if args.length and typeof args[0] is 'object' or typeof args[0] is 'string' then args.shift() else {}
   callback = if args.length then args.shift() else null
   schema.name = @name
   schema = ColumnSchema: [name: schema]  if typeof schema is 'string'
-  @client.connection.put "/#{@name}/schema", schema, (error, data) ->
+  @client.connection.put "/#{@name}/schema", schema, (error, data) =>
     unless callback
       if error
         throw error
       else
         return
-    callback.apply self, [error, if error then null else true]
+    callback.apply @, [error, if error then null else true]
 
 ###
 Drop an existing table
@@ -104,14 +103,13 @@ hbase()
 ```
 ###
 Table::delete = (callback) ->
-  self = this
-  @client.connection.delete "/#{@name}/schema", (error, data) ->
+  @client.connection.delete "/#{@name}/schema", (error, data) =>
     unless callback
       if error
         throw error
       else
         return
-    callback.apply self, [error, if error then null else true]
+    callback.apply @, [error, if error then null else true]
 
 ###
 Check if a table is created
@@ -122,12 +120,11 @@ myTable.exists(calblack);
 ```
 ###
 Table::exists = (callback) ->
-  self = this
-  @client.connection.get "/#{@name}/exists", (error, exists) ->
+  @client.connection.get "/#{@name}/exists", (error, exists) =>
     if error and error.code is 404
       error = null
       exists = false
-    callback.apply self, [error, if error then null else (exists isnt false)]
+    callback.apply @, [error, if error then null else (exists isnt false)]
 
 ###
 Update an existing table
@@ -136,15 +133,14 @@ Update an existing table
 NOT YET WORKING, waiting for [HBASE-3140](https://issues.apache.org/jira/browse/HBASE-3140).
 ###
 Table::update = (schema, callback) ->
-  self = this
   schema.name = @name
-  @client.connection.post "/#{@name}/schema", schema, (error, data) ->
+  @client.connection.post "/#{@name}/schema", schema, (error, data) =>
     unless callback
       if error
         throw error
       else
         return
-    callback.apply self, [error, if error then null else true]
+    callback.apply @, [error, if error then null else true]
 
 ###
 Retrieves table schema
@@ -180,9 +176,8 @@ Will print something similar to:
 ```
 ###
 Table::getSchema = (callback) ->
-  self = this
-  @client.connection.get "/#{@name}/schema", (error, data) ->
-    callback.apply self, [error, if error then null else data]
+  @client.connection.get "/#{@name}/schema", (error, data) =>
+    callback.apply @, [error, if error then null else data]
 
 ###
 Retrieves table region metadata
@@ -212,9 +207,8 @@ Will print something similar to:
 ```
 ###
 Table::getRegions = (callback) ->
-  self = this
-  @client.connection.get "/#{@name}/regions", (error, data) ->
-    callback.apply self, [error, if error then null else data]
+  @client.connection.get "/#{@name}/regions", (error, data) =>
+    callback.apply @, [error, if error then null else data]
 
 ###
 Return a new row instance

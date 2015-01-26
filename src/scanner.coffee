@@ -92,7 +92,6 @@ following properties are available:
 *   `encoding`: default to client.options.encoding, set overwrite default encoding and return a buffer.   
 ###
 Scanner::create = (params, callback) ->
-  self = this
   args = Array::slice.call arguments
   key = "/#{@table}/scanner"
   params = if typeof args[0] is 'object' then args.shift() else {}
@@ -112,11 +111,11 @@ Scanner::create = (params, callback) ->
         else encode obj[k]  if typeof obj[k] is 'object'
     encode params.filter
     params.filter = JSON.stringify(params.filter)
-  @client.connection.put key, params, (error, data, response) ->
-    return callback.apply(self, [error, null])  if error
+  @client.connection.put key, params, (error, data, response) =>
+    return callback.apply(@, [error, null])  if error
     id = /scanner\/(\w+)$/.exec(response.headers.location)[1]
-    self.id = id
-    callback.apply self, [null, id]
+    @id = id
+    callback.apply @, [null, id]
 
 ###
 `Scanner.get(callback)`
@@ -171,27 +170,26 @@ myScanner.get(function(error, cells){
 ```
 ###
 Scanner::get = (callback) ->
-  self = this
   key = "/#{@table}/scanner/#{@id}"
   if callback
     @callback = callback
   else
     callback = @callback
-  @client.connection.get key, (error, data, response) ->
+  @client.connection.get key, (error, data, response) =>
     # result is successful but the scanner is exhausted, returns HTTP 204 status (no content)
-    return callback.apply self, [null, null] if response and response.statusCode is 204
-    return callback.apply self, [error, null] if error
+    return callback.apply @, [null, null] if response and response.statusCode is 204
+    return callback.apply @, [error, null] if error
     cells = []
-    data.Row.forEach (row) ->
-      key = utils.base64.decode row.key, self.client.options.encoding
-      row.Cell.forEach (cell) ->
+    data.Row.forEach (row) =>
+      key = utils.base64.decode row.key, @client.options.encoding
+      row.Cell.forEach (cell) =>
         data = {}
         data.key = key
-        data.column = utils.base64.decode cell.column, self.client.options.encoding
+        data.column = utils.base64.decode cell.column, @client.options.encoding
         data.timestamp = cell.timestamp
-        data.$ = utils.base64.decode cell.$, self.client.options.encoding
+        data.$ = utils.base64.decode cell.$, @client.options.encoding
         cells.push data
-    callback.apply self, [null, cells]
+    callback.apply @, [null, cells]
 
 ###
 `Scanner.continue()`
@@ -215,14 +213,13 @@ error object if any and a boolean indicating whether
 the scanner was removed or not.
 ###
 Scanner::delete = (callback) ->
-  self = this
   key = "/#{@table}/scanner/#{@id}"
-  @client.connection.delete key, (error, success) ->
+  @client.connection.delete key, (error, success) =>
     unless callback
       if error
         throw error
       else
         return
-    callback.apply self, [error, if error then null else true]
+    callback.apply @, [error, if error then null else true]
 
 module.exports = Scanner
