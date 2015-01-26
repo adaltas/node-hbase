@@ -16,10 +16,10 @@ describe 'scanner', ->
       client
       .getRow('node_table', null)
       .put [
-        { key:'test_scanner_create_1', column:'node_column_family', $:'v 1.3' }
-        { key:'test_scanner_create_2', column:'node_column_family', $:'v 1.1' }
-        { key:'test_scanner_create_3', column:'node_column_family', $:'v 1.2' }
-        { key:'test_scanner_create_4', column:'node_column_family', $:'v 2.2' }
+        { key:'test_scanner_create_1', column:'node_column_family:', $:'v 1.3' }
+        { key:'test_scanner_create_2', column:'node_column_family:', $:'v 1.1' }
+        { key:'test_scanner_create_3', column:'node_column_family:', $:'v 1.2' }
+        { key:'test_scanner_create_4', column:'node_column_family:', $:'v 2.2' }
       ], (err, success) ->
         should.not.exist err
         client
@@ -34,10 +34,10 @@ describe 'scanner', ->
       client
       .getRow('node_table')
       .put [
-        { key:'test_scanner_get_startRow_1', column:'node_column_family', $:'v 1.3' }
-        { key:'test_scanner_get_startRow_11', column:'node_column_family', $:'v 1.1' }
-        { key:'test_scanner_get_startRow_111', column:'node_column_family', $:'v 1.2' }
-        { key:'test_scanner_get_startRow_2', column:'node_column_family', $:'v 2.2' }
+        { key:'test_scanner_get_startRow_1', column:'node_column_family:', $:'v 1.3' }
+        { key:'test_scanner_get_startRow_11', column:'node_column_family:', $:'v 1.1' }
+        { key:'test_scanner_get_startRow_111', column:'node_column_family:', $:'v 1.2' }
+        { key:'test_scanner_get_startRow_2', column:'node_column_family:', $:'v 2.2' }
       ], (err, success) ->
         should.not.exist err
         client
@@ -63,10 +63,10 @@ describe 'scanner', ->
       client
       .getRow('node_table')
       .put [
-        { key:'test_scanner_get_startEndRow_1', column:'node_column_family', $:'v 1.3' }
-        { key:'test_scanner_get_startEndRow_11', column:'node_column_family', $:'v 1.1' }
-        { key:'test_scanner_get_startEndRow_111', column:'node_column_family', $:'v 1.2' }
-        { key:'test_scanner_get_startEndRow_2', column:'node_column_family', $:'v 2.2' }
+        { key:'test_scanner_get_startEndRow_1', column:'node_column_family:', $:'v 1.3' }
+        { key:'test_scanner_get_startEndRow_11', column:'node_column_family:', $:'v 1.1' }
+        { key:'test_scanner_get_startEndRow_111', column:'node_column_family:', $:'v 1.2' }
+        { key:'test_scanner_get_startEndRow_2', column:'node_column_family:', $:'v 2.2' }
       ], (err, success) ->
         should.not.exist err
         client
@@ -93,10 +93,10 @@ describe 'scanner', ->
       client
       .getRow('node_table')
       .put [
-        { key:'test_scanner_get_batch_1', column:'node_column_family', $:'v 1.3' }
-        { key:'test_scanner_get_batch_2', column:'node_column_family', $:'v 1.1' }
-        { key:'test_scanner_get_batch_3', column:'node_column_family', $:'v 1.2' }
-        { key:'test_scanner_get_batch_4', column:'node_column_family', $:'v 2.2' }
+        { key:'test_scanner_get_batch_1', column:'node_column_family:', $:'v 1.3' }
+        { key:'test_scanner_get_batch_2', column:'node_column_family:', $:'v 1.1' }
+        { key:'test_scanner_get_batch_3', column:'node_column_family:', $:'v 1.2' }
+        { key:'test_scanner_get_batch_4', column:'node_column_family:', $:'v 2.2' }
       ], (err, success) ->
         should.not.exist err
         client
@@ -169,10 +169,10 @@ describe 'scanner', ->
       client
       .getRow('node_table')
       .put [
-        { key:'test_scanner_maxversions_1', column:'node_column_family::c', timestamp: time+1, $:'v 1.1' }
-        { key:'test_scanner_maxversions_1', column:'node_column_family::c', timestamp: time+2, $:'v 1.2' }
-        { key:'test_scanner_maxversions_1', column:'node_column_family::c', timestamp: time+3, $:'v 1.3' }
-        { key:'test_scanner_maxversions_1', column:'node_column_family::c', timestamp: time+4, $:'v 1.4' }
+        { key:'test_scanner_maxversions_1', column:'node_column_family:c', timestamp: time+1, $:'v 1.1' }
+        { key:'test_scanner_maxversions_1', column:'node_column_family:c', timestamp: time+2, $:'v 1.2' }
+        { key:'test_scanner_maxversions_1', column:'node_column_family:c', timestamp: time+3, $:'v 1.3' }
+        { key:'test_scanner_maxversions_1', column:'node_column_family:c', timestamp: time+4, $:'v 1.4' }
       ], (err, success) ->
         should.not.exist err
         client
@@ -180,7 +180,7 @@ describe 'scanner', ->
         .create
           startRow: 'test_scanner_maxversions_1'
           endRow: 'test_scanner_maxversions_11'
-          column: 'node_column_family::c'
+          column: 'node_column_family:c'
           maxVersions: 3
         , (err, id) ->
           should.not.exist err
@@ -193,10 +193,10 @@ describe 'scanner', ->
       client
       .getRow('node_table')
       .put [
-        { key:'test_scanner_continue_1', column:'node_column_family', $:'v 1.3' }
-        { key:'test_scanner_continue_2', column:'node_column_family', $:'v 1.1' }
-        { key:'test_scanner_continue_3', column:'node_column_family', $:'v 1.2' }
-        { key:'test_scanner_continue_4', column:'node_column_family', $:'v 2.2' }
+        { key:'test_scanner_continue_1', column:'node_column_family:', $:'v 1.3' }
+        { key:'test_scanner_continue_2', column:'node_column_family:', $:'v 1.1' }
+        { key:'test_scanner_continue_3', column:'node_column_family:', $:'v 1.2' }
+        { key:'test_scanner_continue_4', column:'node_column_family:', $:'v 2.2' }
       ], (err, success) ->
         should.not.exist err
         client

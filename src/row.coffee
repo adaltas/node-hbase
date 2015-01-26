@@ -49,6 +49,8 @@ An optional object of options may contains the following properties:
 -   end: timestamp indicating the maximal version date
 -   v: maximum number of returned versions
 
+Note: In our current release of HBase (0.98) the "v" option only work if a column is provided.
+
 Callback is required and receive two arguments, an error object if any and the column value.
 
 ```javascript
@@ -132,7 +134,7 @@ Row::get = (column, callback) ->
   start = options.start  if options.start
   end = options.end  if options.end
   params.v = options.v  if options.v
-  url = utils.url.encode(@table, @key, columns, start, end, params)
+  url = utils.url.encode table: @table, key: @key, columns: columns, start: start, end: end, params: params
   @client.connection.get url, (error, data) ->
     return args[0].apply(self, [error, null])  if error
     cells = []
@@ -232,6 +234,7 @@ Row::put = (columns, values, callback) ->
   url = undefined
   body = undefined
   bodyRow = undefined
+  # First argument are columns and second argument are values
   if args.length > 2
     columns = args.shift()
     values = args.shift()
@@ -252,9 +255,9 @@ Row::put = (columns, values, callback) ->
       bodyCell.column = utils.base64.encode(column)
       bodyCell.$ = utils.base64.encode(values[i])
       bodyRow.Cell.push bodyCell
-
     body.Row.push bodyRow
-    url = utils.url.encode(@table, @key or "___false-row-key___", columns)
+    url = utils.url.encode table: @table, key: @key or "___false-row-key___", columns: columns
+  # First argument is a full object with columns and values
   else
     data = args.shift()
     callback = args.shift()
@@ -277,7 +280,7 @@ Row::put = (columns, values, callback) ->
         bodyCell.$ = utils.base64.encode(cell.$)
         bodyRow.Cell.push bodyCell
       body.Row.push bodyRow
-    url = utils.url.encode(@table, @key or "___false-row-key___")
+    url = utils.url.encode table: @table, key: @key or "___false-row-key___", columns: ['test:']
   @client.connection.put url, body, (error, data) ->
     return  unless callback
     callback.apply self, [error, (if error then null else true)]
@@ -318,7 +321,7 @@ Row::exists = (column, callback) ->
   self = this
   args = Array::slice.call(arguments)
   column = (if typeof args[0] is "string" then args.shift() else null)
-  url = utils.url.encode(@table, @key, column)
+  url = utils.url.encode table: @table, key: @key, columns: column
   @client.connection.get url, (error, exists) ->
     # note:
     # if row does not exists: 404
@@ -381,7 +384,7 @@ Row::delete = ->
   args = Array::slice.call(arguments)
   columns = undefined
   columns = args.shift()  if typeof args[0] is "string" or (typeof args[0] is "object" and args[0] instanceof Array)
-  url = utils.url.encode(@table, @key, columns)
+  url = utils.url.encode table: @table, key: @key, columns: columns
   @client.connection.delete url, ((error, success) ->
     args[0].apply self, [error, (if error then null else true)]
   ), true

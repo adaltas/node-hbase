@@ -8,22 +8,30 @@ utils =
     decode: (string) ->
       (new Buffer string, 'base64').toString 'utf8'
   url:
-    encode: (table, key, columns, from, to, params) ->
-      args = Array::slice.call arguments
+    ###
+    Arguments:
+    *   `table`
+    *   `key`
+    *   `columns`
+    *   `start`
+    *   `end`
+    *   `params`
+    ###
+    encode: (args) ->
+      throw new Error 'Missing parameters "table"' unless args.table
       newpath = '/'
-      params = args.pop() if args.length > 3 and typeof args[args.length - 1] is 'object'
+      # params = args.pop() if args.length > 3 and typeof args[args.length - 1] is 'object'
       # Table
-      newpath += encodeURIComponent args.shift() if args.length
+      newpath += encodeURIComponent args.table
       # Key
-      if args.length
+      if args.key
         newpath += '/'
-        newpath += encodeURIComponent args.shift()
+        newpath += encodeURIComponent args.key
       # Columns
-      if args.length
+      if args.columns
         columnPath = undefined
-        columns = args.shift()
-        if Array.isArray columns
-          columnPath = columns.map( (column) ->
+        if Array.isArray args.columns
+          columnPath = args.columns.map( (column) ->
             if Array.isArray(column)
               column.map( (c) ->
                 encodeURIComponent c
@@ -31,33 +39,29 @@ utils =
             else
               encodeURIComponent column
           ).join ','
-        else if typeof columns is 'object'
+        else if typeof args.columns is 'object'
           cs = []
-          for k of columns
-            cs.push "#{encodeURIComponent(k)}:#{encodeURIComponent(columns[k])}"
+          for k, v of args.columns
+            cs.push "#{encodeURIComponent(k)}:#{encodeURIComponent(v)}"
           columnPath = cs.join ','
         else
-          columnPath = if columns then encodeURIComponent columns else ''
-        newpath += "/"
+          columnPath = if args.columns then encodeURIComponent args.columns else ''
+        newpath += "/" if columnPath
         if columnPath
           newpath += "#{columnPath}"
       # From & To
-      from = to = null
-      from = args.shift()  if args.length
-      # To
-      to = args.shift()  if args.length
-      if to
+      if args.end
         newpath += '/'
-        if from
-          newpath += encodeURIComponent from 
+        if args.start
+          newpath += encodeURIComponent args.start 
           newpath += ','
-        newpath += encodeURIComponent to
+        newpath += encodeURIComponent args.end
       # Params
-      if params
+      if args.params
         newpath += '?'
         ps = []
-        for k of params
-          ps.push "#{encodeURIComponent(k)}=#{encodeURIComponent(params[k])}"
+        for k, v of args.params
+          ps.push "#{encodeURIComponent(k)}=#{encodeURIComponent(v)}"
         newpath += ps.join ','
       newpath
 

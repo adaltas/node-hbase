@@ -99,19 +99,15 @@ Scanner::create = (params, callback) ->
   params.startRow = utils.base64.encode(params.startRow)  if params.startRow
   params.endRow = utils.base64.encode(params.endRow)  if params.endRow
   if params.column
-    if typeof params.column is 'string'
-      params.column = utils.base64.encode params.column
-    else
-      params.column.forEach (column, i) ->
-        params.column[i] = utils.base64.encode column
-
+    params.column = [params.column] if typeof params.column is 'string'
+    params.column.forEach (column, i) ->
+      params.column[i] = utils.base64.encode column
   if params.filter
     encode = (obj) ->
       for k of obj
         if k is 'value' and (not obj['type'] or obj['type'] isnt 'RegexStringComparator' and obj['type'] isnt 'PageFilter')
           obj[k] = utils.base64.encode(obj[k])
         else encode obj[k]  if typeof obj[k] is 'object'
-
     encode params.filter
     params.filter = JSON.stringify(params.filter)
   @client.connection.put key, params, (error, data, response) ->
