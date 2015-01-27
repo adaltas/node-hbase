@@ -11,13 +11,7 @@ Grab an instance of "Row"
 -------------------------
 
 ```javascript
-var myRow = hbase({}).getRow('my_table','my_row');
-```
-
-Or
-
-```javascript
-var myRow = hbase({}).getTable('my_table').getRow('my_row');
+var myRow = hbase({}).table('my_table').row('my_row');
 ```
 
 Or
@@ -55,7 +49,8 @@ Callback is required and receive two arguments, an error object if any and the c
 
 ```javascript
 hbase()
-.getRow('my_table','my_row')
+.table('my_table')
+.row('my_row')
 .get('my_column_family', {from: 1285942515900}, function(error, value){
   console.log(value);
 });
@@ -83,7 +78,8 @@ Attempting to retrieve a column which does not exist in HBase will return a null
 
 ```javascript
 hbase()
-.getRow('my_table','my_row')
+talbe('my_table')
+.row('my_row')
 .get('my_column_family:my_column', function(error, value){
   assert.strictEqual(404, error.code);
   assert.strictEqual(null, value);
@@ -97,7 +93,8 @@ Values from multiple rows is achieved by appending a suffix glob on the row key.
 
 ```javascript
 hbase()
-.getRow('my_table','my_key_*')
+table('my_table')
+.row('my_key_*')
 .get('my_column_family:my_column', function(error, value){
   console.log(value);
 });
@@ -162,7 +159,8 @@ Callback is optional and receive two arguments, an error object if any and a boo
 
 ```javascript
 hbase()
-.getRow('my_table', 'my_row')
+.table('my_table')
+.row('my_row')
 .put('my_column_family:my_column', 'my value', function(error, success){
   assert.strictEqual(true, success);
 });
@@ -180,7 +178,8 @@ Inserting values into multiple columns is achieved the same way as for a single 
 
 ```javascript
 hbase()
-.getRow('my_table', 'my_row')
+.table('my_table')
+.row('my_row')
 .put(
   ['my_column_family:my_column_1', 'my_column_family:my_column_2'],
   ['my value 1', 'my value 2'],
@@ -199,7 +198,8 @@ var cells =
   , { column: 'cf:c1', timestamp: Date.now()+1, $: 'my value' }
   ];
 hbase()
-.getRow('my_table', 'my_row')
+.table('my_table')
+.row('my_row')
 .put(cells, function(error, success){
   assert.strictEqual(true, success);
 });
@@ -221,7 +221,8 @@ var rows =
   , { key: 'row_2', column: 'cf:c1', timestamp: Date.now()+1, $: 'my value' }
   ];
 hbase()
-.getRow('my_table', null)
+.table('my_table')
+.row()
 .put(rows, function(error,success){
   assert.strictEqual(true, success);
 });
@@ -299,7 +300,8 @@ Example to see if a row exists:
 
 ```javascript
 hbase()
-.getRow('my_table','my_row')
+.table('my_table')
+.row('my_row')
 .exists(function(error, exists){
   assert.strictEqual(true, exists);
 });
@@ -309,7 +311,8 @@ Example to see if a column exists:
 
 ```javascript
 hbase()
-.getRow('my_table','my_row')
+.table('my_table')
+.row('my_row')
 .exists('my_column_family:my_column', function(error, exists){
   assert.strictEqual(true, exists);
 });
@@ -344,7 +347,8 @@ Example to delete a row:
 
 ```javascript
 hbase()
-.getRow('my_table','my_row')
+.table('my_table')
+.row('my_row')
 .delete(function(error, success){
   assert.strictEqual(true, success);
 });
@@ -354,7 +358,8 @@ Example to delete a column:
 
 ```javascript
 hbase()
-.getRow('my_table','my_row')
+.table('my_table')
+.row('my_row')
 .delete('my_column_family:my_column', function(error, success){
   assert.strictEqual(true, success);
 });
@@ -367,7 +372,8 @@ Deleting multiple columns is achieved by providing an array of columns as the fi
 
 ```javascript
 hbase()
-.getRow('my_table','my_row')
+.table('my_table')
+.row('my_row')
 .delete(
   ['my_column_family:my_column_1', 'my_column_family:my_column_2'],
   function(error, success){

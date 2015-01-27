@@ -5,9 +5,10 @@ test = require './test'
 
 describe 'scanner', ->
   it 'stream readable', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table')
+      .table('node_table')
+      .row()
       .put [
         { key:'test_scanner_stream_readable_1', column:'node_column_family:', $:'v 1.3' }
         { key:'test_scanner_stream_readable_11', column:'node_column_family:', $:'v 1.1' }
@@ -16,7 +17,7 @@ describe 'scanner', ->
       ], (err, success) ->
         return next err if err
         scanner = client
-        .getTable('node_table')
+        .table('node_table')
         .scan
           startRow: 'test_scanner_get_startRow_11'
           maxVersions: 1
@@ -30,9 +31,10 @@ describe 'scanner', ->
           rows.length.should.be.above 2
           next()
   it 'Get startRow', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table')
+      .table('node_table')
+      .row()
       .put [
         { key:'test_scanner_get_startRow_1', column:'node_column_family:', $:'v 1.3' }
         { key:'test_scanner_get_startRow_11', column:'node_column_family:', $:'v 1.1' }
@@ -41,7 +43,7 @@ describe 'scanner', ->
       ], (err, success) ->
         return next err if err
         client
-        .getTable('node_table')
+        .table('node_table')
         .scan
           startRow: 'test_scanner_get_startRow_11'
           maxVersions: 1
@@ -57,9 +59,10 @@ describe 'scanner', ->
           rows[1].column.should.eql 'node_column_family:'
           next()
   it 'Get startRow and endRow', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table')
+      .table('node_table')
+      .row()
       .put [
         { key:'test_scanner_get_startEndRow_1', column:'node_column_family:', $:'v 1.3' }
         { key:'test_scanner_get_startEndRow_11', column:'node_column_family:', $:'v 1.1' }
@@ -68,7 +71,7 @@ describe 'scanner', ->
       ], (err, success) ->
         return next err if err
         client
-        .getTable('node_table')
+        .table('node_table')
         .scan
           startRow: 'test_scanner_get_startEndRow_11'
           endRow: 'test_scanner_get_startEndRow_2'
@@ -85,9 +88,10 @@ describe 'scanner', ->
           rows[1].column.should.eql 'node_column_family:'
           next()
   it 'Get columns', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table')
+      .table('node_table')
+      .row()
       .put [
         { key:'test_scanner_get_columns_1', column:'node_column_family:c1', $:'v 1.1' }
         { key:'test_scanner_get_columns_1', column:'node_column_family:c2', $:'v 1.2' }
@@ -104,7 +108,7 @@ describe 'scanner', ->
       ], (err, success) ->
         return next err if err
         client
-        .getTable('node_table')
+        .table('node_table')
         .scan
           startRow: 'test_scanner_get_columns_1'
           endRow: 'test_scanner_get_columns_3'
@@ -125,10 +129,11 @@ describe 'scanner', ->
               'node_column_family:c4' ]
             next()
   it 'Option maxVersions', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       time = (new Date).getTime()
       client
-      .getRow('node_table')
+      .table('node_table')
+      .row()
       .put [
         { key:'test_scanner_maxversions_1', column:'node_column_family:c', timestamp: time+1, $:'v 1.1' }
         { key:'test_scanner_maxversions_1', column:'node_column_family:c', timestamp: time+2, $:'v 1.2' }
@@ -137,7 +142,7 @@ describe 'scanner', ->
       ], (err, success) ->
         return next err if err
         client
-        .getTable('node_table')
+        .table('node_table')
         .scan
           startRow: 'test_scanner_maxversions_1'
           endRow: 'test_scanner_maxversions_11'

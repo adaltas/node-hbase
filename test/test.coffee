@@ -4,7 +4,7 @@ fs = require 'fs'
 path = require 'path'
 assert = require 'assert'
 
-module.exports.getClient = (options, callback) ->
+module.exports.client = (options, callback) ->
   if arguments.length is 1
     callback = options
     options = {}
@@ -17,7 +17,7 @@ module.exports.getClient = (options, callback) ->
     options[k] ?= properties[k]
   options.encoding ?= 'utf8'
   client = hbase options
-  table = client.getTable('node_table')
+  table = client.table('node_table')
   table.exists (error, exists) ->
     assert.ifError error
     return callback(error, client, options) if exists

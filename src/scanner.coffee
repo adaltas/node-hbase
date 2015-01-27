@@ -15,7 +15,7 @@ Grab an instance of "Scanner"
 -----------------------------
 
 ```javascript
-var myScanner = hbase({}).getTable('my_table').scan(...);
+var myScanner = hbase({}).table('my_table').scan(...);
 ```
 
 Or
@@ -66,7 +66,7 @@ wich returns all rows starting by "my_key_" and whose
 value is "here you are".   
 
 ```javascript
-client.getTable('my_tb').scan({
+client.table('my_tb').scan({
   filter: {
   "op":"MUST_PASS_ALL","type":"FilterList","filters":[{
       "op":"EQUAL",

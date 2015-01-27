@@ -27,10 +27,11 @@ hbase = require '../src'
 
 describe 'filter', ->
   it 'Option filter', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       time = (new Date).getTime()
       client
-      .getRow('node_table')
+      .table('node_table')
+      .row()
       .put [
         {key:'test_filter|row_1', column:'node_column_family:aa', $:'aa'}
         {key:'test_filter|row_1', column:'node_column_family:aa', $:'ab'}
@@ -44,9 +45,9 @@ describe 'filter', ->
       ], (err, success) ->
         next err
   it 'FilterList # must_pass_all # +RegexStringComparator', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getTable('node_table')
+      .table('node_table')
       .scan
         startRow: 'test_filter|row_1'
         maxVersions: 1
@@ -63,10 +64,10 @@ describe 'filter', ->
           cells[2].key.should.eql 'test_filter|row_2'
           next()
   it 'FirstKeyOnlyFilter', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       # Only return the first KV from each row.
       client
-      .getTable('node_table')
+      .table('node_table')
       .scan
         startRow: 'test_filter|row_1'
         filter: {'type':'FirstKeyOnlyFilter'}
@@ -84,9 +85,9 @@ describe 'filter', ->
         if keys.indexOf(cell['key']) is -1
           keys.push cell['key']
       keys
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getTable('node_table')
+      .table('node_table')
       .scan
         startRow: 'test_filter|row_1'
         endRow: 'test_filter|row_4'
@@ -105,9 +106,9 @@ describe 'filter', ->
         if keys.indexOf(cell['key']) is -1
           keys.push cell['key']
       keys
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getTable('node_table')
+      .table('node_table')
       .scan
         startRow: 'test_filter|row_1'
         endRow: 'test_filter|row_4'
@@ -120,10 +121,10 @@ describe 'filter', ->
           keys.should.eql ['test_filter|row_1','test_filter|row_2']
           next()
   it 'RowFilter # equal_with_binary_comparator', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       # Based on the key
       client
-      .getTable('node_table')
+      .table('node_table')
       .scan
         startRow: 'test_filter|row_1'
         maxVersions: 1
@@ -133,9 +134,9 @@ describe 'filter', ->
           cells.length.should.eql 3
           next()
   it 'ValueFilter # op equal', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getTable('node_table')
+      .table('node_table')
       .scan
         startRow: 'test_filter|row_1'
         endRow: 'test_filter|row_4'

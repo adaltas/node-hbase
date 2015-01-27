@@ -7,8 +7,8 @@ sort = (a, b) -> if a.toLowerCase() < b.toLowerCase() then -1 else 1
 describe 'client', ->
   it 'get version', (next) ->
     @timeout 0
-    test.getClient (err, client) ->
-      client.getVersion (err, version) ->
+    test.client (err, client) ->
+      client.version (err, version) ->
         should.not.exist err
         Object.keys(version)
         .sort(sort)
@@ -16,15 +16,15 @@ describe 'client', ->
         next()
   it 'get version cluster', (next) ->
     @timeout 0
-    test.getClient (err, client) ->
-      client.getVersionCluster (err, versionCluster) ->
+    test.client (err, client) ->
+      client.version_cluster (err, versionCluster) ->
         should.not.exist err
         versionCluster.should.match /^(Unknown)|(\d[\d\.]+)/
         next()
   it 'get status cluster', (next) ->
     @timeout 0
-    test.getClient (err, client) ->
-      client.getStatusCluster (err,statusCluster) ->
+    test.client (err, client) ->
+      client.status_cluster (err,statusCluster) ->
         should.not.exist err
         Object.keys(statusCluster)
         .sort(sort)
@@ -32,8 +32,8 @@ describe 'client', ->
         next()
   it 'get tables', (next) ->
     @timeout 0
-    test.getClient (err, client) ->
-      client.getTables (err,tables) ->
+    test.client (err, client) ->
+      client.tables (err,tables) ->
         should.not.exist err
         tables.filter( (table) -> table.name is 'node_table' ).length.should.eql 1
         next()
@@ -41,6 +41,6 @@ describe 'client', ->
     @timeout 0
     # Hopefully, 456789 isnt used, might worth checking it with `nc`
     hbase( host: 'localhost', port: 456789 )
-    .getVersionCluster (err, versionCluster) ->
+    .version_cluster (err, versionCluster) ->
       err.should.be.an.instanceof Error
       next()

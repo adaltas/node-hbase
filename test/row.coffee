@@ -4,38 +4,38 @@ test = require './test'
 Row = require '../src/row'
 
 describe 'row', ->
-  it 'create new instance', (next) ->
-    test.getClient (err, client) ->
-      client.getRow('mytable', 'my_row').should.be.an.instanceof Row
-      client.getTable('mytable').getRow('my_row').should.be.an.instanceof Row
-      next()
   it 'put column family', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_put_column_family')
+      .table('node_table')
+      .row('test_row_put_column_family')
       .put 'node_column_family:', 'my value', (err, data) ->
         should.not.exist err
         data.should.be.ok
         next()
   it 'put column', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_put_column')
+      .table('node_table')
+      .row('test_row_put_column')
       .put 'node_column_family:node_column', 'my value', (err, success) ->
         should.not.exist err
         success.should.be.ok
         next()
   it 'put multiple rows', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table','test_row_put_x_rows_1')
+      .table('node_table')
+      .row('test_row_put_x_rows_1')
       .delete () ->
         client
-        .getRow('node_table','test_row_put_x_rows_2')
+        .table('node_table')
+        .row('test_row_put_x_rows_2')
         .delete () ->
           time = Date.now()
           client
-          .getRow('node_table', null) # 'test_row_put_multiple_rows'
+          .table('node_table')
+          .row(null) # 'test_row_put_multiple_rows'
           .put [
             {key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time + 20, $: 'v 1.3'}
             {key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time + 60, $: 'v 1.1'}
@@ -45,7 +45,8 @@ describe 'row', ->
             should.not.exist err
             success.should.be.ok
             client
-            .getRow('node_table', 'test_row_put_x_rows_*')
+            .table('node_table')
+            .row('test_row_put_x_rows_*')
             .get 'node_column_family:', v: 3, (err, cells) ->
               should.not.exist err
               cells.should.eql [
@@ -56,9 +57,10 @@ describe 'row', ->
               ]
               next()
   it 'put multiple columns with multiple arguments', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_put_multiple_columns_multi_args')
+      .table('node_table')
+      .row('test_row_put_multiple_columns_multi_args')
       .delete (err, success) ->
         should.not.exist err
         this.put [
@@ -78,9 +80,10 @@ describe 'row', ->
             cells[1].$.should.eql 'my value 2'
             next()
   it 'put multiple columns with one arguments', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_put_multiple_columns_one_arg')
+      .table('node_table')
+      .row('test_row_put_multiple_columns_one_arg')
       .delete (err, success) ->
         should.not.exist err
         columns = [
@@ -99,9 +102,10 @@ describe 'row', ->
             cells[1].$.should.eql 'v 2'
             next()
   it 'get row', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_get_row')
+      .table('node_table')
+      .row('test_row_get_row')
       .delete (err, value) ->
         colums = ['node_column_family:column_1', 'node_column_family:column_2']
         values = ['my value 1','my value 2']
@@ -117,21 +121,24 @@ describe 'row', ->
             cells[1].$.should.eql 'my value 2'
             next()
   it 'get row with suffix globbing', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_get_globbing_1')
+      .table('node_table')
+      .row('test_row_get_globbing_1')
       .delete (err, success) ->
         should.not.exist err
         this.put 'node_column_family:column_1', 'my value 1', (err, success) ->
           should.not.exist err
           client
-          .getRow('node_table', 'test_row_get_globbing_2')
+          .table('node_table')
+          .row('test_row_get_globbing_2')
           .delete (err, success) ->
             should.not.exist err
             this.put 'node_column_family:column_1', 'my value 2', (err, success) ->
               should.not.exist err
               client
-              .getRow('node_table','test_row_get_globbing_*')
+              .table('node_table')
+              .row('test_row_get_globbing_*')
               .get (err, cells) ->
                 should.not.exist err
                 cells.length.should.eql 2
@@ -139,9 +146,10 @@ describe 'row', ->
                 cells[1].key.should.eql 'test_row_get_globbing_2'
                 next()
   it 'get column', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_get_column')
+      .table('node_table')
+      .row('test_row_get_column')
       .delete (err, value) ->
         this.put 'node_column_family:', 'my value', (err, value) ->
           # curl -H "Accept: application/json" http:#localhost:8080/node_table/test_row_get_column/node_column_family
@@ -155,24 +163,27 @@ describe 'row', ->
   it.skip 'get escape', (next) ->
     # the "!" and "'" are not escaped by "encodeURIComponent")
     # and java throw an error
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_get_escape!\'éè~:@#.?*()') # "/, "
+      .table('node_table')
+      .row('test_get_escape!\'éè~:@#.?*()') # "/, "
       .delete (err, value) ->
         should.not.exist err
         this.put 'node_column_family:!\'éè~:@#.?*()', 'my value', (err, success) ->
           should.not.exist err
           client
-          .getRow('node_table', 'test_get_escape!\'éè~:@#.?*()')
+          .table('node_table')
+          .row('test_get_escape!\'éè~:@#.?*()')
           .get (err, value) ->
             should.not.exist err
             value.length.should.eql 1
             value[0].column.should.eql 'node_column_family:!\'éè~:@#.?*()'
             next()
   it 'get options start and end', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_get_start_end:')
+      .table('node_table')
+      .row('test_row_get_start_end:')
       .delete (err, success) ->
         time = Date.now()
         rows = [
@@ -190,9 +201,10 @@ describe 'row', ->
             cells[1].timestamp.should.eql time+40
             next()
   it 'get option v', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_get_v')
+      .table('node_table')
+      .row('test_row_get_v')
       .delete (err, value) ->
         this.put ['node_column_family:','node_column_family:'], ['v 1','v 2'], (err, value) ->
           this.get 'node_column_family:', {v:1}, (err, cells) ->
@@ -203,9 +215,10 @@ describe 'row', ->
             cells[0].$.should.eql 'v 2'
             next()
   it 'get multiple columns', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_get_multiple_columns')
+      .table('node_table')
+      .row('test_row_get_multiple_columns')
       .delete (err, value) ->
         should.not.exist err
         this.put ['node_column_family:c1','node_column_family:c2','node_column_family:c3'], ['v 1','v 2','v 3'], (err, value) ->
@@ -219,78 +232,87 @@ describe 'row', ->
             cells[1].$.should.eql 'v 3'
             next()
   it 'get missing row', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_get_row_missing')
+      .table('node_table')
+      .row('test_row_get_row_missing')
       .get 'node_column_family:', (err, value) ->
         (err.code is 404 or err.code is 503).should.be.true
         should.not.exist value
         next()
   it 'get missing column', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_get_column_missing')
+      .table('node_table')
+      .row('test_row_get_column_missing')
       .put 'node_column_family:', 'my value', (err, value) ->
         this.get 'node_column_family:column_missing', (err, value) ->
           err.code.should.eql 404
           should.not.exist value
           next()
   it 'exists # row # Row exists', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_exist_row')
+      .table('node_table')
+      .row('test_row_exist_row')
       .put 'node_column_family:', 'value', (err, value) ->
         this.exists (err, exists) ->
           should.not.exist err
           exists.should.be.ok
           next()
   it 'exists # row # Row does not exists', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_exist_row_missing')
+      .table('node_table')
+      .row('test_row_exist_row_missing')
       .exists (err, exists) ->
         should.not.exist err
         exists.should.not.be.ok
         next()
   it 'exists # column # Row exists', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_exist_column')
+      .table('node_table')
+      .row('test_row_exist_column')
       .put 'node_column_family:', 'value', (err, value) ->
         this.exists 'node_column_family:', (err, exists) ->
           should.not.exist err
           exists.should.be.ok
           next()
   it 'exists # column # Row does not exists', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_exist_column_with_row_missing')
+      .table('node_table')
+      .row('test_row_exist_column_with_row_missing')
       .exists 'node_column_family:', (err, exists) ->
         should.not.exist err
         exists.should.not.be.ok
         next()
   it 'exists # column # Row exists and column family does not exists', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_exist_column_with_column_missing')
+      .table('node_table')
+      .row('test_row_exist_column_with_column_missing')
       .put 'node_column_family:', 'value', (err, value) ->
         this.exists 'node_column_family_missing', (err, exists) ->
           should.not.exist err
           exists.should.not.be.ok
           next()
   it 'exists # column # Row exists and column family exists and column does not exits', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_exist_column_with_column_missing')
+      .table('node_table')
+      .row('test_row_exist_column_with_column_missing')
       .put 'node_column_family:', 'value', (err, value) ->
         this.exists 'node_column_family:column_missing', (err, exists) ->
           should.not.exist err
           exists.should.not.be.ok
           next()
   it 'delete row', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_delete_row')
+      .table('node_table')
+      .row('test_row_delete_row')
       .put 'node_column_family:column_1', 'my value', (err, value) ->
         this.put 'node_column_family:column_2', 'my value', (err, value) ->
           this.delete (err, success) ->
@@ -301,9 +323,10 @@ describe 'row', ->
               exists.should.not.be.ok
               next()
   it 'delete column', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_delete_column')
+      .table('node_table')
+      .row('test_row_delete_column')
       .put 'node_column_family:c_1', 'my value', (err, value) ->
         this.put 'node_column_family:c_2', 'my value', (err, value) ->
           this.delete 'node_column_family:c_2', (err, success) ->
@@ -317,9 +340,10 @@ describe 'row', ->
               exists.should.not.be.ok
               next()
   it 'delete multiple columns', (next) ->
-    test.getClient (err, client) ->
+    test.client (err, client) ->
       client
-      .getRow('node_table', 'test_row_delete_multiple_columns')
+      .table('node_table')
+      .row('test_row_delete_multiple_columns')
       .delete (err, success) ->
         should.not.exist err
         this.put ['node_column_family:c_1','node_column_family:c_2','node_column_family:c_3'], ['v 1','v 2','v 3'], (err, value) ->

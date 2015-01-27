@@ -9,7 +9,7 @@ Grab an instance of "hbase.Table"
 ---------------------------------
 
 ```javascript
-var myTable = hbase({}).getTable('my_table');
+var myTable = hbase({}).table('my_table');
 ```
 
 Or
@@ -41,7 +41,7 @@ its `create` function with the schema as argument.
 
 ```javascript
 hbase()
-.getTable('my_new_table')
+.table('my_new_table')
 .create('my_new_column', function(error, success){
   console.log('Table created: ' + (success ? 'yes' : 'no'));
 } );
@@ -58,7 +58,7 @@ For more control on the table and column family schema
 
 ```javascript
 hbase()
-.getTable( 'my_new_table' )
+.table( 'my_new_table' )
 .create( {
   IS_META: false,
   IS_ROOT: false,
@@ -96,7 +96,7 @@ Callback is optionnal and receive two arguments, an error object if any and a bo
 
 ```javascript
 hbase()
-.getTable('my_table')
+.table('my_table')
 .delete(function(error, success){
   assert.ok(success);
 });
@@ -148,8 +148,8 @@ Retrieves table schema
 
 ```javascript
 hbase()
-.getTable( 'my_new_table' )
-.getSchema(function(error, schema){
+.table( 'my_new_table' )
+.schema(function(error, schema){
   console.log(schema);
 });
 ```
@@ -175,7 +175,7 @@ Will print something similar to:
 }
 ```
 ###
-Table::getSchema = (callback) ->
+Table::schema = (callback) ->
   @client.connection.get "/#{@name}/schema", (error, data) =>
     callback.apply @, [error, if error then null else data]
 
@@ -185,8 +185,8 @@ Retrieves table region metadata
 
 ```javascript
 hbase()
-.getTable( 'my_new_table' )
-.getRegions(function(error, regions){
+.table( 'my_new_table' )
+.regions(function(error, regions){
   console.log(regions);
 });
 ```
@@ -206,7 +206,7 @@ Will print something similar to:
 }
 ```
 ###
-Table::getRegions = (callback) ->
+Table::regions = (callback) ->
   @client.connection.get "/#{@name}/regions", (error, data) =>
     callback.apply @, [error, if error then null else data]
 
@@ -215,11 +215,11 @@ Return a new row instance
 -----------------
 
 ```javascript
-Table.getRow(key)
+Table.row(key)
 ```
 
 ###
-Table::getRow = (key) ->
+Table::row = (key) ->
   new Row @client, @name, key
 
 ###

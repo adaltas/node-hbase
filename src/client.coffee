@@ -49,7 +49,7 @@ Query Software Version
 ----------------------
 
 ```javascript
-client.getVersion( function( error, version ){
+client.version( function( error, version ){
   console.log( version );
 } );
 ```
@@ -65,7 +65,7 @@ Will print something similar to:
 }
 ```
 ###
-Client::getVersion = (callback) ->
+Client::version = (callback) ->
   @connection.get "/version", callback
 
 ###
@@ -73,8 +73,8 @@ Query Storage Cluster Version
 -----------------------------
 
 ```javascript
-client.getVersionCluster( function( error, versionCluster ){
-  console.log( versionCluster );
+client.version_cluster( function( error, version ){
+  console.log( version );
 } );
 ```
 
@@ -84,7 +84,7 @@ Will print something similar to:
 '0.89.20100726'
 ```
 ###
-Client::getVersionCluster = (callback) ->
+Client::version_cluster = (callback) ->
   @connection.get "/version/cluster", callback
 
 ###
@@ -92,7 +92,7 @@ Query Storage Cluster Status
 ----------------------------
 
 ```javascript
-client.getStatusCluster( function( error, statusCluster ){
+client.status_cluster( function( error, statusCluster ){
   console.log( statusCluster );
 } );
 ```
@@ -108,7 +108,7 @@ Will print something similar to:
 }
 ```
 ###
-Client::getStatusCluster = (callback) ->
+Client::status_cluster = (callback) ->
   @connection.get "/status/cluster", callback
 
 ###
@@ -116,7 +116,7 @@ List tables
 -----------
 
 ```javascript
-client.getTables( function( error, tables ){
+client.tables( function( error, tables ){
   console.log( tables );
 } );
 ```
@@ -127,15 +127,12 @@ Will print something similar to:
 [ { name: 'node_hbase' } ]
 ```
 ###
-Client::getTables = (callback) ->
+Client::tables = (callback) ->
   @connection.get "/", (err, data) ->
     callback err, (if data and data.table then data.table else null)
 
 
-Client::getTable = (name) ->
+Client::table = (name) ->
   new Table(this, name)
-
-Client::getRow = (table, row) ->
-  new Row(this, table, row)
 
 module.exports = Client

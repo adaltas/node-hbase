@@ -43,7 +43,7 @@ var assert = require('assert');
 var hbase = require('hbase');
 
 hbase({ host: '127.0.0.1', port: 8080 })
-.getTable('my_table' )
+.table('my_table' )
 .create('my_column_family', function(err, success){
   this
   .getRow('my_row')
@@ -64,7 +64,7 @@ callback argument may be provided. For example:
 
 ```bash
 client
-.getTable('node_table')
+.table('node_table')
 .scan({
   startRow: 'my_row',
   maxVersions: 1
@@ -78,7 +78,7 @@ is equivalent to:
 ```coffee
 var rows = [];
 scanner = client
-.getTable('node_table')
+.table('node_table')
 .scan({
   startRow: 'my_row',
   maxVersions: 1
