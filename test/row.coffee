@@ -4,6 +4,7 @@ test = require './test'
 Row = require '../src/row'
 
 describe 'row', ->
+  @timeout 0
   it 'put column family', (next) ->
     test.client (err, client) ->
       client
@@ -160,30 +161,32 @@ describe 'row', ->
             cells[0].column.should.eql 'node_column_family:'
             cells[0].$.should.eql 'my value'
             next()
-  it.skip 'get escape', (next) ->
+  it 'get escape', (next) ->
     # the "!" and "'" are not escaped by "encodeURIComponent")
     # and java throw an error
+    row = 'test_get_escape!\'éè~:@#.? ()' # '*' is not accepted
+    column = 'node_column_family:!\'éè~:@#.? ()' # "*" is not accepted
     test.client (err, client) ->
       client
       .table('node_table')
-      .row('test_get_escape!\'éè~:@#.?*()') # "/, "
+      .row(row) # "/, "
       .delete (err, value) ->
         should.not.exist err
-        this.put 'node_column_family:!\'éè~:@#.?*()', 'my value', (err, success) ->
+        this.put column, 'my value', (err, success) ->
           should.not.exist err
           client
           .table('node_table')
-          .row('test_get_escape!\'éè~:@#.?*()')
+          .row(row)
           .get (err, value) ->
             should.not.exist err
             value.length.should.eql 1
-            value[0].column.should.eql 'node_column_family:!\'éè~:@#.?*()'
+            value[0].column.should.eql column
             next()
   it 'get options start and end', (next) ->
     test.client (err, client) ->
       client
       .table('node_table')
-      .row('test_row_get_start_end:')
+      .row('test_row_get_start_end')
       .delete (err, success) ->
         time = Date.now()
         rows = [
@@ -194,12 +197,14 @@ describe 'row', ->
         ]
         this.put rows, (err, success) ->
           should.not.exist err
-          this.get 'node_column_family:c1', {start: time+40, end:time+60+1, v:10}, (err, cells) ->
-            should.not.exist err
-            cells.length.should.eql 2
-            cells[0].timestamp.should.eql time+60
-            cells[1].timestamp.should.eql time+40
-            next()
+          setTimeout =>
+            this.get 'node_column_family:c1', {start: time+40, end:time+60+1, v:10}, (err, cells) ->
+              should.not.exist err
+              cells.length.should.eql 2
+              cells[0].timestamp.should.eql time+60
+              cells[1].timestamp.should.eql time+40
+              next()
+          , 1000
   it 'get option v', (next) ->
     test.client (err, client) ->
       client
@@ -332,13 +337,19 @@ describe 'row', ->
           this.delete 'node_column_family:c_2', (err, success) ->
             should.not.exist err
             success.should.be.true
+            count = 0
             this.exists 'node_column_family:c_1', (err, exists) ->
               should.not.exist err
               exists.should.be.ok
+              done()
             this.exists 'node_column_family:c_2', (err, exists) ->
               should.not.exist err
               exists.should.not.be.ok
-              next()
+              done()
+            count = 0
+            done = (err) ->
+              count++
+              next err if err or count is 2
   it 'delete multiple columns', (next) ->
     test.client (err, client) ->
       client
@@ -354,14 +365,22 @@ describe 'row', ->
             this.exists 'node_column_family:c_1', (err, exists) ->
               should.not.exist err
               exists.should.not.be.ok
+              done()
             this.exists 'node_column_family:c_2', (err, exists) ->
               should.not.exist err
               exists.should.be.ok
+              done()
             this.exists 'node_column_family:c_3', (err, exists) ->
               should.not.exist err
               exists.should.not.be.ok
+              done()
             this.exists (err, exists) ->
               should.not.exist err
               exists.should.be.ok
-              next()
+              console.log 'count', count
+              done()
+            count = 0
+            done = (err) ->
+              count++
+              next err if err or count is 4
 

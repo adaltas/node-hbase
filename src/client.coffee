@@ -12,14 +12,27 @@ Client: server information and object factory
 Creating a new client
 ---------------------
 
-A new instance of "HBase" may be instantiated with an object containing the following properties:   
+A new instance of "HBase" may be instantiated with an object containing the
+following properties:   
 
--   *host*
-    string, optional, default to "localhost"
-    Domain or IP of the HBase Stargate server
--   *port*
-    string or int, optional, default to "8080"
-    Port of the HBase REST server
+*   `protocol` (string)   
+    One of 'http' or 'https', default to "http".   
+*   `host` (string)   
+    Domain or IP of the HBase Stargate server, optional, default to "localhost".   
+*   `port` (string|int)   
+    Port of the HBase REST server, optional, default to "8080".   
+*   `krb5` (object)   
+    Configuration object for Kerberos.   
+*   `krb5.principal` (string)   
+    Kerberos user principal, required.   
+*   `krb5.password` (string)   
+    Kerberos password of the user principal, optional if using a keytab.   
+*   `krb5.keytab` (string)   
+    Path to the Kerberos keytab or null if using the default credential cache.   
+*   `krb5.service_principal (string)   
+    GSS service principal in the form of "HTTP@{fqdn}", optional, automatically
+    discovered if "host" is a correct fqdn.   
+
 
 Calling the `hbase` method return an initialized client object.
 
@@ -37,9 +50,12 @@ var client = new hbase.Client({ options });
 ###
 Client = (options) ->
   options = {}  unless options
-  options.host = "127.0.0.1"  unless options.host
-  options.port = "8080"  unless options.port
-  options.timeout = 60 * 1000  unless options.timeout
+  options.protocol ?= 'http'
+  options.host ?= '127.0.0.1'
+  options.port ?= '8080'
+  options.krb5 ?= {}
+  throw Error "Invalid protocol #{JSON.stringify options.protocol}" unless options.protocol in ['http', 'https']
+  # options.timeout = 60 * 1000  unless options.timeout
   @options = options
   @connection = new Connection @
   @

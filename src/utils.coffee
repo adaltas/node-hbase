@@ -68,7 +68,6 @@ utils =
           ps.push "#{encodeURIComponent(k)}=#{encodeURIComponent(v)}"
         newpath += ps.join ','
       newpath
-
   merge: () ->
     target = arguments[0]
     from = 1

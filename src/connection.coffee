@@ -1,5 +1,10 @@
 
-http = require 'http'
+http = 
+  http: require 'http'
+  https: require 'https'
+url = require 'url'
+try krb5 = require 'krb5' catch # No Kerberos Support
+
 
 ###
 Connection: HTTP REST requests for HBase
@@ -39,34 +44,51 @@ Connection = (client) ->
 
 Connection::makeRequest = (method, command, data, callback) ->
   options =
+    protocol: "#{@client.options.protocol}:"
     port: @client.options.port
-    host: @client.options.host
+    hostname: @client.options.host
     method: method
     path: command
     headers:
       'content-type': 'application/json'
-      Accept: 'application/json'
-  req = http.request options, (res) =>
-    body = ''
-    res.on 'data', (chunk) ->
-      body += chunk
-    res.on 'end', =>
-      error = null
-      try
-        body = @handleJson res, body
-      catch e
-        body = null
-        error = e
-      callback error, body, res
-    res.on 'close', ->
-      e = new Error 'Connection closed'
-      callback e, null
-  req.on 'error', (err) ->
-    callback err
-  if data and data isnt ''
-    data = if typeof data is 'string' then data else JSON.stringify data
-    req.write data, 'utf8'
-  req.end()
+      'Accept': 'application/json'
+    rejectUnauthorized: false
+  do_krb5 = =>
+    return do_spnego() if @client.krb5
+    return do_request() unless @client.options.krb5.principal
+    @client.options.krb5.service_principal ?= "HTTP@#{options.hostname}"
+    krb5 @client.options.krb5, (err, k) =>
+      return callback err if err
+      @client.krb5 = k
+      do_spnego()
+  do_spnego = =>
+    @client.krb5.token (err, token) ->
+      return callback err if err
+      options.headers['Authorization'] = 'Negotiate ' + token
+      do_request()
+  do_request = =>
+    req = http[@client.options.protocol].request options, (res) =>
+      body = ''
+      res.on 'data', (chunk) ->
+        body += chunk
+      res.on 'end', =>
+        error = null
+        try
+          body = @handleJson res, body
+        catch e
+          body = null
+          error = e
+        callback error, body, res
+      res.on 'close', ->
+        e = new Error 'Connection closed'
+        callback e, null
+    req.on 'error', (err) ->
+      callback err
+    if data and data isnt ''
+      data = if typeof data is 'string' then data else JSON.stringify data
+      req.write data, 'utf8'
+    req.end()
+  do_krb5()
 
 ###
 HTTP Get requests

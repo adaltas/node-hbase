@@ -26,6 +26,7 @@ hbase = require '../src'
 #{"op":"MUST_PASS_ONE","type":"FilterList","filters":[{"op":"EQUAL","type":"RowFilter","comparator":{"value":".+Two.+","type":"RegexStringComparator"}},{"op":"EQUAL","type":"QualifierFilter","comparator":{"value":".+-2","type":"RegexStringComparator"}},{"op":"EQUAL","type":"ValueFilter","comparator":{"value":"one","type":"SubstringComparator"}}]}
 
 describe 'filter', ->
+  @timeout 0
   it 'Option filter', (next) ->
     test.client (err, client) ->
       time = (new Date).getTime()

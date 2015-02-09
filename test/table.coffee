@@ -4,6 +4,7 @@ Table = require '../src/table'
 test = require './test'
 
 describe 'table', ->
+  @timeout 0
   it 'Instance', (next) ->
     test.client (err, client) ->
       client.table('my table').should.be.an.instanceof Table

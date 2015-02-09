@@ -4,6 +4,7 @@ test = require './test'
 # Scanner = require '../src/scanner'
 
 describe 'scanner', ->
+  @timeout 0
   it 'stream readable', (next) ->
     test.client (err, client) ->
       client

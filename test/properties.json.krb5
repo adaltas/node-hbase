@@ -1,0 +1,13 @@
+{
+  "protocol": "https",
+  "host": "master3.ryba",
+  "port": 60080,
+  "test_table": false,
+  "timeout": 6000,
+  "test_table_modify": false,
+  "krb5": {
+    "principal": "ryba@HADOOP.RYBA",
+    "password": "test123",
+    "service_principal": "HTTP@master3.ryba"
+  }
+}
