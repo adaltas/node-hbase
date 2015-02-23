@@ -123,6 +123,7 @@ the right ownership.
 
 ```bash
 kinit hbase
+hbase shell
 create 'node_table1', {NAME => 'node_column_family', VERSIONS => 5}
 grant 'ryba', 'RWC', 'node_table'
 ```
