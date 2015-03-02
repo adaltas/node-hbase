@@ -58,6 +58,44 @@ hbase({ host: '127.0.0.1', port: 8080 })
 });
 ```
 
+## Using Kerberos/SPNEGO
+
+Options accepts a krb5 object. Password and keytab authentication are supported. 
+Refer to the [krb5] package for additionnal information on how to configure the
+krb5 option.
+
+Using a keytab:
+
+```
+var hbase = require('hbase');
+hbase({
+  host: '127.0.0.1',
+  port: 8080,
+  "krb5": {
+    "principal": "{username}@{REALM}",
+    "keytab": "{path/to/keytab}",
+    "service_principal": "HTTP@{fqdn}"
+  }
+})
+.version();
+```
+
+Using a password:
+
+```
+var hbase = require('hbase');
+hbase({
+  host: '127.0.0.1',
+  port: 8080,
+  "krb5": {
+    "principal": "{username}@{REALM}",
+    "password": "{password}",
+    "service_principal": "HTTP@{fqdn}"
+  }
+})
+.version();
+```
+
 ## Scanner and Filters
 
 The scanner implement the `stream.Readable` API. For ease of usage, an optional
@@ -146,5 +184,6 @@ test. It comes pre-configured for [Ryba] configured in development cluster mode.
 [scanner]: https://github.com/wdavidw/node-hbase/blob/master/test/scanner.coffee
 [mt_samples]: https://gist.github.com/3979381
 [mt_home]: https://github.com/stelcheck
+[krb5]: https://github.com/adaltas/node-krb5
 
 
