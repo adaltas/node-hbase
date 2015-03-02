@@ -28,7 +28,7 @@ describe 'row', ->
       client
       .table('node_table')
       .row('test_row_put_x_rows_1')
-      .delete () ->
+      .delete ->
         client
         .table('node_table')
         .row('test_row_put_x_rows_2')
@@ -43,6 +43,7 @@ describe 'row', ->
             {key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time + 40, $: 'v 1.2'}
             {key: 'test_row_put_x_rows_2', column: 'node_column_family:', timestamp: time + 40, $: 'v 2.2'}
           ], (err, success) ->
+            return next err if err
             should.not.exist err
             success.should.be.ok
             client
@@ -377,7 +378,6 @@ describe 'row', ->
             this.exists (err, exists) ->
               should.not.exist err
               exists.should.be.ok
-              console.log 'count', count
               done()
             count = 0
             done = (err) ->
