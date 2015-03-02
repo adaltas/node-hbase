@@ -1,6 +1,6 @@
 {
   "name": "hbase",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "HBase client using the REST connector",
   "author": "David Worms <david@adaltas.com>",
   "contributors": [{
