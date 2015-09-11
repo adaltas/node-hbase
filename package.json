@@ -25,7 +25,6 @@
   "devDependencies": {
     "mocha": "latest",
     "should": "latest",
-    "docgen": "latest",
     "each": "latest",
     "coffee-script": "latest"
   },
