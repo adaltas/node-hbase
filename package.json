@@ -4,29 +4,36 @@
   "description": "HBase client using the REST connector",
   "author": "David Worms <david@adaltas.com>",
   "license": "BSD-3-Clause",
-  "contributors": [{
-    "name": "David Worms",
-    "email": "david@adaltas.com"
-  },{
-    "name": "Michael Kurze",
-    "email": "https://github.com/michaelku"
-  },{
-    "name": "Michal Taborsky",
-    "email": "https://github.com/whizz"
-  },{
-    "name": "Marc Trudel",
-    "email": "https://github.com/stelcheck"
-  }],
+  "contributors": [
+    {
+      "name": "David Worms",
+      "email": "david@adaltas.com"
+    },
+    {
+      "name": "Michael Kurze",
+      "email": "https://github.com/michaelku"
+    },
+    {
+      "name": "Michal Taborsky",
+      "email": "https://github.com/whizz"
+    },
+    {
+      "name": "Marc Trudel",
+      "email": "https://github.com/stelcheck"
+    }
+  ],
   "main": "./lib/index",
-  "engines": { "node": ">= 0.1.90" },
+  "engines": {
+    "node": ">= 0.1.90"
+  },
   "optionalDependencies": {
-    "krb5": "latest"
+    "krb5": "^0.0.3"
   },
   "devDependencies": {
-    "mocha": "latest",
-    "should": "latest",
-    "each": "latest",
-    "coffee-script": "latest"
+    "coffee-script": "^1.10.0",
+    "each": "^0.5.2",
+    "mocha": "^2.3.2",
+    "should": "^7.1.0"
   },
   "bugs": {
     "url": "https://github.com/wdavidw/node-hbase/issues"
@@ -36,7 +43,7 @@
     "url": "https://github.com/wdavidw/node-hbase.git"
   },
   "homepage": "https://github.com/wdavidw/node-hbase",
-  "scripts":{
+  "scripts": {
     "coffee": "./node_modules/.bin/coffee -b -o lib src",
     "pretest": "./node_modules/.bin/coffee -b -o lib src",
     "test": "NODE_ENV=test ./node_modules/.bin/mocha --compilers coffee:coffee-script/register --reporter dot"
