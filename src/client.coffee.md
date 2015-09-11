@@ -1,16 +1,15 @@
 
-Connection = require "./connection"
-Table = require "./table"
-Row = require "./row"
-Scanner = require "./scanner"
 
-###
+# Client: server information and object factory
 
-Client: server information and object factory
-=============================================
+## Dependencies
 
-Creating a new client
----------------------
+    Connection = require "./connection"
+    Table = require "./table"
+    Row = require "./row"
+    Scanner = require "./scanner"
+
+## Creating a new client
 
 A new instance of "HBase" may be instantiated with an object containing the
 following properties:   
@@ -47,22 +46,20 @@ You can also manually contruct a new instance as follow:
 var hbase = require('hbase');
 var client = new hbase.Client({ options });
 ```
-###
-Client = (options) ->
-  options = {}  unless options
-  options.protocol ?= 'http'
-  options.host ?= '127.0.0.1'
-  options.port ?= '8080'
-  options.krb5 ?= {}
-  throw Error "Invalid protocol #{JSON.stringify options.protocol}" unless options.protocol in ['http', 'https']
-  # options.timeout = 60 * 1000  unless options.timeout
-  @options = options
-  @connection = new Connection @
-  @
 
-###
-Query Software Version
-----------------------
+    Client = (options) ->
+      options = {}  unless options
+      options.protocol ?= 'http'
+      options.host ?= '127.0.0.1'
+      options.port ?= '8080'
+      options.krb5 ?= {}
+      throw Error "Invalid protocol #{JSON.stringify options.protocol}" unless options.protocol in ['http', 'https']
+      # options.timeout = 60 * 1000  unless options.timeout
+      @options = options
+      @connection = new Connection @
+      @
+
+## Query Software Version
 
 ```javascript
 client.version( function( error, version ){
@@ -80,13 +77,11 @@ Will print something similar to:
 , JVM: 'Apple Inc. 1.6.0_20-16.3-b01-279'
 }
 ```
-###
-Client::version = (callback) ->
-  @connection.get "/version", callback
 
-###
-Query Storage Cluster Version
------------------------------
+    Client::version = (callback) ->
+      @connection.get "/version", callback
+
+## Query Storage Cluster Version
 
 ```javascript
 client.version_cluster( function( error, version ){
@@ -99,13 +94,11 @@ Will print something similar to:
 ```csv
 '0.89.20100726'
 ```
-###
-Client::version_cluster = (callback) ->
-  @connection.get "/version/cluster", callback
 
-###
-Query Storage Cluster Status
-----------------------------
+    Client::version_cluster = (callback) ->
+      @connection.get "/version/cluster", callback
+
+## Query Storage Cluster Status
 
 ```javascript
 client.status_cluster( function( error, statusCluster ){
@@ -123,13 +116,11 @@ Will print something similar to:
 , LiveNodes: [ { Node: [Object] } ]
 }
 ```
-###
-Client::status_cluster = (callback) ->
-  @connection.get "/status/cluster", callback
 
-###
-List tables
------------
+    Client::status_cluster = (callback) ->
+      @connection.get "/status/cluster", callback
+
+## List tables
 
 ```javascript
 client.tables( function( error, tables ){
@@ -142,13 +133,13 @@ Will print something similar to:
 ```json
 [ { name: 'node_hbase' } ]
 ```
-###
-Client::tables = (callback) ->
-  @connection.get "/", (err, data) ->
-    callback err, (if data and data.table then data.table else null)
+
+    Client::tables = (callback) ->
+      @connection.get "/", (err, data) ->
+        callback err, (if data and data.table then data.table else null)
 
 
-Client::table = (name) ->
-  new Table(this, name)
+    Client::table = (name) ->
+      new Table(this, name)
 
-module.exports = Client
+    module.exports = Client
