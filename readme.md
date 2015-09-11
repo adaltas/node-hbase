@@ -162,7 +162,7 @@ the right ownership.
 ```bash
 kinit hbase
 hbase shell
-create 'node_table1', {NAME => 'node_column_family', VERSIONS => 5}
+create 'node_table', {NAME => 'node_column_family', VERSIONS => 5}
 grant 'ryba', 'RWC', 'node_table'
 ```
 
@@ -179,11 +179,10 @@ test. It comes pre-configured for [Ryba] configured in development cluster mode.
 *   David Worms: <https://github.com/wdavidw>
 *   Michael Kurze: <https://github.com/michaelku>
 *   Michal Taborsky: <https://github.com/whizz>
+*   Pierre Sauvage: <https://github.com/Pierrotws>
 
 [ryba]: https://github.com/ryba-io/ryba
 [scanner]: https://github.com/wdavidw/node-hbase/blob/master/test/scanner.coffee
 [mt_samples]: https://gist.github.com/3979381
 [mt_home]: https://github.com/stelcheck
 [krb5]: https://github.com/adaltas/node-krb5
-
-
