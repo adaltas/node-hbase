@@ -56,7 +56,7 @@ hbase()
 
 Print something like
 
-```json
+```cjson
 [ { column: 'my_column_family:'
   , timestamp: 1285942722246
   , '$': 'my value 1'
