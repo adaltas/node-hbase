@@ -55,7 +55,7 @@ var connection = new hbase.Connection( client );
         return do_spnego() if @client.krb5
         return do_request() unless @client.options.krb5.principal
         @client.options.krb5.service_principal ?= "HTTP@#{options.hostname}"
-        return callback Error "Module 'krb5' not installe" unless krb5
+        return callback Error "Module 'krb5' not installed" unless krb5
         krb5 @client.options.krb5, (err, k) =>
           return callback err if err
           @client.krb5 = k
