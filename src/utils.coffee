@@ -26,7 +26,13 @@ utils =
       newpath = '/'
       # params = args.pop() if args.length > 3 and typeof args[args.length - 1] is 'object'
       # Table
-      newpath += encodeURIComponent args.table
+      nsSep = args.table.indexOf(':')
+      if nsSep >= 0
+        namespace = args.table.substr(0, nsSep)
+        tablename = args.table.substr(nsSep+1)
+        newpath += encodeURIComponent(namespace) + ':' + encodeURIComponent(tablename)
+      else
+        newpath += encodeURIComponent args.table
       # Key
       if args.key
         newpath += '/'
