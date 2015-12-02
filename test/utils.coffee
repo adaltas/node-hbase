@@ -32,5 +32,5 @@ describe 'utils url', ->
   it 'encode table+key+column+to+params', ->
     utils.url.encode(table: 'table', key: 'key', columns: {'cf1':'c1','cf2':'c2'}, end: 1285941387939, params: {key:'value'}).should.eql '/table/key/cf1:c1,cf2:c2/1285941387939?key=value'
     utils.url.encode(table: 'table', key: 'key', columns: [['cf1','c1'],['cf2','c2']], end: 1285941387939, params: {key:'value'}).should.eql '/table/key/cf1:c1,cf2:c2/1285941387939?key=value'
-    utils.url.encode(table: 'tà:/', key: 'kê:/', columns: {'cf1é:/':'c1è:/','cf2é:/':'c2è:/'}, end: 1285941387939, params: {'kö:/':'vî:/'}).should.eql '/t%C3%A0%3A%2F/k%C3%AA%3A%2F/cf1%C3%A9%3A%2F:c1%C3%A8%3A%2F,cf2%C3%A9%3A%2F:c2%C3%A8%3A%2F/1285941387939?k%C3%B6%3A%2F=v%C3%AE%3A%2F'
+    utils.url.encode(table: 'tà:/', key: 'kê:/', columns: {'cf1é:/':'c1è:/','cf2é:/':'c2è:/'}, end: 1285941387939, params: {'kö:/':'vî:/'}).should.eql '/t%C3%A0:%2F/k%C3%AA%3A%2F/cf1%C3%A9%3A%2F:c1%C3%A8%3A%2F,cf2%C3%A9%3A%2F:c2%C3%A8%3A%2F/1285941387939?k%C3%B6%3A%2F=v%C3%AE%3A%2F'
 
