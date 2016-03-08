@@ -48,7 +48,7 @@ Query Software Version
 ----------------------
 
 ```javascript
-client.getVersion( function( error, version ){
+client.version( function( error, version ){
   console.log( version );
 } );
 ```
@@ -56,11 +56,11 @@ client.getVersion( function( error, version ){
 Will print something similar to:
 
 ```json
-{ Server: 'jetty/6.1.24'
-, REST: '0.0.2'
-, OS: 'Mac OS X 10.6.4 x86_64'
-, Jersey: '1.1.5.1'
-, JVM: 'Apple Inc. 1.6.0_20-16.3-b01-279'
+{ "Server": "jetty/6.1.24"
+, "REST": "0.0.2"
+, "OS": "Mac OS X 10.6.4 x86_64"
+, "Jersey": "1.1.5.1"
+, "JVM": "Apple Inc. 1.6.0_20-16.3-b01-279"
 }
 ```
 
@@ -68,7 +68,7 @@ Query Storage Cluster Version
 -----------------------------
 
 ```javascript
-client.getVersionCluster( function( error, versionCluster ){
+client.version_cluster( function( error, versionCluster ){
   console.log( versionCluster );
 } );
 ```
@@ -83,7 +83,7 @@ Query Storage Cluster Status
 ----------------------------
 
 ```javascript
-client.getStatusCluster( function( error, statusCluster ){
+client.status_cluster( function( error, statusCluster ){
   console.log( statusCluster );
 } );
 ```
@@ -91,11 +91,11 @@ client.getStatusCluster( function( error, statusCluster ){
 Will print something similar to:
 
 ```json
-{ requests: 0
-, regions: 3
-, averageLoad: 3
-, DeadNodes: [ null ]
-, LiveNodes: [ { Node: [Object] } ]
+{ "requests": 0
+, "regions": 3
+, "averageLoad": 3
+, "DeadNodes": [ null ]
+, "LiveNodes": [ { "Node": ["Object"] } ]
 }
 ```
 
@@ -103,7 +103,7 @@ List tables
 -----------
 
 ```javascript
-client.getTables( function( error, tables ){
+client.tables( function( error, tables ){
   console.log( tables );
 } );
 ```
@@ -111,5 +111,5 @@ client.getTables( function( error, tables ){
 Will print something similar to:
 
 ```json
-[ { name: 'node_hbase' } ]
+[ { "name": "node_hbase" } ]
 ```
