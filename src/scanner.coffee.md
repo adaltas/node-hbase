@@ -139,15 +139,14 @@ of cells or null if the scanner is exhausted.
         return callback() if response and response.statusCode is 204
         return callback err if err
         cells = []
-        encoding = if @options.encoding is 'undefined' then @options.encoding else @client.options.encoding
         data.Row.forEach (row) =>
-          key = utils.base64.decode row.key, encoding
+          key = utils.base64.decode row.key, @client.options.encoding
           row.Cell.forEach (cell) =>
             data = {}
             data.key = key
-            data.column = utils.base64.decode cell.column, encoding
+            data.column = utils.base64.decode cell.column, @client.options.encoding
             data.timestamp = cell.timestamp
-            data.$ = utils.base64.decode cell.$, encoding
+            data.$ = utils.base64.decode cell.$, @client.options.encoding
             cells.push data
         callback null, cells
 

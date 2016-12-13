@@ -4,7 +4,7 @@ utils =
   base64:
     encode: (data, to_encoding) ->
       return data if to_encoding is 'base64'
-      data = new Buffer data.toString(), to_encoding or 'utf8' unless Buffer.isBuffer data
+      data = new Buffer data, to_encoding or 'utf8' unless Buffer.isBuffer data
       data.toString 'base64'
     decode: (data, from_encoding) ->
       return data if from_encoding is 'base64'

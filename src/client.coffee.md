@@ -40,7 +40,7 @@ var hbase = require('hbase');
 var client = hbase({ options });
 ```
 
-You can also manually contruct a new instance as follow:
+You can also manually construct a new instance as follow:
 
 ```javascript
 var hbase = require('hbase');
@@ -53,6 +53,7 @@ var client = new hbase.Client({ options });
       options.host ?= '127.0.0.1'
       options.port ?= '8080'
       options.krb5 ?= {}
+      options.encoding ?= 'utf8'
       throw Error "Invalid protocol #{JSON.stringify options.protocol}" unless options.protocol in ['http', 'https']
       # options.timeout = 60 * 1000  unless options.timeout
       @options = options
