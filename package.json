@@ -20,6 +20,10 @@
     {
       "name": "Marc Trudel",
       "email": "https://github.com/stelcheck"
+    },
+    {
+      "name": "Krisztina Hirth",
+      "email": "https://github.com/yellowbrickc"
     }
   ],
   "main": "./lib/index",
