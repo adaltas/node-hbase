@@ -37,10 +37,10 @@ describe 'client', ->
         should.not.exist err
         tables.filter( (table) -> table.name is 'node_table' ).length.should.eql 1
         next()
-  it 'Test', (next) ->
+  it 'throw error if port is invalid', (next) ->
     @timeout 0
-    # Hopefully, 456789 isnt used, might worth checking it with `nc`
-    hbase( host: 'localhost', port: 456789 )
+    # Hopefully, 54321 isnt used, might worth checking it with `nc`
+    hbase( host: 'localhost', port: 54321 )
     .version_cluster (err, versionCluster) ->
       err.should.be.an.instanceof Error
       next()
