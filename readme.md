@@ -149,6 +149,8 @@ appropriate changes.
 If using the HDP sandbox, start the virtual machine, log-in as "root", start
 Ambari `start_ambari.sh`, start HBase `start_hbase.sh` and start the HBase REST
 server `/usr/lib/hbase/bin/hbase rest -p 60080`.
+Otherwise you can run HBase in locally with 
+`docker run -p 2181:2181 -p 60010:60010 -p 60000:60000 -p 60020:60020 -p 60030:60030 -p 8080:8080 -p 8085:8085 sixeyed/hbase-stargate`
 
 To run the tests:
 

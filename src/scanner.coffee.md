@@ -40,11 +40,11 @@ available:
 *   `maxVersions`
     Number of returned version for each row.   
 *   `startTime`
-    Row minimal timestamp version.   
+    Row minimal timestamp (included).   
 *   `endTime`
-    Row maxiam timestamp version.   
+    Row maximal timestamp (excluded).   
 *   `filter`
-    See below for more informations.   
+    See below for more information.   
 *   `encoding`
     Default to client.options.encoding, set to null to overwrite default
     encoding and return a buffer.   
@@ -105,6 +105,8 @@ Create a new scanner and return its ID.
       encoding = if @options.encoding is 'undefined' then @options.encoding else @client.options.encoding
       params.startRow = utils.base64.encode(@options.startRow, encoding) if @options.startRow
       params.endRow = utils.base64.encode(@options.endRow, encoding) if @options.endRow
+      params.startTime = @options.startTime if @options.startTime
+      params.endTime = @options.endTime if @options.endTime
       params.maxVersions = @options.maxVersions if @options.maxVersions
       if @options.column
         params.column = []

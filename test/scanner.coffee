@@ -51,7 +51,7 @@ describe 'scanner', ->
         , (err, rows) ->
           return next err if err
           # http:#brunodumon.wordpress.com/2010/02/17/building-indexes-using-hbase-mapping-strings-numbers-and-dates-onto-bytes/
-          # Technically, you would set the start row for the scanner to France 
+          # Technically, you would set the start row for the scanner to France
           # and stop the scanning by using a RowFilter with a BinaryPrefixComparator
           rows.length.should.be.above 2
           rows[0].key.should.eql 'test_scanner_get_startRow_11'
@@ -80,7 +80,7 @@ describe 'scanner', ->
         , (err, rows) ->
           return next err if err
           # http:#brunodumon.wordpress.com/2010/02/17/building-indexes-using-hbase-mapping-strings-numbers-and-dates-onto-bytes/
-          # Technically, you would set the start row for the scanner to France 
+          # Technically, you would set the start row for the scanner to France
           # and stop the scanning by using a RowFilter with a BinaryPrefixComparator
           rows.length.should.eql 2
           rows[0].key.should.eql 'test_scanner_get_startEndRow_11'
@@ -153,4 +153,34 @@ describe 'scanner', ->
             return next err if err
             cells.length.should.eql 3
             next()
-
+  it 'Get startTime and endTime', (next) ->
+    test.client (err, client) ->
+      client
+        .table('node_table')
+        .row()
+        .put [
+          { key:'test_scanner_get_startTime_1', column:'node_column_family:', timestamp: 1181558248913, $:'v 1.3' }
+          { key:'test_scanner_get_startTime_11', column:'node_column_family:', timestamp: 1181558248913, $:'v 1.1' }
+          { key:'test_scanner_get_startTime_111', column:'node_column_family:', timestamp: 1181558248913, $:'v 1.2' }
+          { key:'test_scanner_get_startTime_2', column:'node_column_family:', timestamp: 1181558248914, $:'v 2.2' }
+        ], (err, success) ->
+          return next err if err
+          client
+            .table('node_table')
+            .scan
+              startTime: 1181558248913
+              endTime: 1181558248914
+              maxVersions: 1
+            , (err, cells) ->
+              return next err if err
+              # http:#brunodumon.wordpress.com/2010/02/17/building-indexes-using-hbase-mapping-strings-numbers-and-dates-onto-bytes/
+              # Technically, you would set the start row for the scanner to France
+              # and stop the scanning by using a RowFilter with a BinaryPrefixComparator
+              cells.length.should.eql 3
+              cells[0].key.should.eql 'test_scanner_get_startTime_1'
+              cells[0].timestamp.should.eql 1181558248913
+              cells[1].key.should.eql 'test_scanner_get_startTime_11'
+              cells[1].timestamp.should.eql 1181558248913
+              cells[2].key.should.eql 'test_scanner_get_startTime_111'
+              cells[2].timestamp.should.eql 1181558248913
+              next()
