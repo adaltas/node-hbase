@@ -31,13 +31,13 @@
     "node": ">= 0.1.90"
   },
   "optionalDependencies": {
-    "krb5": "^0.0.3"
+    "krb5": "^0.1.0"
   },
   "devDependencies": {
-    "coffee-script": "^1.10.0",
-    "each": "^0.5.2",
-    "mocha": "^2.3.2",
-    "should": "^7.1.0"
+    "coffee-script": "^1.12.3",
+    "each": "^0.6.1",
+    "mocha": "^3.2.0",
+    "should": "^11.2.0"
   },
   "bugs": {
     "url": "https://github.com/wdavidw/node-hbase/issues"
