@@ -17,6 +17,12 @@ Client features include:
 *   Scanner and filter support implementing the `stream.Readable` API
 *   Kerberos Support
 
+## About HBase
+
+HBase is part of the Hadoop ecosystem from the Apache Software Foundation. It 
+is a column oriented database (think NoSql) that really scale and is modelled 
+after Google papers and its BigTable database.
+
 ## Installing
 
 Via [npm](http://github.com/isaacs/npm):
