@@ -1,13 +1,4 @@
 
-<pre style="font-family:courier">
- ___   _           _          _     _ ______                   
-|   \ | |         | |        | |   | |____  \                  
-| |\ \| | ___   __| |_____   | |___| |____)  )_____  ___ _____ 
-| | \   |/ _ \ / _  | ___ |  |  ___  |  __  ((____ |/___) ___ |
-| |  \  | |_| ( |_| | ____|  | |   | | |__)  ) ___ |___ | ____|
-|_|   |_|\___/ \____|_____)  |_|   |_|______/\_____(___/|_____) New BSD License
-</pre>
-
 Node HBase is a Node.JS client for the Apache HBase database. It use the Rest
 API (Stargate) to communicate with HBase. Currently, all the API is implemented
 and the data exchange format is JSON (but protocol buffer could follow).
