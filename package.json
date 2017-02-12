@@ -40,13 +40,13 @@
     "should": "^11.2.0"
   },
   "bugs": {
-    "url": "https://github.com/wdavidw/node-hbase/issues"
+    "url": "https://github.com/adaltas/node-hbase/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wdavidw/node-hbase.git"
+    "url": "https://github.com/adaltas/node-hbase.git"
   },
-  "homepage": "https://github.com/wdavidw/node-hbase",
+  "homepage": "https://github.com/adaltas/node-hbase",
   "scripts": {
     "coffee": "./node_modules/.bin/coffee -b -o lib src",
     "pretest": "./node_modules/.bin/coffee -b -o lib src",
