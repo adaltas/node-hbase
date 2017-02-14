@@ -38,9 +38,9 @@ describe 'row', ->
           .table('node_table')
           .row(null) # 'test_row_put_multiple_rows'
           .put [
-            {key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time + 20, $: 'v 1.3'}
             {key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time + 60, $: 'v 1.1'}
             {key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time + 40, $: 'v 1.2'}
+            {key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time + 80, $: 'v 1.3'}
             {key: 'test_row_put_x_rows_2', column: 'node_column_family:', timestamp: time + 40, $: 'v 2.2'}
           ], (err, success) ->
             return next err if err
@@ -51,11 +51,10 @@ describe 'row', ->
             .row('test_row_put_x_rows_*')
             .get 'node_column_family:', v: 3, (err, cells) ->
               should.not.exist err
-              console.log cells
               cells.should.eql [
+                { key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time + 80, '$': 'v 1.3'}
                 { key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time + 60, '$': 'v 1.1'}
                 { key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time + 40, '$': 'v 1.2'}
-                { key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time + 20, '$': 'v 1.3'}
                 { key: 'test_row_put_x_rows_2', column: 'node_column_family:', timestamp: time + 40, '$': 'v 2.2'}
               ]
               next()

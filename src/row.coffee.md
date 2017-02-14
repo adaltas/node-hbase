@@ -273,7 +273,6 @@ hbase()
             bodyRow.Cell.push bodyCell
           body.Row.push bodyRow
         url = utils.url.encode table: @table, key: @key or "___false-row-key___", columns: ['test:']
-      # console.log '>>', url, require('util').inspect body, showHidden: false, depth: null
       @client.connection.put url, body, (error, data) =>
         return  unless callback
         callback.apply @, [error, (if error then null else true)]
