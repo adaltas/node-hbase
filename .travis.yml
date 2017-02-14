@@ -1,0 +1,11 @@
+
+language: node_js
+sudo: required
+services:
+  - docker
+node_js:
+  - "4"
+  - "5"
+  - "6"
+before_install:
+  - "docker run --name stargate -d -p 60080:8080 sixeyed/hbase-stargate"
