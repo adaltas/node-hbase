@@ -38,7 +38,7 @@ describe 'table', ->
       , (err, data) ->
         this.should.be.an.instanceof Table
         should.not.exist err
-        data.should.be.ok
+        data.should.be.true()
         this.schema (err, schema) ->
           schema['ColumnSchema'].length.should.eql 1
           schema['ColumnSchema'][0]['name'].should.eql 'column_1'
@@ -82,7 +82,7 @@ describe 'table', ->
             # todo: drop the created column
             should.not.exist err
             this.should.be.an.instanceof Table
-            data.should.be.ok
+            data.should.be.true()
             this.schema (err, schema) ->
               schema.ColumnSchema.length.should.eql 2
               schema.ColumnSchema[0].name.should.eql 'column_6'
@@ -107,7 +107,7 @@ describe 'table', ->
           .delete (err, data) ->
             this.should.be.an.instanceof Table
             should.not.exist err
-            data.should.be.ok
+            data.should.be.true()
             next()
   it 'Delete (no callback)', (next) ->
     test.client (err, client, config) ->
@@ -134,14 +134,14 @@ describe 'table', ->
       .exists (err, exists) ->
         this.should.be.an.instanceof Table
         should.not.exist err
-        exists.should.be.ok
+        exists.should.be.true()
       # Test missing table
       client
       .table('node_table_missing')
       .exists (err, exists) ->
         this.should.be.an.instanceof Table
         should.not.exist err
-        exists.should.not.be.ok
+        exists.should.not.be.true()
         next()
   it 'Regions', (next) ->
     test.client (err, client) ->
@@ -161,4 +161,3 @@ describe 'table', ->
         should.not.exist err
         schema.name.should.eql 'node_table'
         next()
-

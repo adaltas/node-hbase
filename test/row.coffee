@@ -12,7 +12,7 @@ describe 'row', ->
       .row('test_row_put_column_family')
       .put 'node_column_family:', 'my value', (err, data) ->
         should.not.exist err
-        data.should.be.ok
+        data.should.be.true()
         next()
   it 'put column', (next) ->
     test.client (err, client) ->
@@ -21,7 +21,7 @@ describe 'row', ->
       .row('test_row_put_column')
       .put 'node_column_family:node_column', 'my value', (err, success) ->
         should.not.exist err
-        success.should.be.ok
+        success.should.be.true()
         next()
   it 'put multiple rows', (next) ->
     test.client (err, client) ->
@@ -45,12 +45,13 @@ describe 'row', ->
           ], (err, success) ->
             return next err if err
             should.not.exist err
-            success.should.be.ok
+            success.should.be.true()
             client
             .table('node_table')
             .row('test_row_put_x_rows_*')
             .get 'node_column_family:', v: 3, (err, cells) ->
               should.not.exist err
+              console.log cells
               cells.should.eql [
                 { key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time + 60, '$': 'v 1.1'}
                 { key: 'test_row_put_x_rows_1', column: 'node_column_family:', timestamp: time + 40, '$': 'v 1.2'}
@@ -73,7 +74,7 @@ describe 'row', ->
           'my value 2'
         ], (err, success) ->
           should.not.exist err
-          success.should.be.ok
+          success.should.be.true()
           this.get (err, cells) ->
             cells.length.should.eql 2
             cells[0].column.should.eql 'node_column_family:node_column_1'
@@ -94,7 +95,7 @@ describe 'row', ->
         ]
         this.put columns, (err, success) ->
           should.not.exist err
-          success.should.be.ok
+          success.should.be.true()
           this.get (err, cells) ->
             should.not.exist err
             cells.length.should.eql 2
@@ -264,7 +265,7 @@ describe 'row', ->
       .put 'node_column_family:', 'value', (err, value) ->
         this.exists (err, exists) ->
           should.not.exist err
-          exists.should.be.ok
+          exists.should.be.true()
           next()
   it 'exists # row # Row does not exists', (next) ->
     test.client (err, client) ->
@@ -273,7 +274,7 @@ describe 'row', ->
       .row('test_row_exist_row_missing')
       .exists (err, exists) ->
         should.not.exist err
-        exists.should.not.be.ok
+        exists.should.not.be.true()
         next()
   it 'exists # column # Row exists', (next) ->
     test.client (err, client) ->
@@ -283,7 +284,7 @@ describe 'row', ->
       .put 'node_column_family:', 'value', (err, value) ->
         this.exists 'node_column_family:', (err, exists) ->
           should.not.exist err
-          exists.should.be.ok
+          exists.should.be.true()
           next()
   it 'exists # column # Row does not exists', (next) ->
     test.client (err, client) ->
@@ -292,7 +293,7 @@ describe 'row', ->
       .row('test_row_exist_column_with_row_missing')
       .exists 'node_column_family:', (err, exists) ->
         should.not.exist err
-        exists.should.not.be.ok
+        exists.should.not.be.true()
         next()
   it 'exists # column # Row exists and column family does not exists', (next) ->
     test.client (err, client) ->
@@ -302,7 +303,7 @@ describe 'row', ->
       .put 'node_column_family:', 'value', (err, value) ->
         this.exists 'node_column_family_missing', (err, exists) ->
           should.not.exist err
-          exists.should.not.be.ok
+          exists.should.not.be.true()
           next()
   it 'exists # column # Row exists and column family exists and column does not exits', (next) ->
     test.client (err, client) ->
@@ -312,7 +313,7 @@ describe 'row', ->
       .put 'node_column_family:', 'value', (err, value) ->
         this.exists 'node_column_family:column_missing', (err, exists) ->
           should.not.exist err
-          exists.should.not.be.ok
+          exists.should.not.be.true()
           next()
   it 'delete row', (next) ->
     test.client (err, client) ->
@@ -326,7 +327,7 @@ describe 'row', ->
             success.should.be.true
             this.exists (err, exists) ->
               should.not.exist err
-              exists.should.not.be.ok
+              exists.should.not.be.true()
               next()
   it 'delete column', (next) ->
     test.client (err, client) ->
@@ -341,11 +342,11 @@ describe 'row', ->
             count = 0
             this.exists 'node_column_family:c_1', (err, exists) ->
               should.not.exist err
-              exists.should.be.ok
+              exists.should.be.true()
               done()
             this.exists 'node_column_family:c_2', (err, exists) ->
               should.not.exist err
-              exists.should.not.be.ok
+              exists.should.not.be.true()
               done()
             count = 0
             done = (err) ->
@@ -365,22 +366,21 @@ describe 'row', ->
             success.should.be.true
             this.exists 'node_column_family:c_1', (err, exists) ->
               should.not.exist err
-              exists.should.not.be.ok
+              exists.should.not.be.true()
               done()
             this.exists 'node_column_family:c_2', (err, exists) ->
               should.not.exist err
-              exists.should.be.ok
+              exists.should.be.true()
               done()
             this.exists 'node_column_family:c_3', (err, exists) ->
               should.not.exist err
-              exists.should.not.be.ok
+              exists.should.not.be.true()
               done()
             this.exists (err, exists) ->
               should.not.exist err
-              exists.should.be.ok
+              exists.should.be.true()
               done()
             count = 0
             done = (err) ->
               count++
               next err if err or count is 4
-
