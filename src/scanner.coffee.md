@@ -108,6 +108,7 @@ Create a new scanner and return its ID.
       params.startTime = @options.startTime if @options.startTime
       params.endTime = @options.endTime if @options.endTime
       params.maxVersions = @options.maxVersions if @options.maxVersions
+      params.batch = @options.batch if @options.batch
       if @options.column
         params.column = []
         @options.column = [@options.column] if typeof @options.column is 'string'
