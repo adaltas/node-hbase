@@ -1,4 +1,6 @@
 
+[![Build Status](https://secure.travis-ci.org/adaltas/node-hbase.png)](http://travis-ci.org/adaltas/node-hbase)
+
 Node HBase is a Node.JS client for the Apache HBase database. It use the Rest
 API (Stargate) to communicate with HBase. Currently, all the API is implemented
 and the data exchange format is JSON (but protocol buffer could follow).
@@ -147,7 +149,8 @@ If using the HDP sandbox, start the virtual machine, log-in as "root", start
 Ambari `start_ambari.sh`, start HBase `start_hbase.sh` and start the HBase REST
 server `/usr/lib/hbase/bin/hbase rest -p 60080`.
 Otherwise you can run HBase in locally with 
-`docker run -p 2181:2181 -p 60010:60010 -p 60000:60000 -p 60020:60020 -p 60030:60030 -p 8080:8080 -p 8085:8085 sixeyed/hbase-stargate`
+`docker run --name stargate --rm -p 60080:8080 sixeyed/hbase-stargate`
+`docker run --name stargate -p 2181:2181 -p 60010:60010 -p 60000:60000 -p 60020:60020 -p 60030:60030 -p 60080:8080 -p 8085:8085 sixeyed/hbase-stargate`
 
 To run the tests:
 
@@ -181,7 +184,7 @@ test. It comes pre-configured for [Ryba] configured in development cluster mode.
 *   Pierre Sauvage: <https://github.com/Pierrotws>
 
 [ryba]: https://github.com/ryba-io/ryba
-[scanner]: https://github.com/wdavidw/node-hbase/blob/master/test/scanner.coffee
+[scanner]: https://github.com/adaltas/node-hbase/blob/master/test/scanner.coffee
 [mt_samples]: https://gist.github.com/3979381
 [mt_home]: https://github.com/stelcheck
 [krb5]: https://github.com/adaltas/node-krb5

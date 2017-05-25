@@ -8,4 +8,5 @@ node_js:
   - "5"
   - "6"
 before_install:
+  - "cp test/properties.docker.coffee test/properties.coffee"
   - "docker run --name stargate -d -p 60080:8080 sixeyed/hbase-stargate"

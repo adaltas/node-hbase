@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* travis: set docker properties
 * package: add changelog
 * travis: add definition file
 * row: fix test
