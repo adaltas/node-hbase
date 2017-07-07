@@ -36,21 +36,47 @@ You can also manually contruct a new instance as follow:
 var connection = new hbase.Connection( client );
 ```
 
+
+    clone = (obj) ->
+      if not obj? or typeof obj isnt 'object'
+        return obj
+    
+      if obj instanceof Date
+        return new Date(obj.getTime()) 
+    
+      if obj instanceof RegExp
+        flags = ''
+        flags += 'g' if obj.global?
+        flags += 'i' if obj.ignoreCase?
+        flags += 'm' if obj.multiline?
+        flags += 'y' if obj.sticky?
+        return new RegExp(obj.source, flags) 
+    
+      newInstance = new obj.constructor()
+    
+      for key of obj
+        newInstance[key] = clone obj[key]
+    
+      return newInstance
+    
     Connection = (client) ->
       @client = client
+      options = clone(@client.options)
+      options.protocol = "#{options.protocol}:"
+      options.hostname = options.host
+      delete options.host
+      options.path = if options.path? then options.path.replace(/\/$/, "") else ""
+      options.headers =
+        'content-type': 'application/json'
+        'Accept': 'application/json'
+      options.rejectUnauthorized = false
+      @options = options
       @
 
     Connection::makeRequest = (method, command, data, callback) ->
-      options =
-        protocol: "#{@client.options.protocol}:"
-        port: @client.options.port
-        hostname: @client.options.host
-        method: method
-        path: command
-        headers:
-          'content-type': 'application/json'
-          'Accept': 'application/json'
-        rejectUnauthorized: false
+      options = clone(@options)
+      options.method = method
+      options.path = options.path + command
       do_krb5 = =>
         return do_spnego() if @client.krb5
         return do_request() unless @client.options.krb5.principal
