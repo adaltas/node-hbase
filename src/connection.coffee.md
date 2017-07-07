@@ -52,7 +52,6 @@ var connection = new hbase.Connection( client );
       options = clone(@client.options)
       options.protocol = "#{options.protocol}:"
       options.hostname = options.host
-      delete options.host
       options.path = if options.path? then options.path.replace(/\/$/, "") else ""
       options.headers =
         'content-type': 'application/json'
