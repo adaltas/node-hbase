@@ -30,6 +30,8 @@ Port of the HBase REST server
 
 ```
 
+-   Other custom options that can be passed to requests. For possible options, take a look at [http](https://nodejs.org/api/http.html#http_http_request_options_callback) or [https](https://nodejs.org/api/https.html#https_https_request_options_callback) request.
+
 Calling the `hbase` method return an initialized client object.
 
 ```javascript

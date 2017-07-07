@@ -28,9 +28,10 @@ following properties:
     Kerberos password of the user principal, optional if using a keytab.   
 *   `krb5.keytab` (string)   
     Path to the Kerberos keytab or null if using the default credential cache.   
-*   `krb5.service_principal (string)   
+*   `krb5.service_principal` (string)   
     GSS service principal in the form of "HTTP@{fqdn}", optional, automatically
-    discovered if "host" is a correct fqdn.   
+    discovered if "host" is a correct fqdn.
+*   Other custom options that can be passed to requests. For possible options, take a look at [http](https://nodejs.org/api/http.html#http_http_request_options_callback) or [https](https://nodejs.org/api/https.html#https_https_request_options_callback) request.
 
 
 Calling the `hbase` method return an initialized client object.
