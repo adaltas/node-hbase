@@ -1,0 +1,15 @@
+server {
+        listen 8100 default_server;
+
+        location /
+        {
+                proxy_pass http://localhost:8080/;
+                proxy_set_header X-Real-IP $remote_addr;
+        }
+
+        location /rest/
+        {
+                proxy_pass http://localhost:8080/;
+                proxy_set_header X-Real-IP $remote_addr;
+        }
+}

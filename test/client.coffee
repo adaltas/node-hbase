@@ -44,3 +44,20 @@ describe 'client', ->
     .version_cluster (err, versionCluster) ->
       err.should.be.an.instanceof Error
       next()
+  it 'should pass custom options to connection', (next) ->
+    @timeout 0
+    connection_opts = hbase(
+      protocol: 'https'
+      host: 'localhost',
+      port: 8080,
+      path: '/rest',
+      cert: 'test_cert.crt',
+      key: 'test_key.key'
+    ).connection.options
+    connection_opts.protocol.should.eql 'https:'
+    connection_opts.hostname.should.eql 'localhost'
+    connection_opts.port.should.eql 8080
+    connection_opts.path.should.eql '/rest'
+    connection_opts.cert.should.eql 'test_cert.crt'
+    connection_opts.key.should.eql 'test_key.key'
+    next()

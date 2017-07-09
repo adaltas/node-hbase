@@ -36,21 +36,34 @@ You can also manually contruct a new instance as follow:
 var connection = new hbase.Connection( client );
 ```
 
+    # Based on https://coffeescript-cookbook.github.io/chapters/classes_and_objects/cloning
+    clone = (obj) ->
+      if not obj? or typeof obj isnt 'object'
+        return obj
+    
+      newInstance = new obj.constructor()
+      for key of obj
+        newInstance[key] = clone obj[key]
+    
+      return newInstance
+    
     Connection = (client) ->
       @client = client
+      options = clone(@client.options)
+      options.protocol = "#{options.protocol}:"
+      options.hostname = options.host
+      options.path = if options.path? then options.path.replace(/\/$/, "") else ""
+      options.headers =
+        'content-type': 'application/json'
+        'Accept': 'application/json'
+      options.rejectUnauthorized = false
+      @options = options
       @
 
     Connection::makeRequest = (method, command, data, callback) ->
-      options =
-        protocol: "#{@client.options.protocol}:"
-        port: @client.options.port
-        hostname: @client.options.host
-        method: method
-        path: command
-        headers:
-          'content-type': 'application/json'
-          'Accept': 'application/json'
-        rejectUnauthorized: false
+      options = clone(@options)
+      options.method = method
+      options.path = options.path + command
       do_krb5 = =>
         return do_spnego() if @client.krb5
         return do_request() unless @client.options.krb5.principal
