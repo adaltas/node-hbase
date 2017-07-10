@@ -47,7 +47,6 @@ var connection = new hbase.Connection( client );
     
       return newInstance
     
-    # Based on https://stackoverflow.com/questions/17536235/empty-object-in-coffeescript
     is_object = (obj) ->
       return obj? && typeof obj == 'object'
     
