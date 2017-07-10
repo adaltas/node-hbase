@@ -52,7 +52,10 @@ describe 'client', ->
       port: 8080,
       path: '/rest',
       cert: 'test_cert.crt',
-      key: 'test_key.key'
+      key: 'test_key.key',
+      headers: {
+        'content-length': 5000
+      }
     ).connection.options
     connection_opts.protocol.should.eql 'https:'
     connection_opts.hostname.should.eql 'localhost'
@@ -60,4 +63,32 @@ describe 'client', ->
     connection_opts.path.should.eql '/rest'
     connection_opts.cert.should.eql 'test_cert.crt'
     connection_opts.key.should.eql 'test_key.key'
+    connection_opts.headers.should.eql {
+      "Accept": "application/json"
+      "content-length": 5000
+      "content-type": "application/json"
+    }
+    next()
+  it 'only accept request headers as an object', (next) ->
+    @timeout 0
+    connection_opts = hbase(
+      host: 'localhost',
+      port: 8080,
+      headers: 'test'
+    ).connection.options
+    connection_opts.headers.should.eql {
+      "Accept": "application/json"
+      "content-type": "application/json"
+    }
+    next()
+  it 'should use default request headers when none is passed by the user', (next) ->
+    @timeout 0
+    connection_opts = hbase(
+      host: 'localhost',
+      port: 8080
+    ).connection.options
+    connection_opts.headers.should.eql {
+      "Accept": "application/json"
+      "content-type": "application/json"
+    }
     next()
