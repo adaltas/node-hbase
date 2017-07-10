@@ -158,6 +158,8 @@ To run the tests:
 make test
 ```
 
+There is also a Dockerfile under `hbase-rest-reverse-proxy/` that creates an Nginx reverse proxy to HBase REST. This image can be used to test cases where the REST service runs behind a proxy. The file `test/properties_with_path.docker.coffee` can be used to test scenarios where HBase REST is accessible through a custom path (`/rest`).
+
 When testing against HBase secured with Kerberos, you must create a table with
 the right ownership.
 
