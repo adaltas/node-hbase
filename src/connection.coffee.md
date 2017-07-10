@@ -47,15 +47,19 @@ var connection = new hbase.Connection( client );
     
       return newInstance
     
+    # Based on https://stackoverflow.com/questions/17536235/empty-object-in-coffeescript
+    is_object = (obj) ->
+      return obj? && typeof obj == 'object'
+    
     Connection = (client) ->
       @client = client
       options = clone(@client.options)
       options.protocol = "#{options.protocol}:"
       options.hostname = options.host
       options.path = if options.path? then options.path.replace(/\/$/, "") else ""
-      options.headers =
-        'content-type': 'application/json'
-        'Accept': 'application/json'
+      options.headers = if is_object(options.headers) then options.headers else {}
+      options.headers['content-type'] = 'application/json'
+      options.headers['Accept'] = 'application/json'
       options.rejectUnauthorized = false
       @options = options
       @
