@@ -81,3 +81,14 @@ describe 'client', ->
       "content-type": "application/json"
     }
     next()
+  it 'should use default request headers when none is passed by the user', (next) ->
+    @timeout 0
+    connection_opts = hbase(
+      host: 'localhost',
+      port: 8080
+    ).connection.options
+    connection_opts.headers.should.eql {
+      "Accept": "application/json"
+      "content-type": "application/json"
+    }
+    next()
