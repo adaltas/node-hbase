@@ -1,5 +1,4 @@
 
-should = require 'should'
 Table = require '../src/table'
 test = require './test'
 

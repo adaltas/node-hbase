@@ -14,24 +14,29 @@
 A new instance of "HBase" may be instantiated with an object containing the
 following properties:   
 
-*   `protocol` (string)   
-    One of 'http' or 'https', default to "http".   
-*   `host` (string)   
-    Domain or IP of the HBase Stargate server, optional, default to "localhost".   
-*   `port` (string|int)   
-    Port of the HBase REST server, optional, default to "8080".   
-*   `krb5` (object)   
-    Configuration object for Kerberos.   
-*   `krb5.principal` (string)   
-    Kerberos user principal, required.   
-*   `krb5.password` (string)   
-    Kerberos password of the user principal, optional if using a keytab.   
-*   `krb5.keytab` (string)   
-    Path to the Kerberos keytab or null if using the default credential cache.   
-*   `krb5.service_principal` (string)   
-    GSS service principal in the form of "HTTP@{fqdn}", optional, automatically
-    discovered if "host" is a correct fqdn.
-*   Other custom options that can be passed to requests. For possible options, take a look at [http](https://nodejs.org/api/http.html#http_http_request_options_callback) or [https](https://nodejs.org/api/https.html#https_https_request_options_callback) request.
+* `protocol` (string)   
+  One of 'http' or 'https', default to "http".   
+* `host` (string)   
+  Domain or IP of the HBase Stargate server, optional, default to "localhost".   
+* `port` (string|int)   
+  Port of the HBase REST server, optional, default to "8080".   
+* `krb5` (object)   
+  Configuration object for Kerberos.   
+* `krb5.principal` (string)   
+  Kerberos user principal, required.   
+* `krb5.password` (string)   
+  Kerberos password of the user principal, optional if using a keytab.   
+* `krb5.keytab` (string)   
+  Path to the Kerberos keytab or null if using the default credential cache.   
+* `krb5.service_principal` (string)   
+  GSS service principal in the form of "HTTP@{fqdn}", optional, automatically
+  discovered if "host" is a correct fqdn.
+* `timeout` (int)   
+  Number of milliseconds before the request timeout.
+
+Other custom options that can be passed to requests. For possible options, take 
+a look at [http](https://nodejs.org/api/http.html#http_http_request_options_callback) 
+or [https](https://nodejs.org/api/https.html#https_https_request_options_callback) request.
 
 
 Calling the `hbase` method return an initialized client object.
@@ -71,7 +76,7 @@ client.version( function( error, version ){
 
 Will print something similar to:
 
-```json
+```javascript
 { Server: 'jetty/6.1.24'
 , REST: '0.0.2'
 , OS: 'Mac OS X 10.6.4 x86_64'
@@ -110,7 +115,7 @@ client.status_cluster( function( error, statusCluster ){
 
 Will print something similar to:
 
-```json
+```javascript
 { requests: 0
 , regions: 3
 , averageLoad: 3
@@ -132,7 +137,7 @@ client.tables( function( error, tables ){
 
 Will print something similar to:
 
-```json
+```javascript
 [ { name: 'node_hbase' } ]
 ```
 

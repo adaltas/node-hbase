@@ -1,5 +1,4 @@
 
-should = require 'should'
 test = require './test'
 Row = require '../src/row'
 

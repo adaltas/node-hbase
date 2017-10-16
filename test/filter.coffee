@@ -1,6 +1,5 @@
 
 fs = require 'fs'
-should = require 'should'
 test = require './test'
 hbase = require '../src'
 

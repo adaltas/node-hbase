@@ -1,6 +1,5 @@
 
-should = require 'should'
-hbase = require '..'
+hbase = require '../src'
 test = require './test'
 sort = (a, b) -> if a.toLowerCase() < b.toLowerCase() then -1 else 1
 

@@ -1,7 +1,5 @@
 
 hbase = require '../src'
-fs = require 'fs'
-path = require 'path'
 assert = require 'assert'
 
 cache = null

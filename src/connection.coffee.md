@@ -102,6 +102,11 @@ var connection = new hbase.Connection( client );
         if data and data isnt ''
           data = if typeof data is 'string' then data else JSON.stringify data
           req.write data, 'utf8'
+        # Handle Timeout
+        if options.timeout
+          req.setTimeout options.timeout, ->
+            req.abort()
+        # Terminate Request
         req.end()
       do_krb5()
 

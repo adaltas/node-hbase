@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* connection: new timeout option
 * package: use CoffeeScript 2
 * package: update dependencies
 

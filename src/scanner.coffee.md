@@ -1,5 +1,5 @@
 
-# Scanner operations
+# Scanner: retrieve multiple rows and columns
 
 Scanner are the most efficient way to retrieve multiple 
 rows and columns from HBase.

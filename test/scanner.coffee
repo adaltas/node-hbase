@@ -1,7 +1,5 @@
 
-should = require 'should'
 test = require './test'
-# Scanner = require '../src/scanner'
 
 describe 'scanner', ->
   @timeout 0
