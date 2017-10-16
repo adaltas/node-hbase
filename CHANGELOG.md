@@ -1,7 +1,7 @@
 
 # Changelog
 
-## Trunk
+## v0.3.0
 
 * connection: new timeout option
 * package: use CoffeeScript 2
