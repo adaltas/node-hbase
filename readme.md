@@ -155,7 +155,7 @@ Otherwise you can run HBase in locally with
 To run the tests:
 
 ```bash
-make test
+npm test
 ```
 
 There is also a Dockerfile under `hbase-rest-reverse-proxy/` that creates an Nginx reverse proxy to HBase REST. This image can be used to test cases where the REST service runs behind a proxy. The file `test/properties_with_path.docker.coffee` can be used to test scenarios where HBase REST is accessible through a custom path (`/rest`).

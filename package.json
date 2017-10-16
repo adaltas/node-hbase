@@ -34,10 +34,10 @@
     "krb5": "^0.1.0"
   },
   "devDependencies": {
-    "coffee-script": "^1.12.6",
+    "coffeescript": "^2.0.1",
     "each": "^0.6.1",
-    "mocha": "^3.4.2",
-    "should": "^11.2.1"
+    "mocha": "^4.0.1",
+    "should": "^13.1.2"
   },
   "bugs": {
     "url": "https://github.com/adaltas/node-hbase/issues"
@@ -50,6 +50,6 @@
   "scripts": {
     "coffee": "./node_modules/.bin/coffee -b -o lib src",
     "pretest": "./node_modules/.bin/coffee -b -o lib src",
-    "test": "NODE_ENV=test ./node_modules/.bin/mocha --compilers coffee:coffee-script/register --reporter dot"
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha test/**/*.coffee"
   }
 }

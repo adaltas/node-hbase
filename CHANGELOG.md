@@ -3,6 +3,11 @@
 
 ## Trunk
 
+* package: use CoffeeScript 2
+* package: update dependencies
+
+## v0.2.4
+
 * travis: set docker properties
 * package: add changelog
 * travis: add definition file
