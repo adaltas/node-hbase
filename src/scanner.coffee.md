@@ -132,7 +132,6 @@ Create a new scanner and return its ID.
 Retrieve the next cells from HBase. The callback is required
 and receive two arguments, an error object if any and a array
 of cells or null if the scanner is exhausted.
-```
 
     Scanner::get = (callback) ->
       key = "/#{@table}/scanner/#{@options.id}"
