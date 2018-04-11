@@ -3,7 +3,8 @@
 
 ## Trunk
 
-* client: emit requests
+* readme: fix doc link
+* client: emit http requests
 
 ## v0.3.0
 
