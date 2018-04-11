@@ -10,8 +10,7 @@ navigation: hbase
 github: https://github.com/wdavidw/node-hbase
 ---
 
-Creating a new client
----------------------
+## Creating a new client
 
 A new instance of "HBase" may be instantiated with an object containing the following properties:   
 
@@ -46,8 +45,14 @@ var hbase = require('hbase');
 var client = new hbase.Client({ options });
 ```
 
-Query Software Version
-----------------------
+## Events
+
+The client extends the native Node.js [EventEmitter API](https://nodejs.org/api/events.html). The following events are emitted:
+
+* `request`   
+  An object with the keys `options` and `data` if the request is of type "PUT" or "POST".
+
+## Query Software Version
 
 ```javascript
 client.version( function( error, version ){
@@ -66,8 +71,7 @@ Will print something similar to:
 }
 ```
 
-Query Storage Cluster Version
------------------------------
+## Query Storage Cluster Version
 
 ```javascript
 client.version_cluster( function( error, versionCluster ){
@@ -81,8 +85,7 @@ Will print something similar to:
 '0.89.20100726'
 ```
 
-Query Storage Cluster Status
-----------------------------
+## Query Storage Cluster Status
 
 ```javascript
 client.status_cluster( function( error, statusCluster ){
@@ -101,8 +104,7 @@ Will print something similar to:
 }
 ```
 
-List tables
------------
+## List tables
 
 ```javascript
 client.tables( function( error, tables ){

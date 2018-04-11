@@ -1,6 +1,10 @@
 
 # Changelog
 
+## Trunk
+
+* client: emit requests
+
 ## v0.3.0
 
 * connection: new timeout option

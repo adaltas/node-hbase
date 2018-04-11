@@ -67,6 +67,9 @@ var connection = new hbase.Connection( client );
       options = clone(@options)
       options.method = method
       options.path = options.path + command
+      do_async = =>
+        # Ensure events registered after connection are received
+        setImmediate do_krb5
       do_krb5 = =>
         return do_spnego() if @client.krb5
         return do_request() unless @client.options.krb5.principal
@@ -82,6 +85,7 @@ var connection = new hbase.Connection( client );
           options.headers['Authorization'] = 'Negotiate ' + token
           do_request()
       do_request = =>
+        @client.emit 'request', options: options, data: data
         req = http[@client.options.protocol].request options, (res) =>
           body = ''
           res.on 'data', (chunk) ->
@@ -108,7 +112,7 @@ var connection = new hbase.Connection( client );
             req.abort()
         # Terminate Request
         req.end()
-      do_krb5()
+      do_async()
 
 ## HTTP Get requests
 

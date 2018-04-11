@@ -4,6 +4,8 @@
 
 ## Dependencies
 
+    util = require 'util'
+    EventEmitter = require 'events'
     Connection = require "./connection"
     Table = require "./table"
     Row = require "./row"
@@ -55,16 +57,17 @@ var client = new hbase.Client({ options });
 
     Client = (options) ->
       options = {}  unless options
+      EventEmitter.call @, @options
       options.protocol ?= 'http'
       options.host ?= '127.0.0.1'
       options.port ?= '8080'
       options.krb5 ?= {}
       options.encoding ?= 'utf8'
       throw Error "Invalid protocol #{JSON.stringify options.protocol}" unless options.protocol in ['http', 'https']
-      # options.timeout = 60 * 1000  unless options.timeout
       @options = options
       @connection = new Connection @
       @
+    util.inherits Client, EventEmitter
 
 ## Query Software Version
 

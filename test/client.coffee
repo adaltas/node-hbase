@@ -91,3 +91,11 @@ describe 'client', ->
       "content-type": "application/json"
     }
     next()
+  it 'event request', (next) ->
+    @timeout 0
+    test.client (err, client) ->
+      client.status_cluster (err,statusCluster) ->
+        should.not.exist err
+      client.on 'request', ({options, data}) ->
+        options.path.should.eql '/status/cluster'
+        next()
