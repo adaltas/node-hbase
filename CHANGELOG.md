@@ -3,6 +3,8 @@
 
 ## Trunk
 
+* scanner: improve fetching
+* client: fix connection test
 * test: disable client cache
 * package: ignore lock files
 * readme: fix doc link

@@ -82,11 +82,14 @@ client.table('my_tb').scan({
 
     Scanner = (client, @options={}) ->
       @options.objectMode = true
-      Readable.call(@, @options);
+      Readable.call @, @options
       @client = client
+      @fetching = false
+      @initializing = false
       # @table = if typeof table is 'string' then table else table.name
       # @id = id or null
       @options = table: @options if typeof @options is 'string'
+      @options.batch ?= 1000
       throw Error 'Missing required option "table"' unless @options.table
       @options.id = null
       @callback = null
@@ -100,7 +103,7 @@ Create a new scanner and return its ID.
     Scanner::init = (callback) ->
       # options = utils.merge {}, @options
       params = {}
-      params.batch ?= 1000
+      params.batch ?= @options.batch
       key = "/#{@options.table}/scanner"
       encoding = if @options.encoding is 'undefined' then @options.encoding else @client.options.encoding
       params.startRow = utils.base64.encode(@options.startRow, encoding) if @options.startRow
@@ -134,7 +137,7 @@ and receive two arguments, an error object if any and a array
 of cells or null if the scanner is exhausted.
 
     Scanner::get = (callback) ->
-      key = "/#{@table}/scanner/#{@options.id}"
+      key = "/#{@options.table}/scanner/#{@options.id}"
       @client.connection.get key, (err, data, response) =>
         # result is successful but the scanner is exhausted, returns HTTP 204 status (no content)
         return callback() if response and response.statusCode is 204
@@ -164,7 +167,7 @@ error object if any and a boolean indicating whether
 the scanner was removed or not.
 
     Scanner::delete = (callback) ->
-      @client.connection.delete "/#{@table}/scanner/#{@options.id}", callback
+      @client.connection.delete "/#{@options.table}/scanner/#{@options.id}", callback
 
 ## Scanner._read(size)
 
@@ -172,11 +175,16 @@ Implementation of the `stream.Readable` API.
 
     Scanner::_read = (size) ->
       return if @done
+      return if @initializing
+      return if @fetching
       unless @options.id
+        @initializing = true
         return @init (err, id) =>
+          @initializing = false
           return @emit 'error', err if err
           @_read()
-      @get (err, cells) =>
+      @fetching = true
+      handler = (err, cells) =>
         return if @done
         return @emit 'error', err if err
         unless cells
@@ -184,7 +192,13 @@ Implementation of the `stream.Readable` API.
           return @delete (err) =>
             return @emit 'error', err if err
             @push null
+            @fetching = false
+        more = true
         for cell in cells
-          @push cell
+          more = false unless @push cell
+        if more
+        then @get handler 
+        else @fetching = false
+      @get handler
 
     module.exports = Scanner

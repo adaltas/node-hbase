@@ -182,3 +182,32 @@ describe 'scanner', ->
               cells[2].key.should.eql 'test_scanner_get_startTime_111'
               cells[2].timestamp.should.eql 1181558248913
               next()
+  it 'fetch records in batch', (next) ->
+    test.client (err, client) ->
+      data = for i in [0...1000] # 1000000
+        { key: 'test_scanner_fetch_records_in_batch', column: "node_column_family:#{i}", $: 'v 1.3' }
+      count = init: 0, scan: 0, readable: 0, read: 0
+      client.on 'request', ({options}) ->
+        count.init++ if /^\/node_table\/scanner$/.test options.path
+        count.scan++ if /^\/node_table\/scanner\//.test options.path
+      client
+      .table('node_table')
+      .row()
+      .put data, (err, success) ->
+        return next err if err
+        client
+        .table('node_table')
+        .scan
+          startRow: 'test_scanner_fetch_records_in_batch'
+          endRow: 'test_scanner_fetch_records_in_batch_'
+          maxVersions: 1
+          batch: 10
+        .on 'readable', ->
+          count.readable++
+          while record = @read()
+            count.read++
+        .on 'error', (err) ->
+          next err
+        .on 'end', ->
+          count.should.eql init: 1, scan: 102, readable: 1001, read: 1000
+          next()
