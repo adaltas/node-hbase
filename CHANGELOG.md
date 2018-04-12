@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* package: npm publishing chain
 * docker: provide source file to build containers
 * package: latest dependencies
 * scanner: improve fetching
