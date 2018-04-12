@@ -18,7 +18,7 @@ describe 'connection', ->
   it 'send get', (next) ->
     server = server_start get: '"okay"', (err) ->
       return next err if err
-      client = hbase.Client host: '127.0.0.1', port: 12345
+      client = new hbase.Client host: '127.0.0.1', port: 12345
       client.connection.get '/', (err, data) ->
         return next err if err
         data.should.eql 'okay'
@@ -27,7 +27,7 @@ describe 'connection', ->
   it 'honors timeout', (next) ->
     server = server_start {}, (err) ->
       return next err if err
-      client = hbase.Client host: '127.0.0.1', port: 12345, timeout: 2000
+      client = new hbase.Client host: '127.0.0.1', port: 12345, timeout: 2000
       client.connection.get '/', (err, data) ->
         err.message.should.eql 'socket hang up'
         server_close server, next
