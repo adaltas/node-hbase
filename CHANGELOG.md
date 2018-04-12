@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* test: disable client cache
 * package: ignore lock files
 * readme: fix doc link
 * client: emit http requests

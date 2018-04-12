@@ -2,7 +2,6 @@
 hbase = require '../src'
 assert = require 'assert'
 
-cache = null
 
 module.exports.client = (options, callback) ->
   if arguments.length is 1
@@ -16,12 +15,7 @@ module.exports.client = (options, callback) ->
   for k, v of properties
     options[k] ?= properties[k]
   options.encoding ?= 'utf8'
-  # Create client or get it from cache
-  if cache
-    client = cache
-  else
-    client = hbase options
-    cache = client if options.cache
+  client = hbase options
   table = client.table('node_table')
   table.exists (error, exists) ->
     assert.ifError error
