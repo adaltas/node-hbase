@@ -1,1 +1,1 @@
-/etc/init.d/nginx start; /opt/hbase/bin/start-rest.sh
+/usr/sbin/nginx; /opt/hbase/bin/start-rest.sh

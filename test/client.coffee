@@ -97,5 +97,5 @@ describe 'client', ->
       client.status_cluster (err,statusCluster) ->
         should.not.exist err
       client.on 'request', ({options, data}) ->
-        options.path.should.eql '/status/cluster'
+        options.path.should.match /(^|\/rest)\/status\/cluster/
         next()

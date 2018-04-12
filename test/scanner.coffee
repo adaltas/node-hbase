@@ -188,8 +188,8 @@ describe 'scanner', ->
         { key: 'test_scanner_fetch_records_in_batch', column: "node_column_family:#{i}", $: 'v 1.3' }
       count = init: 0, scan: 0, readable: 0, read: 0
       client.on 'request', ({options}) ->
-        count.init++ if /^\/node_table\/scanner$/.test options.path
-        count.scan++ if /^\/node_table\/scanner\//.test options.path
+        count.init++ if /^(^|\/rest)\/node_table\/scanner$/.test options.path
+        count.scan++ if /^(^|\/rest)\/node_table\/scanner\//.test options.path
       client
       .table('node_table')
       .row()

@@ -1,6 +1,10 @@
 
 # Changelog
 
+## Trunk
+
+* travis: update path to docker file
+
 ## Version 0.4.0
 
 * package: npm publishing chain
