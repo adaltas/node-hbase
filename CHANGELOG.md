@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* docker: provide source file to build containers
 * package: latest dependencies
 * scanner: improve fetching
 * client: fix connection test

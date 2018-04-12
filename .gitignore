@@ -1,8 +1,6 @@
 .*
-lib-cov
 package-lock.json
 yarn.lock
-restart.sh
 test/properties.coffee
 test/properties.js
 test/properties.json
