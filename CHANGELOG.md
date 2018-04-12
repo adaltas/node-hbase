@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* package: latest dependencies
 * scanner: improve fetching
 * client: fix connection test
 * test: disable client cache
