@@ -1,7 +1,7 @@
 
 # Changelog
 
-## Trunk
+## Version 0.4.0
 
 * package: npm publishing chain
 * docker: provide source file to build containers
