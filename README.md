@@ -200,6 +200,8 @@ test. It comes pre-configured for [Ryba] configured in development cluster mode.
 *   Michal Taborsky: <https://github.com/whizz>
 *   Pierre Sauvage: <https://github.com/Pierrotws>
 
+This package is developed by [Adaltas](http://www.adaltas.com).
+
 [ryba]: https://github.com/ryba-io/ryba
 [scanner]: https://github.com/adaltas/node-hbase/blob/master/test/scanner.coffee
 [mt_samples]: https://gist.github.com/3979381
