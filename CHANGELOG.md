@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* doc: rewrite the row documentation
 * doc: rewrite the scanner documentation
 * readme: add author company
 * travis: update path to docker file
