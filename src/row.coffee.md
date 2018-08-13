@@ -9,18 +9,7 @@ multiple operations are available and are documented below.
     utils = require './utils'
     Table = require './table'
 
-## Grab an instance of "Row"
-
-```javascript
-const myRow = hbase({}).table('my_table').row('my_row');
-```
-
-Or
-
-```javascript
-const client = new hbase.Client({})
-const myRow = new hbase.Row(client, 'my_table', 'my_row')
-```
+## Constructor
 
     Row = (client, table, key) ->
       @client = client
