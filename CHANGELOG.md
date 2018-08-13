@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* doc: rewrite the index documentation
 * doc: rewrite the client documentation
 * doc: rewrite the connection documentation
 * doc: rewrite the table documentation
