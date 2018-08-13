@@ -181,11 +181,9 @@ docker build -t fork-hbase docker/hbase-1.1.2
 # Build the REST image
 docker build -t fork-hbase-rest docker/hbase-rest
 # Or build the REST image behind a reverse proxy
-docker build -t fork-hbase-rest-reverse-proxy docker/hbase-rest-reverse-proxy/
+docker build -t fork-hbase-rest docker/hbase-rest-reverse-proxy/
 # Run the REST image
 docker run --name stargate --rm -p 60080:8080 fork-hbase-rest
-Or run the REST image behind a reverse proxy
-docker run --name stargate --rm -p 60080:8080 fork-hbase-rest-reverse-proxy
 ```
 
 To run the tests:
