@@ -3,7 +3,7 @@
 
 Scanner are the most efficient way to retrieve multiple 
 rows and columns from HBase. Internally, it implements the native 
-[Node.js Stream Readable API]().
+[Node.js Stream Readable API](https://nodejs.org/api/stream.html#stream_class_stream_readable).
 
 ## Grab an instance of "Scanner"
 

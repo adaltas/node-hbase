@@ -1,5 +1,4 @@
 
-
 # Client: server information and object factory
 
 ## Dependencies
@@ -11,49 +10,7 @@
     Row = require "./row"
     Scanner = require "./scanner"
 
-## Creating a new client
-
-A new instance of "HBase" may be instantiated with an object containing the
-following properties:   
-
-* `protocol` (string)   
-  One of 'http' or 'https', default to "http".   
-* `host` (string)   
-  Domain or IP of the HBase Stargate server, optional, default to "localhost".   
-* `port` (string|int)   
-  Port of the HBase REST server, optional, default to "8080".   
-* `krb5` (object)   
-  Configuration object for Kerberos.   
-* `krb5.principal` (string)   
-  Kerberos user principal, required.   
-* `krb5.password` (string)   
-  Kerberos password of the user principal, optional if using a keytab.   
-* `krb5.keytab` (string)   
-  Path to the Kerberos keytab or null if using the default credential cache.   
-* `krb5.service_principal` (string)   
-  GSS service principal in the form of "HTTP@{fqdn}", optional, automatically
-  discovered if "host" is a correct fqdn.
-* `timeout` (int)   
-  Number of milliseconds before the request timeout.
-
-Other custom options that can be passed to requests. For possible options, take 
-a look at [http](https://nodejs.org/api/http.html#http_http_request_options_callback) 
-or [https](https://nodejs.org/api/https.html#https_https_request_options_callback) request.
-
-
-Calling the `hbase` method return an initialized client object.
-
-```javascript
-var hbase = require('hbase');
-var client = hbase({ options });
-```
-
-You can also manually construct a new instance as follow:
-
-```javascript
-var hbase = require('hbase');
-var client = new hbase.Client({ options });
-```
+## Constructor
 
     Client = (options) ->
       options = {}  unless options
@@ -69,85 +26,38 @@ var client = new hbase.Client({ options });
       @
     util.inherits Client, EventEmitter
 
-## Query Software Version
+## `client.version`
 
-```javascript
-client.version( function( error, version ){
-  console.log( version );
-} );
-```
-
-Will print something similar to:
-
-```javascript
-{ Server: 'jetty/6.1.24'
-, REST: '0.0.2'
-, OS: 'Mac OS X 10.6.4 x86_64'
-, Jersey: '1.1.5.1'
-, JVM: 'Apple Inc. 1.6.0_20-16.3-b01-279'
-}
-```
+Query Software Version.
 
     Client::version = (callback) ->
       @connection.get "/version", callback
 
-## Query Storage Cluster Version
+## `client.version_cluster`
 
-```javascript
-client.version_cluster( function( error, version ){
-  console.log( version );
-} );
-```
-
-Will print something similar to:
-
-```csv
-'0.89.20100726'
-```
+Query Storage Cluster Version.
 
     Client::version_cluster = (callback) ->
       @connection.get "/version/cluster", callback
 
-## Query Storage Cluster Status
+## `client.status_cluster`
 
-```javascript
-client.status_cluster( function( error, statusCluster ){
-  console.log( statusCluster );
-} );
-```
-
-Will print something similar to:
-
-```javascript
-{ requests: 0
-, regions: 3
-, averageLoad: 3
-, DeadNodes: [ null ]
-, LiveNodes: [ { Node: [Object] } ]
-}
-```
+Query Storage Cluster Status.
 
     Client::status_cluster = (callback) ->
       @connection.get "/status/cluster", callback
 
-## List tables
+## `client.tables`
 
-```javascript
-client.tables( function( error, tables ){
-  console.log( tables );
-} );
-```
-
-Will print something similar to:
-
-```javascript
-[ { name: 'node_hbase' } ]
-```
+List tables.
 
     Client::tables = (callback) ->
       @connection.get "/", (err, data) ->
         callback err, (if data and data.table then data.table else null)
 
+## `client.table`
+
+Return a new instance of "hbase.Table".
 
     Client::table = (name) ->
       new Table(this, name)

@@ -91,7 +91,7 @@ describe 'client', ->
       "content-type": "application/json"
     }
     next()
-  it 'event request', (next) ->
+  it 'emit event request', (next) ->
     @timeout 0
     test.client (err, client) ->
       client.status_cluster (err,statusCluster) ->
