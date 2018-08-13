@@ -5,6 +5,15 @@ Scanner are the most efficient way to retrieve multiple
 rows and columns from HBase. Internally, it implements the native 
 [Node.js Stream Readable API]().
 
+## Dependencies
+
+    util = require 'util'
+    utils = require './utils'
+    Table = require './table'
+    {Readable} = require 'stream'
+
+## Constructor
+
     Scanner = (client, @options={}) ->
       @options.objectMode = true
       Readable.call @, @options
