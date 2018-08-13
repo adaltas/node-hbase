@@ -209,5 +209,5 @@ describe 'scanner', ->
         .on 'error', (err) ->
           next err
         .on 'end', ->
-          count.should.eql init: 1, scan: 102, readable: 1001, read: 1000
+          count.should.eql init: 1, scan: 102, readable: 101, read: 1000
           next()
