@@ -4,11 +4,11 @@ utils =
   base64:
     encode: (data, to_encoding) ->
       return data if to_encoding is 'base64'
-      data = new Buffer data, to_encoding or 'utf8' unless Buffer.isBuffer data
+      data = Buffer.from(data, to_encoding or 'utf8') unless Buffer.isBuffer data
       data.toString 'base64'
     decode: (data, from_encoding) ->
       return data if from_encoding is 'base64'
-      data = (new Buffer data, 'base64') unless Buffer.isBuffer data
+      data = Buffer.from(data, 'base64') unless Buffer.isBuffer data
       return data.toString from_encoding or 'utf8'
   url:
     ###
