@@ -1,84 +1,9 @@
 
-# Scanner: retrieve multiple rows and columns
+# Scanner operations
 
 Scanner are the most efficient way to retrieve multiple 
-rows and columns from HBase.
-
-## Dependencies
-
-    util = require 'util'
-    utils = require './utils'
-    Table = require './table'
-    {Readable} = require 'stream'
-
-## Grab an instance of "Scanner"
-
-```javascript
-var myScanner = hbase({}).table('my_table').scan(...);
-```
-
-Or
-
-```javascript
-var client = new hbase.Client({});
-var myScanner = new hbase.Scanner(client, {table: 'my_table'});
-```
-
-## Options
-
-All options except the "table" option are optional. The following properties are
-available:
-
-*   `startRow`
-    First row returned by the scanner.   
-*   `endRow`
-    Row stopping the scanner, not returned by the scanner.   
-*   `columns`
-    Filter the scanner by columns (a string or an array of columns).   
-*   `batch`
-    Number of cells returned on each iteration, internal use, default to "1000".   
-*   `maxVersions`
-    Number of returned version for each row.   
-*   `startTime`
-    Row minimal timestamp (included).   
-*   `endTime`
-    Row maximal timestamp (excluded).   
-*   `filter`
-    See below for more information.   
-*   `encoding`
-    Default to client.options.encoding, set to null to overwrite default
-    encoding and return a buffer.   
-
-## Using filter
-
-Filter are defined during the scanner creation. If you
-are familiar with HBase filters, it will be real easy to
-use them. Note, you should not worry about encoding the
-values, the library will do it for you. When you create
-a new scanner, just associate the `filter` property with  
-your filter object. All filters are supported.   
-
-Many examples are available in the tests but here's one
-wich returns all rows starting by "my_key_" and whose
-value is "here you are".   
-
-```javascript
-client.table('my_tb').scan({
-  filter: {
-  "op":"MUST_PASS_ALL","type":"FilterList","filters":[{
-      "op":"EQUAL",
-      "type":"RowFilter",
-      "comparator":{"value":"my_key_.+","type":"RegexStringComparator"}
-    },{
-      "op":"EQUAL",
-      "type":"ValueFilter",
-      "comparator":{"value":"here you are","type":"BinaryComparator"}
-    }
-  ]}
-}, function(error, cells){
-  assert.ifError(error);
-});
-```
+rows and columns from HBase. Internally, it implements the native 
+[Node.js Stream Readable API]().
 
     Scanner = (client, @options={}) ->
       @options.objectMode = true
@@ -96,9 +21,9 @@ client.table('my_tb').scan({
 
     util.inherits Scanner, Readable
 
-## `Scanner.init(callback)`
+## `scanner.init(callback)`
 
-Create a new scanner and return its ID.
+Internal method to create a new scanner and retrieve its ID.
 
     Scanner::init = (callback) ->
       # options = utils.merge {}, @options
@@ -130,11 +55,9 @@ Create a new scanner and return its ID.
         @options.id = id
         callback null, id
 
-## `Scanner.get(callback)`
+## `scanner.get(callback)`
 
-Retrieve the next cells from HBase. The callback is required
-and receive two arguments, an error object if any and a array
-of cells or null if the scanner is exhausted.
+Internal method to retrieve a batch of records.
 
     Scanner::get = (callback) ->
       key = "/#{@options.table}/scanner/#{@options.id}"
@@ -154,22 +77,14 @@ of cells or null if the scanner is exhausted.
             cells.push data
         callback null, cells
 
-## `Scanner.delete(callback)`
+## `scanner.delete(callback)`
 
-Delete a scanner.
-
-```javascript
-myScanner.delete(callback);
-```
-
-Callback is optionnal and receive two arguments, an 
-error object if any and a boolean indicating whether 
-the scanner was removed or not.
+Internal method to unregister the scanner from the HBase server.
 
     Scanner::delete = (callback) ->
       @client.connection.delete "/#{@options.table}/scanner/#{@options.id}", callback
 
-## Scanner._read(size)
+## `scanner._read(size)`
 
 Implementation of the `stream.Readable` API.
 

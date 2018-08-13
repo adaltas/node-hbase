@@ -1,20 +1,11 @@
----
-title: "Scanner operations"
-date: 2015-01-26T22:21:40.052Z
-language: en
-layout: page
-comments: false
-sharing: false
-footer: false
-navigation: hbase
-github: https://github.com/wdavidw/node-hbase
----
+
+# Scanner operations
 
 Scanner are the most efficient way to retrieve multiple 
-rows and columns from HBase.
+rows and columns from HBase. Internally, it implements the native 
+[Node.js Stream Readable API]().
 
-Grab an instance of "Scanner"
------------------------------
+## Grab an instance of "Scanner"
 
 ```javascript
 var myScanner = hbase({}).getTable('my_table').scan(...);
@@ -27,26 +18,73 @@ var client = new hbase.Client({});
 var myScanner = new hbase.Scanner(client, {table: 'my_table'});
 ```
 
-Options
--------
-
-
+## Options
 
 All options except the "table" option are optional. The following properties are
 available:
 
-*   `startRow`: First row returned by the scanner.   
-*   `endRow`: Row stopping the scanner, not returned by the scanner.   
-*   `columns`: Filter the scanner by columns (a string or an array of columns).   
-*   `batch`: Number of cells returned on each iteration.   
+*   `startRow`
+    First row returned by the scanner.   
+*   `endRow`
+    Row stopping the scanner, not returned by the scanner.   
+*   `columns`
+    Filter the scanner by columns (a string or an array of columns).   
+*   `batch`
+    Number of cells returned on each iteration, internal use, default to "1000".   
 *   `maxVersions`
-*   `startTime`   
-*   `endTime`   
-*   `filter`: see below for more informations.   
-*   `encoding`: default to client.options.encoding, set overwrite default encoding and return a buffer.   
+    Number of returned version for each row.   
+*   `startTime`
+    Row minimal timestamp (included).   
+*   `endTime`
+    Row maximal timestamp (excluded).   
+*   `filter`
+    See below for more information.   
+*   `encoding`
+    Default to client.options.encoding, set to null to overwrite default
+    encoding and return a buffer.   
 
-Using filter
-------------
+## Using the Stream Readable API
+
+The Stream Readable API is a scallable solution to throttle the iteratation of 
+large volumes of data. By large, we mean a volume exceeding the memory capacity of the node hosting the process.
+
+```javascript
+const scanner = client
+.table('node_table')
+.scan({
+  startRow: 'test_scanner_get_startRow_11',
+  maxVersions: 1
+})
+const rows = []
+scanner.on( 'readable', => {
+  while(chunk = scanner.read())
+    rows.push chunk
+})
+scanner.on( 'error', err =>
+  throw err
+)
+scanner.on( 'end', =>
+  console.info(rows)
+)
+```
+
+## Using the callback API
+
+For conveniency, the `scan` function exported by the table object accepts a 
+callback function which will be called when the scan has complete.
+
+```javascript
+client
+.table('node_table')
+.scan({
+  startRow: 'test_scanner_get_startRow_11',
+  maxVersions: 1
+}, (err, rows) =>
+  console.info(rows)
+)
+```
+
+## Using filter
 
 Filter are defined during the scanner creation. If you
 are familiar with HBase filters, it will be real easy to
@@ -60,98 +98,56 @@ wich returns all rows starting by "my_key_" and whose
 value is "here you are".   
 
 ```javascript
-client.getTable('my_tb').scan({
+client
+.table('my_tb')
+.scan({
   filter: {
   "op":"MUST_PASS_ALL","type":"FilterList","filters":[{
-
-```javascript
-  "op":"EQUAL",
-  "type":"RowFilter",
-  "comparator":{"value":"my_key_.+","type":"RegexStringComparator"}
-},{
-  "op":"EQUAL",
-  "type":"ValueFilter",
-  "comparator":{"value":"here you are","type":"BinaryComparator"}
-}
-
-```
-
-}, function(error, cells){
-  assert.ifError(error);
+      "op":"EQUAL",
+      "type":"RowFilter",
+      "comparator":{"value":"my_key_.+","type":"RegexStringComparator"}
+    },{
+      "op":"EQUAL",
+      "type":"ValueFilter",
+      "comparator":{"value":"here you are","type":"BinaryComparator"}
+    }
+  ]}
+}, (error, cells) => {
+  assert.ifError(error)
 });
 ```
 
-<a name="Scanner.init"></a>
-`Scanner.init(callback)`
------------------------
+## `Scanner.init(callback)`
 
-Create a new scanner and return its ID.
+Internal method to create a new scanner and retrieve its ID.
 
+## `Scanner.get(callback)`
 
-<a name="Scanner.get"></a>
-`Scanner.get(callback)`
------------------------
-
-Scanning records.
+Internal method to retrieve a batch of records.
 
 ```javascript
 myScanner.get(callback);
 ```
 
-Retrieve the next cells from HBase. The callback is required
-and receive two arguments, an error object if any and a array
-of cells or null if the scanner is exhausted.
+The method is expected to be called multiple time to get the next cells from
+HBase. The callback is required and receive two arguments, an error object if
+any and a array of cells or null if the scanner is exhausted.
 
 The number of cells depends on the `batch` option. It is your
 responsibity to call `get` as long as more cells are expected.
 
-```javascript
-var callback = function(error, cells){
-  assert.ifError(error);
-  if(cells){
+## `Scanner.delete(callback)`
+
+Internal method to unregister the scanner from the HBase server.
 
 ```javascript
-// do something
-console.log(cells);
-// call the next iteration
-myScanner.get(callback)
-lse{
-// no more cells to iterate
-
+myScanner.delete(callback);
 ```
 
-};
-myScanner.get(callback);
-```
+Callback is optionnal and receive two arguments, an 
+error object if any and a boolean indicating whether 
+the scanner was removed or not.
 
-Note, this is not very pretty. Alternatively, you could make
-use of the scanner function `continue` inside your callback
-to trigger a new iteration. Here's how:
-  
-```javascript
-myScanner.get(function(error, cells){
-  assert.ifError(error);
-  if(cells){
+## `Scanner._read(size)`
 
-```javascript
-// do something
-console.log(cells);
-// call the next iteration
-this.continue()
-lse{
-// no more cells to iterate
-// delete the scanner
-this.delete();
-
-```
-
-});
-```
-
-# <a name="Scanner.continue"></a>
-`Scanner.continue()`
-# --------------------
-# ###
-# Scanner::continue = ->
-#   @get()
-
+Implementation of the `stream.Readable` API.
