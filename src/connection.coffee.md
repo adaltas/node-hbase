@@ -1,15 +1,13 @@
 
 # Connection: HTTP REST requests for HBase
 
-The connection object handles HTTP requests. You shouldn't
-have to call it directly because HBase requests are transparently
-made by the client objects.
+The connection object handles HTTP requests. You shouldn't have to call it 
+directly because HBase requests are transparently made by the client objects.
 
-Note, at this point, the HTTP client only communicate to
-HBase with the JSON format. Some valid requests requests return
-an empty body which of course not a valid JSON. In such cases,
-no error is thrown by the response handler but the returned value
-is null.
+Note, at this point, the HTTP client only communicate to HBase with the JSON
+format. Some valid requests requests return an empty body which of course not a
+valid JSON. In such cases, no error is thrown by the response handler but the
+returned value is null.
 
 ## Dependencies
 
@@ -19,22 +17,7 @@ is null.
     url = require 'url'
     try krb5 = require 'krb5' catch # No Kerberos Support
 
-## Creating a new connection
-
-The most common way of initializing a new connection object
-is through the client object. When a new client is constructed,
-it create and hold a connection object.
-
-```javascript
-var client = hbase({ options });
-assert.ok(client.connection instanceof hbase.Connection);
-```
-
-You can also manually contruct a new instance as follow:
-
-```javascript
-var connection = new hbase.Connection( client );
-```
+## Utilities
 
     # Based on https://coffeescript-cookbook.github.io/chapters/classes_and_objects/cloning
     clone = (obj) ->
@@ -49,6 +32,8 @@ var connection = new hbase.Connection( client );
     
     is_object = (obj) ->
       return obj? && typeof obj == 'object'
+
+## Constructor
     
     Connection = (client) ->
       @client = client
@@ -113,25 +98,6 @@ var connection = new hbase.Connection( client );
         # Terminate Request
         req.end()
       do_async()
-
-## HTTP Get requests
-
-```javascript
-myConnection.get(command, callback, [status]);
-```
-
-Execute an HTTP Get request. The callback contains 3 arguments: the error object if any, the decoded response body and the Node `http.ClientResponse` object.
-
-```javascript
-(new Connection({}))
-.get('http://localhost:8080/', function(error, data, response){
-  if(error){
-    process.exit(1);
-  }
-  console.log('Status code: ' + response.statusCode);
-  console.log('Number of tables: ' + tables.length);
-});
-```
 
     Connection::get = (command, callback) ->
       @makeRequest 'GET', command, '', callback

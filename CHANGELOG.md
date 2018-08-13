@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* doc: rewrite the connection documentation
 * doc: rewrite the table documentation
 * doc: rewrite the row documentation
 * doc: rewrite the scanner documentation
