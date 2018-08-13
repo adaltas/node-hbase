@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* docker: migrate base image to centos:7
 * doc: rewrite the index documentation
 * doc: rewrite the client documentation
 * doc: rewrite the connection documentation

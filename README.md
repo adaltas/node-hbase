@@ -163,9 +163,30 @@ appropriate changes.
 If using the HDP sandbox, start the virtual machine, log-in as "root", start
 Ambari `start_ambari.sh`, start HBase `start_hbase.sh` and start the HBase REST
 server `/usr/lib/hbase/bin/hbase rest -p 60080`.
-Otherwise you can run HBase in locally with 
-`docker run --name stargate --rm -p 60080:8080 sixeyed/hbase-stargate`
-`docker run --name stargate -p 2181:2181 -p 60010:60010 -p 60000:60000 -p 60020:60020 -p 60030:60030 -p 60080:8080 -p 8085:8085 sixeyed/hbase-stargate`
+
+Otherwise you can run HBase in locally with:
+
+```bash
+# Start the Docker image
+docker run --name stargate --rm -p 60080:8080 sixeyed/hbase-stargate
+# Or
+docker run --name stargate -p 2181:2181 -p 60010:60010 -p 60000:60000 -p 60020:60020 -p 60030:60030 -p 60080:8080 -p 8085:8085 sixeyed/hbase-stargate
+```
+
+Note, the current HBase image from sixeyed and are currently based on the CentOS:6 image which is incompatible with the latest kernels. Here is how to build your own new image:
+
+```
+# Build the base image
+docker build -t fork-hbase docker/hbase-1.1.2
+# Build the REST image
+docker build -t fork-hbase-rest docker/hbase-rest
+# Or build the REST image behind a reverse proxy
+docker build -t fork-hbase-rest-reverse-proxy docker/hbase-rest-reverse-proxy/
+# Run the REST image
+docker run --name stargate --rm -p 60080:8080 fork-hbase-rest
+Or run the REST image behind a reverse proxy
+docker run --name stargate --rm -p 60080:8080 fork-hbase-rest-reverse-proxy
+```
 
 To run the tests:
 
