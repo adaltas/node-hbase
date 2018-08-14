@@ -1,7 +1,7 @@
 
 # Changelog
 
-## Trunk
+## Version 0.5.0
 
 * travis: update docker preparation
 * docker: migrate base image to centos:7
