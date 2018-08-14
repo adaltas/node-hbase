@@ -1,6 +1,10 @@
 
 # Changelog
 
+## Trunk
+
+* readme: fix documentation links
+
 ## Version 0.4.1
 
 * travis: update docker preparation

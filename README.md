@@ -35,17 +35,17 @@ npm install hbase
 
 ## Documentation
 
-* [Index](./blob/master/doc/index.md)   
+* [Index](./doc/index.md)   
   Getting started
-* [Client](./blob/master/doc/client.md)   
+* [Client](./doc/client.md)   
   Server information and object factory
-* [Connection](./blob/master/doc/connect.md)   
+* [Connection](./doc/connect.md)   
   HTTP REST requests
-* [Row](./blob/master/doc/row.md)   
+* [Row](./doc/row.md)   
   CRUD operation on rows and columns
-* [Scanner](./blob/master/doc/scanner.md)   
+* [Scanner](./doc/scanner.md)   
   Retrieve multiple rows and columns
-* [Table](./blob/master/doc/table.md)   
+* [Table](./doc/table.md)   
   Create, modify and delete HBase tables
 
 ## Quick example
