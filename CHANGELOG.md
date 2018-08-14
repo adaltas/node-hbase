@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* tarvis: support Node.js 10
 * docker: fix reverse proxy image
 
 ## Version 0.4.2

@@ -209,5 +209,9 @@ describe 'scanner', ->
         .on 'error', (err) ->
           next err
         .on 'end', ->
-          count.should.eql init: 1, scan: 102, readable: 101, read: 1000
+          count.init.should.eql 1
+          count.scan.should.eql 102
+          # Node.js <10 = 1001, >10 = 101
+          count.readable.should.equalOneOf [101, 1001]
+          count.read.should.eql 1000
           next()
