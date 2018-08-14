@@ -1,6 +1,10 @@
 
 # Changelog
 
+## Trunk
+
+* docker: fix reverse proxy image
+
 ## Version 0.4.2
 
 * readme: fix documentation links

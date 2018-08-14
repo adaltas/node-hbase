@@ -156,8 +156,7 @@ with a scanner request. You will find a lot of examples inside the
 
 ## Running the tests
 
-Tests are executed with mocha. Before running the tests the first time, copy the
-file "./test/properties.json.sample" to "./test/properties.json" and make the
+Tests are executed with [Mocha](https://mochajs.org/). They reference a configuration module at "./test/properties". The format can be in JavaScript, CoffeeScript or JSON. You can use any of the "./test/properties.\*.coffee" examples as a starting point and make the
 appropriate changes.
 
 If using the HDP sandbox, start the virtual machine, log-in as "root", start
@@ -180,10 +179,21 @@ Note, the current HBase image from sixeyed and are currently based on the CentOS
 docker build -t fork-hbase docker/hbase-1.1.2
 # Build the REST image
 docker build -t fork-hbase-rest docker/hbase-rest
-# Or build the REST image behind a reverse proxy
-docker build -t fork-hbase-rest docker/hbase-rest-reverse-proxy/
 # Run the REST image
 docker run --name stargate --rm -p 60080:8080 fork-hbase-rest
+```
+
+Or with the REST server behind a reverse proxy:
+
+```
+# Build the base image
+docker build -t fork-hbase docker/hbase-1.1.2
+# Build the REST image
+docker build -t fork-hbase-rest docker/hbase-rest
+# Build the REST image behind a reverse proxy
+docker build -t fork-hbase-rest-reverse-proxy docker/hbase-rest-reverse-proxy
+# Run the REST image
+docker run --name stargate --rm -p 60080:8100 fork-hbase-rest-reverse-proxy
 ```
 
 To run the tests:

@@ -9,8 +9,9 @@ node_js:
   - "8"
 before_install:
   - "docker build -t fork-hbase docker/hbase-1.1.2"
-  - "docker build -t hbase-rest docker/hbase-rest-reverse-proxy/"
-  - "docker run -d -p 60080:8100 hbase-rest"
+  - "docker build -t fork-hbase-rest docker/hbase-rest"
+  - "docker build -t fork-hbase-rest-reverse-proxy docker/hbase-rest-reverse-proxy"
+  - "docker run -d -p 60080:8100 fork-hbase-rest-reverse-proxy"
 script:
   - cp test/properties.docker.coffee test/properties.coffee && npm test
   - cp test/properties_with_path.docker.coffee test/properties.coffee && npm test
