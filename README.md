@@ -1,7 +1,7 @@
 
 [![Build Status](https://secure.travis-ci.org/adaltas/node-hbase.png)](http://travis-ci.org/adaltas/node-hbase)
 
-Node HBase is a Node.JS client for the [Apache HBase](https://hbase.apache.org/)
+[Node.js HBase](https://hbase.js.org) is a Node.JS client for the [Apache HBase](https://hbase.apache.org/)
 database. It use the Rest API (Stargate) to communicate with HBase. Currently,
 all the API is implemented and the data exchange format is JSON (but protocol
 buffer could follow).
@@ -13,7 +13,7 @@ Bigtable.
 
 Client features include:
 
-*   Intuitive API following HBase naming conventions
+*   Intuitive API following Apache HBase naming conventions
 *   Documentation and tests
 *   Full Implementation of the REST API
 *   Transparent encoding/decoding of values
@@ -22,7 +22,7 @@ Client features include:
 
 ## About HBase
 
-HBase is part of the Hadoop ecosystem from the Apache Software Foundation. It 
+Apache HBase is part of the Hadoop ecosystem from the Apache Software Foundation. It 
 is a column oriented database (think NoSql) that really scale and is modelled 
 after Google papers and its BigTable database.
 
