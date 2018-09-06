@@ -182,68 +182,10 @@ with a scanner request. You will find a lot of examples inside the
 [Scanner test][scanner] and also look at the [examples][mt_samples] published by
 [Marc Trudel][mt_home].
 
-## Running the tests
+## More documentation
 
-Tests are executed with [Mocha](https://mochajs.org/). They reference a configuration module at "./test/properties". The format can be in JavaScript, CoffeeScript or JSON. You can use any of the "./test/properties.\*.coffee" examples as a starting point and make the
-appropriate changes.
-
-If using the HDP sandbox, start the virtual machine, log-in as "root", start
-Ambari `start_ambari.sh`, start HBase `start_hbase.sh` and start the HBase REST
-server `/usr/lib/hbase/bin/hbase rest -p 60080`.
-
-Otherwise you can run HBase in locally with:
-
-```bash
-# Start the Docker image
-docker run --name stargate --rm -p 60080:8080 sixeyed/hbase-stargate
-# Or
-docker run --name stargate -p 2181:2181 -p 60010:60010 -p 60000:60000 -p 60020:60020 -p 60030:60030 -p 60080:8080 -p 8085:8085 sixeyed/hbase-stargate
-```
-
-Note, the current HBase image from sixeyed and are currently based on the CentOS:6 image which is incompatible with the latest kernels. Here is how to build your own new image:
-
-```
-# Build the base image
-docker build -t fork-hbase docker/hbase-1.1.2
-# Build the REST image
-docker build -t fork-hbase-rest docker/hbase-rest
-# Run the REST image
-docker run --name stargate --rm -p 60080:8080 fork-hbase-rest
-```
-
-Or with the REST server behind a reverse proxy:
-
-```
-# Build the base image
-docker build -t fork-hbase docker/hbase-1.1.2
-# Build the REST image
-docker build -t fork-hbase-rest docker/hbase-rest
-# Build the REST image behind a reverse proxy
-docker build -t fork-hbase-rest-reverse-proxy docker/hbase-rest-reverse-proxy
-# Run the REST image
-docker run --name stargate --rm -p 60080:8100 fork-hbase-rest-reverse-proxy
-```
-
-To run the tests:
-
-```bash
-npm test
-```
-
-There is also a Dockerfile under `hbase-rest-reverse-proxy/` that creates an Nginx reverse proxy to HBase REST. This image can be used to test cases where the REST service runs behind a proxy. The file `test/properties_with_path.docker.coffee` can be used to test scenarios where HBase REST is accessible through a custom path (`/rest`).
-
-When testing against HBase secured with Kerberos, you must create a table with
-the right ownership.
-
-```bash
-kinit hbase
-hbase shell
-create 'node_table', {NAME => 'node_column_family', VERSIONS => 5}
-grant 'ryba', 'RWC', 'node_table'
-```
-
-You can use the example located in "test/properties.json.krb5" to configure the
-test. It comes pre-configured for [Ryba] configured in development cluster mode.
+*   [Developer Guide](https://hbase.js.org/learn/developer/)
+*   [Contributor Guide](https://hbase.js.org/learn/contribute/)
 
 ## Related projects
 
