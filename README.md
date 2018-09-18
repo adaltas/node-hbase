@@ -109,7 +109,7 @@ krb5 option.
 Using a keytab:
 
 ```javascript
-var hbase = require('hbase');
+const hbase = require('hbase');
 hbase({
   host: '127.0.0.1',
   port: 8080,
@@ -125,7 +125,7 @@ hbase({
 Using a password:
 
 ```javascript
-var hbase = require('hbase');
+const hbase = require('hbase');
 hbase({
   host: '127.0.0.1',
   port: 8080,
@@ -157,7 +157,7 @@ client
 is equivalent to:
 
 ```coffee
-var rows = [];
+const rows = [];
 scanner = client
 .table('node_table')
 .scan({
