@@ -83,9 +83,8 @@ returned value is null.
               body = null
               error = e
             callback error, body, res
-          res.on 'close', ->
-            e = new Error 'Connection closed'
-            callback e, null
+          res.on 'error', (err) ->
+            callback err
         req.on 'error', (err) ->
           callback err
         if data and data isnt ''

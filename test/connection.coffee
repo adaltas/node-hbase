@@ -32,3 +32,8 @@ describe 'connection', ->
         err.message.should.eql 'socket hang up'
         server_close server, next
         
+  it 'send error if cannot reach server', (next) ->
+      client = new hbase.Client host: '127.0.0.1', port: 12345
+      client.connection.get '/', (err, data) ->
+        err.errno.should.be.equal("ECONNREFUSED")
+        next()
