@@ -160,3 +160,8 @@ describe 'table', ->
         should.not.exist err
         schema.name.should.eql 'node_table'
         next()
+  it 'Check 404 error (schema of non existent table)', (next) ->
+    test.client (err, client) ->
+      client.table('dummy').schema (err, schema) ->
+        err.code.should.eql 404
+        next()
