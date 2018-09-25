@@ -31,7 +31,7 @@
     "node": ">= 0.1.90"
   },
   "optionalDependencies": {
-    "krb5": "^0.1.0"
+    "krb5": "^0.4.1"
   },
   "devDependencies": {
     "coffeescript": "^2.2.4",
