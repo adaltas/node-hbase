@@ -1,7 +1,7 @@
 
 # Connection: HTTP REST requests for HBase
 
-The connection object handles HTTP requests. You shouldn't have to call it 
+The connection object handles HTTP requests. You shouldn't have to call it
 directly because HBase requests are transparently made by the client objects.
 
 Note, at this point, the HTTP client only communicate to HBase with the JSON
@@ -11,7 +11,7 @@ returned value is null.
 
 ## Dependencies
 
-    http = 
+    http =
       http: require 'http'
       https: require 'https'
     url = require 'url'
@@ -23,18 +23,18 @@ returned value is null.
     clone = (obj) ->
       if not obj? or typeof obj isnt 'object'
         return obj
-    
+
       newInstance = new obj.constructor()
       for key of obj
         newInstance[key] = clone obj[key]
-    
+
       return newInstance
-    
+
     is_object = (obj) ->
       return obj? && typeof obj == 'object'
 
 ## Constructor
-    
+
     Connection = (client) ->
       @client = client
       options = clone(@client.options)
@@ -62,10 +62,13 @@ returned value is null.
         return callback Error "Module 'krb5' not installed" unless krb5
         do_spnego()
       do_spnego = =>
-        krb5 @client.options.krb5
-        .kinit (err, ccname) ->
+        return do_token() unless @client.options.krb5.password or @client.options.krb5.keytab
+        # Kinit first if password or keytab provided
+        krb5.kinit @client.options.krb5, (err, ccname) ->
           return callback Error err if err
-        .spnego (err, token) ->
+          do_token()
+      do_token = =>
+        krb5.spnego @client.options.krb5, (err, token) ->
           e = 'GSS error ' + err
           return callback Error e if err
           options.headers['Authorization'] = 'Negotiate ' + token
