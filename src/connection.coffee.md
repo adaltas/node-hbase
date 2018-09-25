@@ -60,13 +60,14 @@ returned value is null.
         return do_request() unless @client.options.krb5.principal
         @client.options.krb5.service_principal ?= "HTTP@#{options.hostname}"
         return callback Error "Module 'krb5' not installed" unless krb5
-        krb5 @client.options.krb5, (err, k) =>
-          return callback err if err
-          @client.krb5 = k
-          do_spnego()
+        do_spnego()
       do_spnego = =>
-        @client.krb5.token (err, token) ->
-          return callback err if err
+        krb5 @client.options.krb5
+        .kinit (err, ccname) ->
+          return callback Error err if err
+        .spnego (err, token) ->
+          e = 'GSS error ' + err
+          return callback Error e if err
           options.headers['Authorization'] = 'Negotiate ' + token
           do_request()
       do_request = =>
