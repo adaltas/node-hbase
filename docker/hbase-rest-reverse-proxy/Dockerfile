@@ -1,6 +1,5 @@
 
-#FROM sixeyed/hbase-stargate
-FROM fork-hbase-rest
+FROM sixeyed/hbase-stargate
 
 # Install nginx
 RUN yum install -y epel-release; yum clean all; yum install -y nginx --nogpgcheck

@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* docker: use sixeyed image instead of fork-hbase-rest
 * package: from BSD to MIT
 * travis: support Node.js 10
 * docker: fix reverse proxy image
