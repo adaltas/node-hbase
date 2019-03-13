@@ -1,7 +1,7 @@
 
 # Changelog
 
-## Trunk
+## Version 0.5.0
 
 * docker: use sixeyed image instead of fork-hbase-rest
 * package: from BSD to MIT
