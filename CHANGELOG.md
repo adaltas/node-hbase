@@ -1,13 +1,17 @@
 
 # Changelog
 
-## Version 0.5.0
+## Trunk
 
 * docker: use sixeyed image instead of fork-hbase-rest
 * package: from BSD to MIT
 * travis: support Node.js 10
 * docker: fix reverse proxy image
 * package: latest dependencies
+
+## Version 0.5.0
+
+* package: invalid version
 
 ## Version 0.4.2
 
