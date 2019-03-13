@@ -7,6 +7,7 @@
 * package: from BSD to MIT
 * travis: support Node.js 10
 * docker: fix reverse proxy image
+* package: latest dependencies
 
 ## Version 0.4.2
 
