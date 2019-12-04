@@ -1,7 +1,7 @@
 
 # Changelog
 
-## Trunk
+## Version 0.6.1
 
 * package: update adaltas url
 
