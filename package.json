@@ -2,29 +2,15 @@
   "name": "hbase",
   "version": "0.6.0",
   "description": "HBase client using the REST connector",
-  "author": "David Worms <david@adaltas.com>",
+  "author": "David Worms <david@adaltas.com> (https://www.adaltas.com)",
   "license": "MIT",
   "contributors": [
-    {
-      "name": "David Worms",
-      "email": "david@adaltas.com"
-    },
-    {
-      "name": "Michael Kurze",
-      "email": "https://github.com/michaelku"
-    },
-    {
-      "name": "Michal Taborsky",
-      "email": "https://github.com/whizz"
-    },
-    {
-      "name": "Marc Trudel",
-      "email": "https://github.com/stelcheck"
-    },
-    {
-      "name": "Krisztina Hirth",
-      "email": "https://github.com/yellowbrickc"
-    }
+    "David Worms <david@adaltas.com> (https://www.adaltas.com)",
+    "Xavier Hermand <xavier@adaltas.com> (https://www.adaltas.com)",
+    "Michael Kurze (https://github.com/michaelku)",
+    "Michal Taborsky (https://github.com/whizz)",
+    "Marc Trudel (https://github.com/stelcheck)",
+    "Krisztina Hirth (https://github.com/yellowbrickc)"
   ],
   "main": "./lib/index",
   "engines": {

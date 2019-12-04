@@ -194,7 +194,7 @@ with a scanner request. You will find a lot of examples inside the
 
 ## Contributors
 
-*   David Worms: <https://github.com/wdavidw>
+*   David Worms: <https://www.adaltas.com>
 *   Michael Kurze: <https://github.com/michaelku>
 *   Michal Taborsky: <https://github.com/whizz>
 *   Pierre Sauvage: <https://github.com/Pierrotws>

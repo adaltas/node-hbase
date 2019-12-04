@@ -1,6 +1,10 @@
 
 # Changelog
 
+## Trunk
+
+* package: update adaltas url
+
 ## Version 0.6.0
 
 * docker: use sixeyed image instead of fork-hbase-rest
