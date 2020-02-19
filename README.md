@@ -138,6 +138,34 @@ hbase({
 .version();
 ```
 
+Using kdestroy:
+```javascript
+const hbase = require('hbase');
+const client = hbase({
+  host: '127.0.0.1',
+  port: 8080,
+  "krb5": {
+    "principal": "{username}@{REALM}",
+    "password": "{password}",
+    "service_principal": "HTTP@{fqdn}"
+  }
+});
+
+/**
+ * destroys credential cache
+ * options: 
+ *  ccname (optionnal) 
+ *    Credential cache location. If this is not specified, default path is taken from environment variable KRB5CCNAME, then from /etc/krb5.conf.
+ * callback
+ *  err
+ *    Should be undefined. Otherwise it contains an error message.
+ * eg:
+ *  1. no options ->  client.kdestroy(callback)
+ *  2. nothing -> client.kdestroy()
+ */
+client.kdestroy(options, callback)
+```
+
 ## Scanner and Filters
 
 The scanner implement the `stream.Readable` API. For ease of usage, an optional
