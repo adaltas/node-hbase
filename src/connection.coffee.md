@@ -19,15 +19,12 @@ returned value is null.
 
 ## Utilities
 
-    # Based on https://coffeescript-cookbook.github.io/chapters/classes_and_objects/cloning
     clone = (obj) ->
       if not obj? or typeof obj isnt 'object'
         return obj
-
       newInstance = new obj.constructor()
       for key of obj
         newInstance[key] = clone obj[key]
-
       return newInstance
 
     is_object = (obj) ->
@@ -52,7 +49,7 @@ returned value is null.
       options = clone(@options)
       options.method = method
       options.path = options.path + command
-      do_async = =>
+      do_async = ->
         # Ensure events registered after connection are received
         setImmediate do_krb5
       do_krb5 = =>
@@ -62,7 +59,8 @@ returned value is null.
         return callback Error "Module 'krb5' not installed" unless krb5
         do_spnego()
       do_spnego = =>
-        return do_token() unless @client.options.krb5.password or @client.options.krb5.keytab
+        unless @client.options.krb5.password or @client.options.krb5.keytab
+          return do_token()
         # Kinit first if password or keytab provided
         krb5.kinit @client.options.krb5, (err, ccname) ->
           return callback Error err if err

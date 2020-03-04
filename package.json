@@ -16,6 +16,19 @@
   "engines": {
     "node": ">= 0.1.90"
   },
+  "coffeelintConfig": {
+    "indentation": {
+      "level": "error",
+      "value": 2
+    },
+    "line_endings": {
+      "level": "error",
+      "value": "unix"
+    },
+    "max_line_length": {
+      "level": "ignore"
+    }
+  },
   "optionalDependencies": {
     "krb5": "^0.5.0"
   },
