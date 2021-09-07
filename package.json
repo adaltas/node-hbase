@@ -46,6 +46,17 @@
     "url": "https://github.com/adaltas/node-hbase.git"
   },
   "homepage": "https://github.com/adaltas/node-hbase",
+  "mocha": {
+    "throw-deprecation": true,
+    "require": [
+      "should",
+      "coffeescript/register"
+    ],
+    "inline-diffs": true,
+    "timeout": 40000,
+    "reporter": "spec",
+    "recursive": true
+  },
   "scripts": {
     "preversion": "grep '## Trunk' CHANGELOG.md && rm -rf lib && npm test",
     "version": "version=`grep '^  \"version\": ' package.json | sed 's/.*\"\\([0-9\\.]*\\)\".*/\\1/'` && sed -i \"s/## Trunk/## Version $version/\" CHANGELOG.md && git add CHANGELOG.md",
