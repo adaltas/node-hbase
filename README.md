@@ -28,10 +28,12 @@ after Google papers and its BigTable database.
 
 ## Installing
 
-Via [npm](http://github.com/isaacs/npm):
+From your project directoy, via [npm](http://github.com/isaacs/npm):
 
 ```bash
 npm install hbase
+# Or without the krb5 optional dependency
+npm install hbase --no-optional
 ```
 
 ## Documentation
