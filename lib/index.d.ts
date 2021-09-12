@@ -143,7 +143,7 @@ declare namespace hbase {
         handleJson(response: any, body: any): void;
 
         /**
-         * Private method used to make API calls to hbase rest
+         * Internal method used to make API calls to hbase rest
          * @param method
          * @param command
          * @param data
